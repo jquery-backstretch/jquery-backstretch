@@ -1,0 +1,29 @@
+h1. jQuery Backstretch
+
+Backstretch is a jQuery plugin that allows you to add a dynamically-resized background image to any page.
+The image will stretch to fit the page, and will automatically resize as the window size changes.
+
+h2. Demo
+
+"View the demo on the project page ":http://srobbin.com/jquery-plugins/jquery-backstretch/.
+
+h2. Options
+
+h2. Setup
+
+Include the jQuery library and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
+
+<pre><code><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript" src="/jquery.backstretch-1.0.min.js"></script>
+</code></pre>
+
+Note: The example above uses the Google hosted version of jQuery; there is also a jQuery source file included with this distribution, if you would like to host it yourself.
+
+<pre><code><script type="text/javascript">
+  $.backstretch("/path/to/image.jpg");
+</script>
+</code></pre>
+
+h2. Support
+
+Please file a ticket on our Github issues tracker.
