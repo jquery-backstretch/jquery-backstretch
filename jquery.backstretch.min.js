@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch 1.0
- * http://github.com/srobbin/jquery-backstretch/
+ * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
  *
