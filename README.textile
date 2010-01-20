@@ -15,7 +15,7 @@ Should we show the background image as it's downloading, or wait until download 
 
 h3. speed
 
-If hideUntilReady is set to true, this is the speed at which the image will fade in after downloading is complete. This accepts integers as well as standard jQuery speed strings (slow, normal, fast). (type=Integer, default=0)
+If hideUntilReady is set to true, this is the speed at which the image will fade in, after downloading is complete. Integers are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer, default=0)
 
 
 h2. Setup
