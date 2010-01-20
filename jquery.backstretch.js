@@ -37,7 +37,7 @@
                                     .appendTo(wrap),
             img = $("<img />").attr("src", src)
                               .bind("load", function() {
-                                    self = $(this);
+                                    var self = $(this);
                                     imgRatio = self.width() / self.height();
                                     _adjustBG(function() {
                                       if( settings.hideUntilReady )
