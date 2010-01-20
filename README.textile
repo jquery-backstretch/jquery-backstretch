@@ -5,22 +5,31 @@ The image will stretch to fit the page, and will automatically resize as the win
 
 h2. Demo
 
-"View the demo on the project page ":http://srobbin.com/jquery-plugins/jquery-backstretch/.
+"View the demo on the project page":http://srobbin.com/jquery-plugins/jquery-backstretch/
 
 h2. Options
+
+h3. hideUntilReady
+
+Should we show the background image as it's downloading, or wait until download is complete? (type=Boolean, default=true)
+
+h3. speed
+
+If hideUntilReady is set to true, this is the speed at which the image will fade in after downloading is complete. This accepts integers as well as standard jQuery speed strings (slow, normal, fast). (type=Integer, default=0)
+
 
 h2. Setup
 
 Include the jQuery library and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
 
-<pre><code><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<pre><code><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
 <script type="text/javascript" src="/jquery.backstretch-1.0.min.js"></script>
 </code></pre>
 
 Note: The example above uses the Google hosted version of jQuery; there is also a jQuery source file included with this distribution, if you would like to host it yourself.
 
 <pre><code><script type="text/javascript">
-  $.backstretch("/path/to/image.jpg");
+  $.backstretch("/path/to/image.jpg", {speed: 150});
 </script>
 </code></pre>
 
