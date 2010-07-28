@@ -13,11 +13,13 @@
 
     $.backstretch = function(src, options, callback) {
         var settings = {
-            centered: true,         // Should we center the image or leave it fixed at 0,0?
+            centeredX: true,         // Should we center the image on the X axis?
+            centeredY: true,         // Should we center the image on the Y axis?
             speed: 0                // fadeIn speed for background after image loads (e.g. "fast" or 500)
         },
         rootElement = ("onorientationchange" in window) ? $(document) : $(window), // hack to acccount for iOS position:fixed shortcomings
-        imgRatio, bgImg, bgWidth, bgHeight, bgOffset, bgOffsetCSS;
+        imgRatio, bgImg, bgWidth, bgHeight, bgOffset,
+        bgCSS = {left: 0, top: 0};
         
         // Extend the settings with those the user has provided
         if(options && typeof options == "object") $.extend(settings, options);
@@ -53,7 +55,7 @@
                 $(window).resize(_adjustBG);
             }
         }
-    
+            
         function _adjustBG(fn) {
             bgWidth = rootElement.width();
             bgHeight = bgWidth / imgRatio;
@@ -62,16 +64,15 @@
             // Note: Offset code provided by Peter Baker (http://ptrbkr.com/). Thanks, Peter!
             if(bgHeight >= rootElement.height()) {
                 bgOffset = (bgHeight - rootElement.height()) /2;
-                bgOffsetCSS = {left: "0px", top: "-" + bgOffset + "px"};
+                if(settings.centeredY) $.extend(bgCSS, {top: "-" + bgOffset + "px"});
             } else {
                 bgHeight = rootElement.height();
                 bgWidth = bgHeight * imgRatio;
                 bgOffset = (bgWidth - rootElement.width()) / 2;
-                bgOffsetCSS = {left: "-" + bgOffset + "px", top: "0px"};
-            }    
+                if(settings.centeredX) $.extend(bgCSS, {left: "-" + bgOffset + "px"});
+            }
       
-            $("#backstretch img").width( bgWidth ).height( bgHeight );
-            if(settings.centered) $("#backstretch img").css(bgOffsetCSS);
+            $("#backstretch img").width( bgWidth ).height( bgHeight ).css(bgCSS);
       
             // Executed the passed in function, if necessary
             if (typeof fn == "function") fn();
