@@ -31,9 +31,8 @@
         function _init() {
             // Prepend image, wrapped in a DIV, with some positioning and zIndex voodoo
             if(src) {
-                var commonCSS = {left: 0, top: 0},
-                    container = $("<div />").attr("id", "backstretch")
-                                            .css( $.extend(commonCSS, {position: "fixed", overflow: "hidden", zIndex: -1}) ),
+                var container = $("<div />").attr("id", "backstretch")
+                                            .css({left: 0, top: 0, position: "fixed", overflow: "hidden", zIndex: -9999}),
                     img = $("<img />").attr("src", src)
                                       .css({position: "relative", display: "none"})
                                       .bind("load", function() {                                          
