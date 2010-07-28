@@ -11,7 +11,7 @@ h2. Options
 
 h3. centeredX
 
-The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameters controls whether or not we center the image on the X axis to account for the discrepancy. (type=Boolean, default=true)
+The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. (type=Boolean, default=true)
 
 h3. centeredY
 
