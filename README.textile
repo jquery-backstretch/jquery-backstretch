@@ -44,7 +44,7 @@ h3. Version 1.1
 * Added 'centeredX' and 'centeredY' options.
 * Removed 'hideUntilReady' option. It looks pretty bad if you don't hide the image until it's fully loaded.
 * Fixed IE img onload bug.
-* Hack to stretch image on iOS, where position:fixed is wonky.
+* Now supports iPhone/iPad orientation changes.
 
 h2. Support
 
