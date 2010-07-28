@@ -33,12 +33,11 @@
             if(src) {
                 var container = $("<div />").attr("id", "backstretch")
                                             .css({left: 0, top: 0, position: "fixed", overflow: "hidden", zIndex: -9999}),
-                    img = $("<img />").attr("src", src)
-                                      .css({position: "relative", display: "none"})
-                                      .bind("load", function() {                                          
+                    img = $("<img />").css({position: "relative", display: "none"})
+                                      .bind("load", function(e) {                                          
                                           var self = $(this);
-                                              imgRatio = self.width() / self.height();
-                                              
+                                          imgRatio = $(e.target).width() / $(e.target).height();
+    
                                           _adjustBG(function() {
                                               self.fadeIn(settings.speed, function(){
                                                   if(typeof callback == "function") callback();
@@ -48,6 +47,7 @@
                                       .appendTo(container);
                   
                 $("body").prepend(container);
+                img.attr("src", src); // Hack for IE img onload event
 
                 // Adjust the background size when the window is resized or orientation has changed (iOS)
                 $(window).resize(_adjustBG);
