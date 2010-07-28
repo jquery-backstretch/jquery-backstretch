@@ -9,13 +9,13 @@ h2. Demo
 
 h2. Options
 
-h3. hideUntilReady
+h3. centered
 
-Should we show the background image as it's downloading, or wait until download is complete? (type=Boolean, default=true)
+The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameters controls whether or not we center the image to account for the discrepancy. (type=Boolean, default=true)
 
 h3. speed
 
-If hideUntilReady is set to true, this is the speed at which the image will fade in, after downloading is complete. Integers are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer, default=0)
+This is the speed at which the image will fade in, after downloading is complete. Integers are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer, default=0)
 
 
 h2. Setup
@@ -32,6 +32,14 @@ Note: The example above uses the Google hosted version of jQuery; there is also 
   $.backstretch("/path/to/image.jpg", {speed: 150});
 </script>
 </code></pre>
+
+h2. Changelog
+
+h3. Version 1.1
+
+* Added 'centered' option.
+* Removed 'hideUntilReady' option. It looks pretty bad if you don't hide the image until it's fully loaded.
+* Hack to stretch image on iOS, where position:fixed is wonky.
 
 h2. Support
 
