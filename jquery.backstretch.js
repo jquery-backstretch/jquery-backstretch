@@ -18,8 +18,7 @@
             speed: 0                // fadeIn speed for background after image loads (e.g. "fast" or 500)
         },
         rootElement = ("onorientationchange" in window) ? $(document) : $(window), // hack to acccount for iOS position:fixed shortcomings
-        imgRatio, bgImg, bgWidth, bgHeight, bgOffset,
-        bgCSS = {left: 0, top: 0};
+        imgRatio, bgImg, bgWidth, bgHeight, bgOffset, bgCSS;
         
         // Extend the settings with those the user has provided
         if(options && typeof options == "object") $.extend(settings, options);
@@ -57,6 +56,7 @@
         }
             
         function _adjustBG(fn) {
+            bgCSS = {left: 0, top: 0}
             bgWidth = rootElement.width();
             bgHeight = bgWidth / imgRatio;
             
