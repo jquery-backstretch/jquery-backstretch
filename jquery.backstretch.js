@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch
- * Version 1.1
+ * Version 1.1.2
  * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
@@ -56,23 +56,28 @@
         }
             
         function _adjustBG(fn) {
-            bgCSS = {left: 0, top: 0}
-            bgWidth = rootElement.width();
-            bgHeight = bgWidth / imgRatio;
-            
-            // Make adjustments based on image ratio
-            // Note: Offset code provided by Peter Baker (http://ptrbkr.com/). Thanks, Peter!
-            if(bgHeight >= rootElement.height()) {
-                bgOffset = (bgHeight - rootElement.height()) /2;
-                if(settings.centeredY) $.extend(bgCSS, {top: "-" + bgOffset + "px"});
-            } else {
-                bgHeight = rootElement.height();
-                bgWidth = bgHeight * imgRatio;
-                bgOffset = (bgWidth - rootElement.width()) / 2;
-                if(settings.centeredX) $.extend(bgCSS, {left: "-" + bgOffset + "px"});
+            try {
+                bgCSS = {left: 0, top: 0}
+                bgWidth = rootElement.width();
+                bgHeight = bgWidth / imgRatio;
+
+                // Make adjustments based on image ratio
+                // Note: Offset code provided by Peter Baker (http://ptrbkr.com/). Thanks, Peter!
+                if(bgHeight >= rootElement.height()) {
+                    bgOffset = (bgHeight - rootElement.height()) /2;
+                    if(settings.centeredY) $.extend(bgCSS, {top: "-" + bgOffset + "px"});
+                } else {
+                    bgHeight = rootElement.height();
+                    bgWidth = bgHeight * imgRatio;
+                    bgOffset = (bgWidth - rootElement.width()) / 2;
+                    if(settings.centeredX) $.extend(bgCSS, {left: "-" + bgOffset + "px"});
+                }
+
+                $("#backstretch img").width( bgWidth ).height( bgHeight ).css(bgCSS);
+            } catch(err) {
+                // IE7 seems to trigger _adjustBG before the image is loaded.
+                // This try/catch block is a hack to let it fail gracefully.
             }
-      
-            $("#backstretch img").width( bgWidth ).height( bgHeight ).css(bgCSS);
       
             // Executed the passed in function, if necessary
             if (typeof fn == "function") fn();
