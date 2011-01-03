@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch
- * Version 1.1.2
+ * Version 1.1.3
  * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
@@ -12,6 +12,9 @@
 (function($) {
 
     $.backstretch = function(src, options, callback) {
+		if ($.isArray(src)) {
+			src = src[Math.floor(Math.random()*src.length)];
+		}
         var settings = {
             centeredX: true,         // Should we center the image on the X axis?
             centeredY: true,         // Should we center the image on the Y axis?
