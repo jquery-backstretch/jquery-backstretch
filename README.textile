@@ -9,18 +9,26 @@ h2. Demo
 
 h2. Options
 
+The ratio of the width/height of the image doesn't always jive with the width/height of the window. Centering (centeredX, centerY and center) makes sure the center of the image is always in view and 'clips' the outer parts of the image.
+
 h3. centeredX
 
-The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. (type=Boolean, default=true)
+A relative point on the X-axis (range 0-1) to center the image on. For backwards compatibility, true defaults to 0.5 (center), false to 0 (left). (type=Integer, default=0.5)
+Usage: {centeredX: 0.3}
 
 h3. centeredY
 
-This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. (type=Boolean, default=true)
+A relative point on the Y-axis (range 0-1) to center the image on. For backwards compatibility, true defaults to 0.5 (center), false to 0 (top). (type=Integer, default=0.5)
+Usage: {centeredX: 0.2}
+
+h3. center
+
+Shorthand to set centeredX and centeredY at once. This will override earlier or default settings for centeredX and centeredY. (type=Array, default=[0.5, 0.5])
+Usage: {center: [0.3, 0.2]}
 
 h3. speed
 
 This is the speed at which the image will fade in, after downloading is complete. Integers are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer, default=0)
-
 
 h2. Setup
 
