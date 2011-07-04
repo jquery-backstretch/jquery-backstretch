@@ -5,8 +5,7 @@ The image will stretch to fit the page, and will automatically resize as the win
 
 h2. Demo
 
-There are a couple of examples included with this package, or feel free to check it out live on
-"on the project page itself.":http://srobbin.com/jquery-plugins/jquery-backstretch/
+There are a couple of examples included with this package, or feel free to check it out live "on the project page itself.":http://srobbin.com/jquery-plugins/jquery-backstretch/
 
 h2. Options
 
