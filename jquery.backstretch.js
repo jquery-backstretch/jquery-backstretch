@@ -40,18 +40,18 @@
                 // If this is the first time that backstretch is being called
                 if(container.length == 0) {
                     container = $("<div />").attr("id", "backstretch")
-                                            .css({left: 0, top: 0, position: "fixed", overflow: "hidden", zIndex: -9999});
+                                            .css({left: 0, top: 0, position: "fixed", overflow: "hidden", zIndex: -999999, margin: 0, padding: 0});
                 } else {
                     // Prepare to delete any old images
                     container.find("img").addClass("deleteable");
                 }
                 
-                img = $("<img />").css({position: "fixed", display: "none"})
-                                  .bind("load", function(e) {                                          
+                img = $("<img />").css({position: "fixed", display: "none", margin: 0, padding: 0, border: none})
+                                  .bind("load", function() {                                          
                                       var self = $(this);
                                       
                                       self.css({width: "auto", height: "auto"});
-                                      imgRatio = $(e.target).width() / $(e.target).height();
+                                      imgRatio = this.width / this.height;
 
                                       _adjustBG(function() {
                                           self.fadeIn(settings.speed, function(){
