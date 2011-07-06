@@ -46,7 +46,7 @@
                     container.find("img").addClass("deleteable");
                 }
                 
-                img = $("<img />").css({position: "fixed", display: "none", margin: 0, padding: 0, border: none})
+                img = $("<img />").css({position: "fixed", display: "none", margin: 0, padding: 0, border: "none"})
                                   .bind("load", function() {                                          
                                       var self = $(this);
                                       
