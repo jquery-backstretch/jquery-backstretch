@@ -54,7 +54,7 @@
                                       self.css({width: "auto", height: "auto"});
                                       imgWidth = this.width || $(e.target).width();
                                       imgHeight = this.height || $(e.target).height();
-                                      imgRatio = imgHeight / imgWidth;
+                                      imgRatio = imgWidth / imgHeight;
 
                                       _adjustBG(function() {
                                           self.fadeIn(settings.speed, function(){
