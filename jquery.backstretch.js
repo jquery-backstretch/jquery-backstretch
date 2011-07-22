@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch
- * Version 1.2.0
+ * Version 1.2.0b2
  * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
@@ -47,11 +47,14 @@
                 }
                 
                 img = $("<img />").css({position: "fixed", display: "none", margin: 0, padding: 0, border: "none"})
-                                  .bind("load", function() {                                          
-                                      var self = $(this);
-                                      
+                                  .bind("load", function(e) {                                          
+                                      var self = $(this),
+                                          imgWidth, imgHeight;
+                                          
                                       self.css({width: "auto", height: "auto"});
-                                      imgRatio = this.width / this.height;
+                                      imgWidth = this.width || $(e.target).width();
+                                      imgHeight = this.height || $(e.target).height();
+                                      imgRatio = imgHeight / imgWidth;
 
                                       _adjustBG(function() {
                                           self.fadeIn(settings.speed, function(){
