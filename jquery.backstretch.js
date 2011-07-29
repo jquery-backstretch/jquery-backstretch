@@ -46,7 +46,7 @@
                     container.find("img").addClass("deleteable");
                 }
                 
-                img = $("<img />").css({position: "absolute", display: "none", margin: 0, padding: 0, border: "none"})
+                img = $("<img />").css({position: "absolute", display: "none", margin: 0, padding: 0, border: "none", zIndex: -999999})
                                   .bind("load", function(e) {                                          
                                       var self = $(this),
                                           imgWidth, imgHeight;
@@ -70,7 +70,7 @@
                  
                 // Append the container to the body, if it's not already there
                 if($("body #backstretch").length == 0) {
-                    $("body").prepend(container);
+                    $("body").append(container);
                 }
                 
                 // Attach the settings
