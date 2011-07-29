@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch
- * Version 1.2.0
+ * Version 1.2.1
  * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
@@ -22,7 +22,7 @@
         existingSettings = container.data('settings'),
         rootElement = ("onorientationchange" in window) ? $(document) : $(window), // hack to acccount for iOS position:fixed shortcomings
         imgRatio, bgImg, bgWidth, bgHeight, bgOffset, bgCSS;
-        
+                
         // Extend the settings with those the user has provided
         if(options && typeof options == "object") $.extend(settings, options);
     
@@ -40,13 +40,13 @@
                 // If this is the first time that backstretch is being called
                 if(container.length == 0) {
                     container = $("<div />").attr("id", "backstretch")
-                                            .css({left: 0, top: 0, position: "fixed", overflow: "hidden", zIndex: -999999, margin: 0, padding: 0});
+                                            .css({left: 0, top: 0, position: "fixed", overflow: "hidden", zIndex: -999999, margin: 0, padding: 0, height: "100%", width: "100%"});
                 } else {
                     // Prepare to delete any old images
                     container.find("img").addClass("deleteable");
                 }
                 
-                img = $("<img />").css({position: "fixed", display: "none", margin: 0, padding: 0, border: "none"})
+                img = $("<img />").css({position: "absolute", display: "none", margin: 0, padding: 0, border: "none"})
                                   .bind("load", function(e) {                                          
                                       var self = $(this),
                                           imgWidth, imgHeight;
@@ -87,7 +87,7 @@
                 bgCSS = {left: 0, top: 0}
                 bgWidth = rootElement.width();
                 bgHeight = bgWidth / imgRatio;
-
+                
                 // Make adjustments based on image ratio
                 // Note: Offset code provided by Peter Baker (http://ptrbkr.com/). Thanks, Peter!
                 if(bgHeight >= rootElement.height()) {
