@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch
- * Version 1.2.1
+ * Version 1.2.2
  * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
@@ -100,7 +100,8 @@
                     if(settings.centeredX) $.extend(bgCSS, {left: "-" + bgOffset + "px"});
                 }
 
-                $("#backstretch img:last").width( bgWidth ).height( bgHeight ).css(bgCSS);
+                $("#backstretch, #backstretch img:last").width( bgWidth ).height( bgHeight )
+                                                        .filter("img").css(bgCSS);
             } catch(err) {
                 // IE7 seems to trigger _adjustBG before the image is loaded.
                 // This try/catch block is a hack to let it fail gracefully.
