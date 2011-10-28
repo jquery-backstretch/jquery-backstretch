@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch
- * Version 1.2.3
+ * Version 1.2.4
  * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
@@ -25,6 +25,9 @@
                 
         // Extend the settings with those the user has provided
         if(options && typeof options == "object") $.extend(settings, options);
+        
+        // Just in case the user passed in a function without options
+        if(options && typeof options == "function") callback = options;
     
         // Initialize
         $(document).ready(_init);
