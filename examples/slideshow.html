@@ -26,6 +26,13 @@
         &quot;pot-holder.jpg&quot;,
         &quot;coffee.jpg&quot;
     ];
+    
+    // A little script for preloading all of the images
+    // It's not necessary, but generally a good idea
+    $(images).each(function(){
+       $('<img/>')[0].src = this; 
+    });
+    
     // The index variable will keep track of which image is currently showing
     var index = 0;
 
@@ -50,6 +57,13 @@
             "pot-holder.jpg",
             "coffee.jpg"
         ];
+        
+        // A little script for preloading all of the images
+        // It's not necessary, but generally a good idea
+        $(images).each(function(){
+           $('<img/>')[0].src = this; 
+        });
+        
         // The index variable will keep track of which image is currently showing
         var index = 0;
         
