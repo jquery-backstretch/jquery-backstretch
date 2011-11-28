@@ -9,7 +9,23 @@
  * Dual licensed under the MIT and GPL licenses.
 */
 
-(function($) {
+(function ( name, definition ){
+
+  var theModule = definition(),
+    hasDefine = typeof define === 'function' && define.amd,
+    hasExports = typeof module !== 'undefined' && module.exports;
+  
+  if ( hasDefine ){ // Register as AMD Module
+    define(theModule);
+  } else if ( hasExports ) { // Register as Node.js Module
+    module.exports = theModule;
+  } else { // Assign to common namespaces or simply the global object (window)
+    (this.jQuery || this.ender || this.$ || this)[name] = theModule;
+  }
+
+})( 'backstretch', function() {
+
+  (function($) {
 
     $.backstretch = function(src, options, callback) {
         var defaultSettings = {
@@ -115,4 +131,6 @@
         }
     };
   
-})(jQuery);
+  })(jQuery);
+
+});
