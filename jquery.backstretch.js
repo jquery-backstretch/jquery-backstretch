@@ -103,7 +103,7 @@
                     if(settings.centeredX) $.extend(bgCSS, {left: "-" + bgOffset + "px"});
                 }
 
-                $("#backstretch, #backstretch img").width( bgWidth ).height( bgHeight )
+                $("#backstretch, #backstretch img:not(.deleteable)").width( bgWidth ).height( bgHeight )
                                                    .filter("img").css(bgCSS);
             } catch(err) {
                 // IE7 seems to trigger _adjustBG before the image is loaded.
