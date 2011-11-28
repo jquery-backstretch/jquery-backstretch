@@ -9,9 +9,27 @@
  * Dual licensed under the MIT and GPL licenses.
 */
 
-(function($) {
+(function ( name, definition ){
 
-    $.backstretch = function(src, options, callback) {
+  var theModule = definition(),
+    hasDefine = typeof define === 'function' && define.amd,
+    hasExports = typeof module !== 'undefined' && module.exports;
+  
+  if ( hasDefine ){ // Register as AMD Module
+    define(theModule);
+  } else if ( hasExports ) { // Register as Node.js Module
+    module.exports = theModule;
+  } else { // Assign to common namespaces or simply the global object (window)
+    (this.jQuery || this.ender || this.$ || this)[name] = theModule;
+  }
+
+})( 'backstretch', function() {
+
+  var backstretch;
+
+  (function($) {
+
+    backstretch = $.backstretch = function(src, options, callback) {
         var defaultSettings = {
             centeredX: true,         // Should we center the image on the X axis?
             centeredY: true,         // Should we center the image on the Y axis?
@@ -115,4 +133,8 @@
         }
     };
   
-})(jQuery);
+  })(jQuery);
+
+  return backstretch;
+
+});
