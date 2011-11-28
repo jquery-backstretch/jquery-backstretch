@@ -27,7 +27,7 @@
 
   (function($) {
 
-    $.backstretch = function(src, options, callback) {
+    backstretch = $.backstretch = function(src, options, callback) {
         var defaultSettings = {
             centeredX: true,         // Should we center the image on the X axis?
             centeredY: true,         // Should we center the image on the Y axis?
@@ -132,5 +132,7 @@
     };
   
   })(jQuery);
+
+  return backstretch;
 
 });
