@@ -25,6 +25,8 @@
 
 })( 'backstretch', function() {
 
+  var backstretch;
+
   (function($) {
 
     backstretch = $.backstretch = function(src, options, callback) {
