@@ -9,7 +9,7 @@
  * Dual licensed under the MIT and GPL licenses.
 */
 
-(function($) {
+;(function($) {
 
     $.backstretch = function(src, options, callback) {
         var defaultSettings = {
