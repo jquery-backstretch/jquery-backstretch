@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<style>
+	    body { font-family: Helvetica, Arial, sans-serif; }
+	    .container {
+	        width: 90%;
+	        margin: 20px auto;
+	        color: #FFF;
+	        padding: 50px 20px 100px 20px;
+	    }
+	    p { background: #666; background: rgba(0,0,0,0.4);  }
+	    pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; }
+	</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Basic Demo - Div</h1>
+        <p>This is a basic demo of jQuery Backstretch being applied to a div with a class of 'container' rather than the body. You can of course change this to be almost any block level element and it also handles multiple instances.</p>
+        <pre><code>
+&lt;script src=&quot;../lib/jquery-1.6.4.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;../jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $('.container').backstretch(&quot;pot-holder.jpg&quot;);
+&lt;/script&gt;
+        </code></pre>
+    </div>
+	<script src="../lib/jquery-1.6.4.min.js"></script>
+	<script src="../jquery.backstretch.min.js"></script>
+	<script>
+	    $('.container').backstretch("pot-holder.jpg");
+    </script>
+</body>
+</html>
