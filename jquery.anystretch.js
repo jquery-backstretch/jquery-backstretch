@@ -1,32 +1,35 @@
 /*
- * jQuery Backstretch
- * Version 1.3
- * http://srobbin.com/jquery-plugins/jquery-backstretch/
+ * jQuery Anystretch
+ * Version 1.0
+ * https://github.com/danmillar/jquery-anystretch
  *
- * Add a dynamically-resized background image to the page
+ * Add a dynamically-resized background image to the body
+ * of a page or any other block level element within it
  *
- * Copyright (c) 2011 Scott Robbin (srobbin.com)
+ * Copyright (c) 2012 Dan Millar (@danmillar / decode.uk.com)
  * Dual licensed under the MIT and GPL licenses.
  *
- * modified 2012-01-26 by Dan Millar (@danmillar)
- * added ability to call backstretch on other elements
+ * This is a fork of jQuery Backstretch (v1.2)
+ * Copyright (c) 2011 Scott Robbin (srobbin.com)
 */
 
 ;(function($) {
     
-    $.fn.backstretch = function(src, options, callback) {
+    $.fn.anystretch = function(src, options, callback) {
         return this.each(function(i){
         
             var defaultSettings = {
                 centeredX: true,         // Should we center the image on the X axis?
                 centeredY: true,         // Should we center the image on the Y axis?
-                speed: 0                 // fadeIn speed for background after image loads (e.g. "fast" or 500)
+                speed: 0,                // fadeIn speed for background after image loads (e.g. "fast" or 500)
+                elPosition: 'relative',  // position of containing element when not being added to the body
+                useInnerWidth: false     // set to true if dealing with elements with borders 
             },
             el = $(this),
-            isBody = (el.get(0).tagName == undefined) ? true : false,
-            container = isBody ? $(".backstretch") : el.find(".backstretch"),
+            isBody = (el.get(0).tagName == undefined) ? true : false, // Decide whether anystretch is being called on an element or not
+            container = isBody ? $('.anystretch') : el.children(".anystretch"),
             settings = container.data("settings") || defaultSettings, // If this has been called once before, use the old settings as the default
-            existingSettings = container.data("settings'"),
+            existingSettings = container.data('settings'),
             imgRatio, bgImg, bgWidth, bgHeight, bgOffset, bgCSS;
             
             // Extend the settings with those the user has provided
@@ -47,13 +50,13 @@
                     var img;
                     
                     if(!isBody) {
-                        // If not being added to the body set position to relative to keep backstretch contained
-                        el.css({position: "relative", background: "none"});
+                        // If not being added to the body set position to elPosition (default: relative) to keep anystretch contained
+                        el.css({position: settings.elPosition, background: "none"});
                     }
                     
-                    // If this is the first time that backstretch is being called
+                    // If this is the first time that anystretch is being called
                     if(container.length == 0) {
-                        container = $("<div />").attr("class", "backstretch")
+                        container = $("<div />").attr("class", "anystretch")
                                                 .css({left: 0, top: 0, position: (isBody ? "fixed" : "absolute"), overflow: "hidden", zIndex: (isBody ? -999999 : -999998), margin: 0, padding: 0, height: "100%", width: "100%"});
                     } else {
                         // Prepare to delete any old images
@@ -83,7 +86,7 @@
                                       .appendTo(container);
                      
                     // Append the container to the body, if it's not already there
-                    if(el.children(".backstretch").length == 0) {
+                    if(el.children(".anystretch").length == 0) {
                         if(isBody) {
                             $('body').append(container);
                         } else {
@@ -131,20 +134,20 @@
             }
             
             function _width() {
-                return isBody ? el.width() : el.outerWidth();
+                return isBody || settings.useInnerWidth ? el.width() : el.outerWidth();
             }
             
             function _height() {
-                return isBody ? el.height() : el.outerHeight();
+                return isBody || settings.useInnerWidth ? el.height() : el.outerHeight();
             }
             
         });
     };
     
-    $.backstretch = function(src, options, callback) {
+    $.anystretch = function(src, options, callback) {
         var el = ("onorientationchange" in window) ? $(document) : $(window); // hack to acccount for iOS position:fixed shortcomings
         
-        el.backstretch(src, options, callback);
+        el.anystretch(src, options, callback);
     };
   
 })(jQuery);

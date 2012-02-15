@@ -1,13 +1,13 @@
-h1. jQuery Backstretch
+h1. jQuery Anystretch
 
-PLEASE NOTE: This is a fork of the offical jQuery Backstretch by @srobbin. This version includes the ability to call Backstretch on any block level element and handles multiple instances.
+PLEASE NOTE: This is a fork of the original jQuery Backstretch by @srobbin. This version includes the ability to call Backstretch on any block level element and handles multiple instances.
 
-Backstretch is a jQuery plugin that allows you to add a dynamically-resized background image to any page.
-The image will stretch to fit the page, and will automatically resize as the window size changes.
+Anystretch is a jQuery plugin that allows you to add a dynamically-resized background image to any page or block level element.
+The image will stretch to fit the page/element, and will automatically resize as the window size changes.
 
 h2. Demo
 
-There are a couple of examples included with this package.
+The examples within this package show both the problem and solution.
 
 h2. Options
 
@@ -23,54 +23,51 @@ h3. speed
 
 This is the speed at which the image will fade in, after downloading is complete. Integers are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer, default=0)
 
+h3. elPosition (only when not used on the body)
+
+This is the css position given to the containing element when used on anything except the body. (type=String, default=relative)
+
+h3. useInnerWidth (only when not used on the body)
+
+By default Anystretch uses the outside measurements of an element to calculate it's size. If needed to can force it to use it's inner width. e.g. when you have borders. (type=Boolean, default=false)
+
 
 h2. Setup
 
-Include the jQuery library and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
+Include the jQuery library and Anystretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
 
-<pre><code><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-<script type="text/javascript" src="/jquery.backstretch.min.js"></script>
+<pre><code><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="/jquery.anystretch.min.js"></script>
 </code></pre>
 
 Note: The example above uses the Google hosted version of jQuery; there is also a jQuery source file included with this distribution, if you would like to host it yourself.
 
 <pre><code><script type="text/javascript">
-  $.backstretch("/path/to/image.jpg", {speed: 150});
+  $.anystretch("/path/to/image.jpg", {speed: 150});
 </script>
 </code></pre>
 
-Want to change the image after Backstretch has been loaded? No problem, just call it again!
+Want to change the image after Anystretch has been loaded? No problem, just call it again!
 
 <pre><code><script type="text/javascript">
-  $.backstretch("/path/to/image.jpg", {speed: 150});
+  $.anystretch("/path/to/image.jpg", {speed: 150});
   
   // Perhaps you'd like to change the image on a button click
   $(".button").click(function() {
-      $.backstretch("/path/to/next_image.jpg");
+      $.anystretch("/path/to/next_image.jpg");
   });
 </script>
 </code></pre>
 
-If you require Backstretch to work on one or more elements inside the page, rather than the page itself, simply call it on the element:
+If you require Anystretch to work on one or more elements inside the page, rather than the page itself, simply call it on the element:
 
 <pre><code><script type="text/javascript">
-  $('#myDiv').backstretch("/path/to/image.jpg", {speed: 150});
+  $('#myDiv').anystretch("/path/to/image.jpg", {speed: 150});
 </script>
 </code></pre>
 
 h2. Changelog
 
-h3. Version 1.3 - Unofficial
+h3. Version 1.0
 
-* You can now call backstretch on one or more elements.
-
-h3. Version 1.2
-
-* You can now called backstretch twice, and it will replace the existing image.
-
-h3. Version 1.1
-
-* Added 'centeredX' and 'centeredY' options.
-* Removed 'hideUntilReady' option. It looks pretty bad if you don't hide the image until it's fully loaded.
-* Fixed IE img onload bug.
-* Now supports iPhone/iPad orientation changes.
+* This was forked from Backstretch (version 1.2)
