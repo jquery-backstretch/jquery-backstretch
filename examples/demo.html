@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		
+		<title>Solution: using jQuery Anystretch</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">		
+		<meta name="description" content="Just a test page to show off some CSS gubbins">
+		<meta name="author" content="Elliot Jay Stocks">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style type="text/css" media="screen">
+			* { margin:0; padding:0; }
+			body { background:#ccc; color:#fff; font:1em/1.4em Georgia, 'Times New Roman', serif; }
+			h1, div + p { color:#333; text-align:center; }
+			h1 { line-height:1.2em; padding:5% 20% 0 20%; }
+			div + p { padding:0 20% 5% 20%; }
+			h2 { font-size:1.5em; line-height:1.2em; }
+			h2, p { padding:0.5em 0; }
+			a { border-bottom:1px solid #333; color:#333; text-decoration:none; }
+			a:hover { background:#fff; }
+			div { background:yellow; border:10px solid #fff; margin:5%; }
+			div div { background:rgba(0,0,0,0.6); border:none; margin:0 0 0 50%; padding:6% 2%; }
+		</style>
+		
+	</head>
+	
+	<body>
+		
+		<h1>Solution: <em>using jQuery Anystretch</em></h1>
+		
+	    <div class="div01">
+			<div>
+	        	<h2>Element with hardly any content</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
+			</div>
+	    </div>
+	
+		<div class="div02">
+			<div>
+	        	<h2>Element with much more content</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
+	    </div>
+	
+		<div class="div03">
+			<div>
+	        	<h2>Element with loads and loads of content</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
+	    </div>
+	
+		<p>This is an example page by <a href="http://elliotjaystocks.com/">Elliot Jay Stocks</a> showing the benefit of <a href="https://github.com/danmillar/jquery-anystretch">jQuery Anystretch</a>, <a href="http://decode.uk.com/">Decode</a>&#8217;s fork of <a href="http://srobbin.com/blog/jquery-plugins/jquery-backstretch/">jQuery Backstretch by Scott Robbin</a>. For context, please refer to <a href="http://elliotjaystocks.com/blog/better-background-images-for-responsive-web-design/">this blog post</a>. Photos by <a href="http://www.flickr.com/photos/elliotjaystocks/">EJS</a>. <strong>Can&#8217;t see the benefit? Refer to <a href="problem1.html">the problem with inline images</a> and <a href="problem2.html">the problem with CSS&#8217; <em>background-size</em> property</a>.</strong></p>
+
+		<script src="../lib/jquery-1.7.1.min.js"></script>
+		<script src="../jquery.anystretch.min.js"></script>
+		
+		<script>
+		    $('.div01').anystretch("img01.jpg");
+		    $('.div02').anystretch("img02.jpg");
+		    $('.div03').anystretch("img03.jpg");
+	    </script>
+
+	</body>
+
+</html>
