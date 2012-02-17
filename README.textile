@@ -27,11 +27,6 @@ h3. elPosition (only when not used on the body)
 
 This is the css position given to the containing element when used on anything except the body. (type=String, default=relative)
 
-h3. useInnerWidth (only when not used on the body)
-
-By default Anystretch uses the outside measurements of an element to calculate it's size. If needed to can force it to use it's inner width. e.g. when you have borders. (type=Boolean, default=false)
-
-
 h2. Setup
 
 Include the jQuery library and Anystretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):

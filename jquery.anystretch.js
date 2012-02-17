@@ -23,7 +23,6 @@
                 centeredY: true,         // Should we center the image on the Y axis?
                 speed: 0,                // fadeIn speed for background after image loads (e.g. "fast" or 500)
                 elPosition: 'relative',  // position of containing element when not being added to the body
-                useInnerWidth: false     // set to true if dealing with elements with borders 
             },
             el = $(this),
             isBody = (el.get(0).tagName == undefined) ? true : false, // Decide whether anystretch is being called on an element or not
@@ -134,11 +133,11 @@
             }
             
             function _width() {
-                return isBody || settings.useInnerWidth ? el.width() : el.outerWidth();
+                return isBody ? el.width() : el.innerWidth();
             }
             
             function _height() {
-                return isBody || settings.useInnerWidth ? el.height() : el.outerHeight();
+                return isBody ? el.height() : el.innerHeight();
             }
             
         });
