@@ -7,7 +7,7 @@ The image will stretch to fit the page/element, and will automatically resize as
 
 h2. Demo
 
-An example is provided within this package. To see it in action go to: http://wearyoubelong.com/
+An example is provided within this package. To see it in action go to: "http://wearyoubelong.com":http://wearyoubelong.com
 
 h2. Options
 
