@@ -21,6 +21,7 @@
             var defaultSettings = {
                 centeredX: true,         // Should we center the image on the X axis?
                 centeredY: true,         // Should we center the image on the Y axis?
+                bottom: false,         // Should we force the to be at the bottom of the Y axis?
                 speed: 0,                // fadeIn speed for background after image loads (e.g. "fast" or 500)
                 elPosition: 'relative',  // position of containing element when not being added to the body
             },
@@ -114,6 +115,7 @@
                     if(bgHeight >= _height()) {
                         bgOffset = (bgHeight - _height()) /2;
                         if(settings.centeredY) $.extend(bgCSS, {top: "-" + bgOffset + "px"});
+                        if(settings.bottom) $.extend(bgCSS, {top: "auto", bottom: "0px"});
                     } else {
                         bgHeight = _height();
                         bgWidth = bgHeight * imgRatio;
