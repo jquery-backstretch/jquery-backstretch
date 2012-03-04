@@ -1,6 +1,6 @@
 /*
  * jQuery Anystretch
- * Version 1.0
+ * Version 1.1
  * https://github.com/danmillar/jquery-anystretch
  *
  * Add a dynamically-resized background image to the body
@@ -16,22 +16,21 @@
 ;(function($) {
     
     $.fn.anystretch = function(src, options, callback) {
+        var isBody = this.selector.length ? false : true; // Decide whether anystretch is being called on an element or not
+
         return this.each(function(i){
-        
             var defaultSettings = {
-                centeredX: true,         // Should we center the image on the X axis?
-                centeredY: true,         // Should we center the image on the Y axis?
-                bottom: false,         // Should we force the to be at the bottom of the Y axis?
+                positionX: 'center',     // Should we center the image on the X axis?
+                positionY: 'center',     // Should we center the image on the Y axis?
                 speed: 0,                // fadeIn speed for background after image loads (e.g. "fast" or 500)
-                elPosition: 'relative',  // position of containing element when not being added to the body
+                elPosition: 'relative'  // position of containing element when not being added to the body
             },
             el = $(this),
-            isBody = (el.get(0).tagName == undefined) ? true : false, // Decide whether anystretch is being called on an element or not
             container = isBody ? $('.anystretch') : el.children(".anystretch"),
             settings = container.data("settings") || defaultSettings, // If this has been called once before, use the old settings as the default
             existingSettings = container.data('settings'),
             imgRatio, bgImg, bgWidth, bgHeight, bgOffset, bgCSS;
-            
+
             // Extend the settings with those the user has provided
             if(options && typeof options == "object") $.extend(settings, options);
             
@@ -114,13 +113,20 @@
                     // Note: Offset code provided by Peter Baker (http://ptrbkr.com/). Thanks, Peter!
                     if(bgHeight >= _height()) {
                         bgOffset = (bgHeight - _height()) /2;
-                        if(settings.centeredY) $.extend(bgCSS, {top: "-" + bgOffset + "px"});
-                        if(settings.bottom) $.extend(bgCSS, {top: "auto", bottom: "0px"});
+                        if(settings.positionY == 'center' || settings.centeredY) { // 
+                            $.extend(bgCSS, {top: "-" + bgOffset + "px"});
+                        } else if(settings.positionY == 'bottom') {
+                            $.extend(bgCSS, {top: "auto", bottom: "0px"});
+                        }
                     } else {
                         bgHeight = _height();
                         bgWidth = bgHeight * imgRatio;
                         bgOffset = (bgWidth - _width()) / 2;
-                        if(settings.centeredX) $.extend(bgCSS, {left: "-" + bgOffset + "px"});
+                        if(settings.positionX == 'center' || settings.centeredX) {
+                            $.extend(bgCSS, {left: "-" + bgOffset + "px"});
+                        } else if(settings.positionX == 'right') {
+                            $.extend(bgCSS, {left: "auto", right: "0px"});
+                        }
                     }
     
                     container.children("img:not(.deleteable)").width( bgWidth ).height( bgHeight )

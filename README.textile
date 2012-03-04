@@ -1,7 +1,5 @@
 h1. jQuery Anystretch
 
-PLEASE NOTE: This is a fork of the original jQuery Backstretch by @srobbin. This version includes the ability to call Backstretch on any block level element and handles multiple instances.
-
 Anystretch is a jQuery plugin that allows you to add a dynamically-resized background image to any page or block level element.
 The image will stretch to fit the page/element, and will automatically resize as the window size changes.
 
@@ -11,13 +9,13 @@ An example is provided within this package. To see it in action go to: "http://w
 
 h2. Options
 
-h3. centeredX
+h3. positionX
 
-The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. (type=Boolean, default=true)
+This parameter controls how we position the image on the X axis. (type=String, options=left|center|right, default=center)
 
-h3. centeredY
+h3. positionY
 
-This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. (type=Boolean, default=true)
+This parameter controls how we position the image on the Y axis. (type=String, options=top|center|bottom, default=center)
 
 h3. speed
 
@@ -62,6 +60,10 @@ If you require Anystretch to work on one or more elements inside the page, rathe
 </code></pre>
 
 h2. Changelog
+
+h3. Version 1.1
+
+* Changed options from centeredX/centeredY to positionX/positionY to allow for greater control
 
 h3. Version 1.0
 
