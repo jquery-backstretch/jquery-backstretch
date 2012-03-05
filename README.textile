@@ -5,7 +5,7 @@ The image will stretch to fit the page, and will automatically resize as the win
 
 h2. Demo
 
-There are a couple of examples included with this package, or feel free to check it out live "on the project page itself.":http://srobbin.com/jquery-plugins/jquery-backstretch/
+There are a couple of examples included with this package, or feel free to check it out live "on the project page itself.":http://srobbin.com/jquery-plugins/backstretch/
 
 h2. Options
 
@@ -66,4 +66,4 @@ h2. Support
 
 Basic support is offered through Github’s issues tracker. Many requests are resolved through the help of fellow Backstretch users and myself, however assistance is not guaranteed or timely.
 
-If you are in need of immediate support, or would like customizations to the script, "Premium Support":https://www.paypal.com/cgi-bin/webscr?business=scott@halobrite.com&cmd=_xclick&currency_code=USD&amount=17&item_name=jQuery%20Backstretch%20Premium%20Support is available for $17. Premium Support provides you with direct email access to me, and allows me to set time aside to help solve your problem quickly.
+If you are in need of immediate support, or would like customizations to the script, "Premium Support":https://www.paypal.com/cgi-bin/webscr?business=srobbin@gmail.com&cmd=_xclick&currency_code=USD&amount=17&item_name=Backstretch%20Premium%20Support is available for $17. Premium Support provides you with direct email access to me, and allows me to set time aside to help solve your problem quickly.
