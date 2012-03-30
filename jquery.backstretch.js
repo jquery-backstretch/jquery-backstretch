@@ -114,5 +114,11 @@
             if (typeof fn == "function") fn();
         }
     };
-  
+    
+    // Expose backstretch as an AMD module
+    // https://github.com/jquery/jquery/blob/master/src/exports.js
+    if ( typeof define === "function" && define.amd ){
+        define("backstretch", [], function () { return $.backstretch; });
+    }
+
 })(jQuery);
