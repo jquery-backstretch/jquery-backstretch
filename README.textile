@@ -25,6 +25,10 @@ h3. elPosition (only when not used on the body)
 
 This is the css position given to the containing element when used on anything except the body. (type=String, default=relative)
 
+h3. dataName
+
+The name of the data attribute that Anystretch will use for the image name, if none is supplied in the src. (type=String, default=stretch)
+
 h2. Setup
 
 Include the jQuery library and Anystretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
@@ -59,7 +63,19 @@ If you require Anystretch to work on one or more elements inside the page, rathe
 </script>
 </code></pre>
 
+As of Version 1.2, Anystretch can also determine the image to use, via a data attribute. By default, Anystretch will use data-stretch although this can be changed by setting the dataName in the settings.
+
+
+<pre><code><script type="text/javascript">
+  $(".stretchMe").anystretch();
+</script>
+</code></pre>
+
 h2. Changelog
+
+h3. Version 1.2
+
+* Added dataName, to allow automatic image usage via data-anystretch (default)
 
 h3. Version 1.1
 

@@ -1,6 +1,8 @@
 /*
  * jQuery Anystretch
- * Version 1.1
+ * Version 1.2 (@jbrooksuk / me.itslimetime.com)
+ * https://github.com/jbrooksuk/jquery-anystretch
+ * Based on Dan Millar's Port
  * https://github.com/danmillar/jquery-anystretch
  *
  * Add a dynamically-resized background image to the body
@@ -23,7 +25,8 @@
                 positionX: 'center',     // Should we center the image on the X axis?
                 positionY: 'center',     // Should we center the image on the Y axis?
                 speed: 0,                // fadeIn speed for background after image loads (e.g. "fast" or 500)
-                elPosition: 'relative'  // position of containing element when not being added to the body
+                elPosition: 'relative',  // position of containing element when not being added to the body
+                dataName: 'stretch'      // The data-* name used to search for
             },
             el = $(this),
             container = isBody ? $('.anystretch') : el.children(".anystretch"),
@@ -45,7 +48,7 @@
         
             function _init() {
                 // Prepend image, wrapped in a DIV, with some positioning and zIndex voodoo
-                if(src) {
+                if(src || el.length >= 1) {
                     var img;
                     
                     if(!isBody) {
@@ -96,7 +99,15 @@
                     // Attach the settings
                     container.data("settings", settings);
                         
-                    img.attr("src", src); // Hack for IE img onload event
+                    var imgSrc = "";
+                    if(src) {
+                        imgSrc = src;
+                    }else if(el.data(settings.dataName)) {
+                        imgSrc = el.data(settings.dataName);
+                    }else{
+                        return;
+                    }
+                    img.attr("src", imgSrc); // Hack for IE img onload event
                     
                     // Adjust the background size when the window is resized or orientation has changed (iOS)
                     $(window).resize(_adjustBG);
