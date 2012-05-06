@@ -5,8 +5,10 @@
  *
  * Add a dynamically-resized background image to the page
  *
- * Copyright (c) 2011 Scott Robbin (srobbin.com)
- * Dual licensed under the MIT and GPL licenses.
+ * Copyright (c) 2012 Scott Robbin (srobbin.com)
+ * Licensed under the MIT license
+ * https://raw.github.com/srobbin/jquery-backstretch/master/MIT-LICENSE.txt
+ * 
 */
 
 ;(function($) {
