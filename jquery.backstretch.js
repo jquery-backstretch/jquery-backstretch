@@ -7,7 +7,7 @@
  *
  * Copyright (c) 2012 Scott Robbin (srobbin.com)
  * Licensed under the MIT license
- * https://raw.github.com/srobbin/jquery-backstretch/master/MIT-LICENSE.txt
+ * https://raw.github.com/srobbin/jquery-backstretch/master/LICENSE.txt
  * 
 */
 
