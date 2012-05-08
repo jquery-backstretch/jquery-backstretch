@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch
- * Version 1.2.6
+ * Version 1.2.7
  * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
@@ -85,13 +85,7 @@
             rootElement = supportsFixedPosition ? $(window) : $(document);
 
             // Should we use the window's innerHeight?
-            useWindowInnerHeight = supportsFixedPosition && window.innerHeight;
-
-            /*
-             * Scroll the page one pixel to get the right window height on iOS
-             * Pretty harmless for everyone else
-            */
-            window.scrollTo(0, 1);
+            useWindowInnerHeight = supportsFixedPosition && window.innerHeight; 
 
             // Initialize the plugin
             _init();
@@ -136,6 +130,11 @@
                  
                 // Append the container to the body, if it's not already there
                 if($("body #backstretch").length == 0) {
+                    /*
+                     * Scroll the page one pixel to get the right window height on iOS
+                     * Pretty harmless for everyone else
+                    */
+                    if ($(window).scrollTop() === 0 ) window.scrollTo(0, 0);
                     $("body").append($container);
                 }
                 
