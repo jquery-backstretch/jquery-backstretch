@@ -1,6 +1,6 @@
 /*
  * jQuery Backstretch
- * Version 1.2.7
+ * Version 1.2.8
  * http://srobbin.com/jquery-plugins/jquery-backstretch/
  *
  * Add a dynamically-resized background image to the page
@@ -8,7 +8,7 @@
  * Copyright (c) 2012 Scott Robbin (srobbin.com)
  * Licensed under the MIT license
  * https://raw.github.com/srobbin/jquery-backstretch/master/LICENSE.txt
- * 
+ *
 */
 
 ;(function($) {
@@ -27,10 +27,10 @@
 
         // Extend the settings with those the user has provided
         if(options && typeof options == "object") $.extend(settings, options);
-        
+
         // Just in case the user passed in a function without options
         if(options && typeof options == "function") callback = options;
-        
+
         $(document).ready(function() {
             /*
              *  Taken from jQuery Mobile 1.1.0
@@ -42,7 +42,7 @@
              *  jQuery Mobile uses this workaround. It's not ideal, but works.
              *
              *  Modified to detect IE6
-             */ 
+             */
             var w = window
               , ua = navigator.userAgent
               , platform = navigator.platform
@@ -55,7 +55,7 @@
               , omversion = !!operammobilematch && operammobilematch[ 1 ]
               , iematch = ua.match( /MSIE ([0-9]+)/ )
               , ieversion = !!iematch && iematch[ 1 ];
-              
+
             supportsFixedPosition = !(
               // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
               (( platform.indexOf( "iPhone" ) > -1 || platform.indexOf( "iPad" ) > -1  || platform.indexOf( "iPod" ) > -1 ) && wkversion && wkversion < 534 )
@@ -80,12 +80,12 @@
               // IE6
               ( ieversion && ieversion <= 6)
             );
-            
+
             // Set the root element
             rootElement = supportsFixedPosition ? $(window) : $(document);
 
             // Should we use the window's innerHeight?
-            useWindowInnerHeight = supportsFixedPosition && window.innerHeight; 
+            useWindowInnerHeight = supportsFixedPosition && window.innerHeight;
 
             // Initialize the plugin
             _init();
@@ -93,12 +93,12 @@
 
         // For chaining
         return this;
-    
+
         function _init() {
             // Prepend image, wrapped in a DIV, with some positioning and zIndex voodoo
             if(src) {
                 var img;
-                
+
                 // If this is the first time that backstretch is being called
                 if($container.length == 0) {
                     $container = $("<div />").attr("id", "backstretch")
@@ -107,12 +107,12 @@
                     // Prepare to delete any old images
                     $container.find("img").addClass("deleteable");
                 }
-                
-                img = $("<img />").css({position: "absolute", display: "none", margin: 0, padding: 0, border: "none", zIndex: -999999})
-                                  .bind("load", function(e) {                                          
+
+                img = $("<img />").css({position: "absolute", display: "none", margin: 0, padding: 0, border: "none", zIndex: -999999, maxWidth: "none"})
+                                  .bind("load", function(e) {
                                       var $self = $(this),
                                           imgWidth, imgHeight;
-                                          
+
                                       $self.css({width: "auto", height: "auto"});
                                       imgWidth = this.width || $(e.target).width();
                                       imgHeight = this.height || $(e.target).height();
@@ -127,7 +127,7 @@
                                       });
                                   })
                                   .appendTo($container);
-                 
+
                 // Append the container to the body, if it's not already there
                 if($("body #backstretch").length == 0) {
                     /*
@@ -137,10 +137,10 @@
                     if ($(window).scrollTop() === 0 ) window.scrollTo(0, 0);
                     $("body").append($container);
                 }
-                
+
                 // Attach the settings
                 $container.data("settings", settings);
-                    
+
                 img.attr("src", src); // Hack for IE img onload event
 
                 // Adjust the background size when the window is resized or orientation has changed (iOS)
@@ -153,7 +153,7 @@
                 });
             }
         }
-            
+
         function _adjustBG() {
             try {
                 bgCSS = {left: 0, top: 0}
@@ -181,5 +181,5 @@
             }
         }
     };
-  
+
 })(jQuery);
