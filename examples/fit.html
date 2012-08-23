@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<style>
+	    body { font-family: Helvetica, Arial, sans-serif; }
+	    .container {
+	        width: 90%;
+	        margin: 20px auto;
+	        background-color: #FFF;
+	        padding: 20px;
+	    }
+	    pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; }
+	</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Basic Demo</h1>
+        <p>This is a basic demo of jQuery Backstretch. It is a simple example of loading one image onto the page.</p>
+        <pre><code>
+&lt;script src=&quot;../lib/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;../jquery.backstretch.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $.backstretch(&quot;pot-holder.jpg&quot;, {fit: true});
+&lt;/script&gt;
+        </code></pre>
+    </div>
+	<script src="../lib/jquery.min.js"></script>
+	<script src="../jquery.backstretch.js"></script>
+	<script>
+	    $.backstretch("pot-holder.jpg", {fit: true});
+    </script>
+</body>
+</html>

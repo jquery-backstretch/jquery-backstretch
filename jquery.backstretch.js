@@ -17,6 +17,7 @@
         var defaultSettings = {
             centeredX: true         // Should we center the image on the X axis?
           , centeredY: true         // Should we center the image on the Y axis?
+          , fit: false              // Should we fit the image on the viewport?
           , speed: 0                // fadeIn speed for background after image loads (e.g. "fast" or 500)
         }
       , $container = $("#backstretch")
@@ -84,9 +85,6 @@
             // Set the root element
             rootElement = supportsFixedPosition ? $(window) : $(document);
 
-            // Should we use the window's innerHeight?
-            useWindowInnerHeight = supportsFixedPosition && window.innerHeight;
-
             // Initialize the plugin
             _init();
         });
@@ -110,20 +108,20 @@
 
                 img = $("<img />").css({position: "absolute", display: "none", margin: 0, padding: 0, border: "none", zIndex: -999999, maxWidth: "none"})
                                   .bind("load", function(e) {
-                                      var $self = $(this),
+                                      var self = this,
                                           imgWidth, imgHeight;
 
-                                      $self.css({width: "auto", height: "auto"});
+                                      $(self).css({width: "auto", height: "auto"});
                                       imgWidth = this.width || $(e.target).width();
                                       imgHeight = this.height || $(e.target).height();
                                       imgRatio = imgWidth / imgHeight;
 
                                       _adjustBG();
-                                      $self.fadeIn(settings.speed, function(){
+                                      $(self).fadeIn(settings.speed, function(){
                                           // Remove the old images, if necessary.
                                           $container.find('.deleteable').remove();
                                           // Callback
-                                          if(typeof callback == "function") callback();
+                                          if(typeof callback == "function") callback.apply(self);
                                       });
                                   })
                                   .appendTo($container);
@@ -149,32 +147,54 @@
                   if("onorientationchange" in window) {
                     if (window.pageYOffset === 0) window.scrollTo(0, 1);
                   }
-                  _adjustBG()
+                  _adjustBG();
+                  // Callback
+                  if(typeof callback == "function") callback.apply(img.get(0));
                 });
             }
         }
 
         function _adjustBG() {
             try {
-                bgCSS = {left: 0, top: 0}
-              , rootWidth = bgWidth = rootElement.width()
-              , rootHeight = useWindowInnerHeight ? window.innerHeight : rootElement.height()
-              , bgHeight = bgWidth / imgRatio;
+                var rootWidth  = (supportsFixedPosition && window.innerWidth) ? window.innerWidth : rootElement.width() // if browser supports fixed position try to use the window's innerWidth first
+                  , rootHeight  = (supportsFixedPosition && window.innerHeight) ? window.innerHeight : rootElement.height(); // if browser supports fixed position try to use the window's innerHeight first
 
-                // Make adjustments based on image ratio
-                // Note: Offset code provided by Peter Baker (http://ptrbkr.com/). Thanks, Peter!
-                if(bgHeight >= rootHeight) {
-                    bgOffset = (bgHeight - rootHeight) /2;
-                    if(settings.centeredY) bgCSS.top = "-" + bgOffset + "px";
+                // adjust background dimension according to viewport orientation
+                if (rootWidth >= rootHeight) {
+                    // horizontal or square viewport
+                    // first try to fit the background by width
+                    bgWidth = rootWidth;
+                    bgHeight = bgWidth / imgRatio;
+                    // after if the fitting is needed and the height is to large then shrink the image by height
+                    // without fitting if the backround height is lesser than viewport height then stretch it by height
+                    if ((settings.fit && bgHeight > rootHeight) || (!settings.fit && bgHeight < rootHeight)) {
+                        bgHeight = rootHeight;
+                        bgWidth = bgHeight * imgRatio;
+                    }
                 } else {
+                    // vertical viewport
+                    // first try to fit the background by height
                     bgHeight = rootHeight;
                     bgWidth = bgHeight * imgRatio;
-                    bgOffset = (bgWidth - rootWidth) / 2;
-                    if(settings.centeredX) bgCSS.left = "-" + bgOffset + "px";
+                    // after if the fitting is needed and the width is to large then shrink the image by width
+                    // without fitting if the backround width is lesser than viewport width then stretch it by width
+                    if ((settings.fit && bgWidth > rootWidth) || (!settings.fit && bgWidth < rootWidth)) {
+                        bgWidth = rootWidth;
+                        bgHeight = bgWidth / imgRatio;
+                    }
+                }
+
+                // adjust background position according to settings
+                bgCSS = {left: 0, top: 0};
+                if(settings.centeredX) {
+                    bgCSS.left = ((rootWidth - bgWidth) / 2) + "px";
+                }
+                if(settings.centeredY) {
+                    bgCSS.top = ((rootHeight - bgHeight) / 2) + "px";
                 }
 
                 $container.css({width: rootWidth, height: rootHeight})
-                          .find("img:not(.deleteable)").css({width: bgWidth, height: bgHeight}).css(bgCSS);
+                          .find("img:not(.deleteable)").css($.extend({width: bgWidth, height: bgHeight}, bgCSS));
             } catch(err) {
                 // IE7 seems to trigger _adjustBG before the image is loaded.
                 // This try/catch block is a hack to let it fail gracefully.
