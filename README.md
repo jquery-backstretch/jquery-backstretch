@@ -41,7 +41,7 @@ This parameter controls whether or not we center the image on the Y axis to acco
 
 ### fade
 
-This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer or String, default='fast')
+This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer or String, default=0)
 
 ### duration
 
