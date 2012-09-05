@@ -4,7 +4,7 @@ A simple jQuery plugin that allows you to add a dynamically-resized, slideshow-c
 
 ## Demo
 
-There are a couple of examples included with this package, or feel free to check it out live "on the project page itself.":http://srobbin.com/jquery-plugins/backstretch/
+Note: This branch is work in progress, The demos at [srobbin.com/jquery-plugins/backstretch/](http://srobbin.com/jquery-plugins/backstretch/) will give you an idea of how the plugin works, but they are demonstrating an older version. If you'd like to test out how this one works, look in the examples folder.
 
 ## Setup
 
