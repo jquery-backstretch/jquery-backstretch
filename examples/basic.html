@@ -3,32 +3,61 @@
 <head>
 	<meta charset="utf-8" />
 	<style>
-	    body { font-family: Helvetica, Arial, sans-serif; }
+	    body { font-family: Helvetica, Arial, sans-serif; line-height: 1.3em; -webkit-font-smoothing: antialiased; }
 	    .container {
 	        width: 90%;
 	        margin: 20px auto;
 	        background-color: #FFF;
 	        padding: 20px;
 	    }
-	    pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; }
+
+      pre, code {
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        font-size: 12px;
+        color: #333;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+      }
+	    pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; overflow: scroll; }
+      code { padding: 2px 4px; background-color: #F7F7F9; border: 1px solid #E1E1E8; color: #D14; }
+
+      .other { height: 300px; color: #FFF; }
+      .other div {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #000;
+        background: rgba(0,0,0,0.7);
+      }
+      .other div p { padding: 10px; }
 	</style>
 </head>
 <body>
     <div class="container">
         <h1>Basic Demo</h1>
-        <p>This is a basic demo of jQuery Backstretch. It is a simple example of loading one image onto the page.</p>
-        <pre><code>
-&lt;script src=&quot;../lib/jquery.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;../jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+        <p>In its simplest form, Backstretch can be called by passing in the path to an image, and it will be applied to the page's <code>body</code>.</p>
+        <pre>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
     $.backstretch(&quot;pot-holder.jpg&quot;);
-&lt;/script&gt;
-        </code></pre>
+&lt;/script&gt;</pre>
+        <h2>Other Elements</h2>
+        <p>Or, if you'd like, you can also attach Backstretch to another block level element on the page.</p>
+        <div class="other">
+          <div><p>The background image on this element was set using Backstretch.</p></div>
+        </div>
+        <pre>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(&quot;.other&quot;).backstretch(&quot;coffee.jpg&quot;);
+&lt;/script&gt;</pre>
     </div>
-	<script src="../lib/jquery.min.js"></script>
-	<script src="../jquery.backstretch.min.js"></script>
+	<script src="../libs/jquery/jquery.js"></script>
+	<script src="../src/jquery.backstretch.js"></script>
 	<script>
-	    $.backstretch("pot-holder.jpg");
-    </script>
+	    $.backstretch(["pot-holder.jpg"]);
+      $(".other").backstretch("coffee.jpg");
+  </script>
 </body>
 </html>

@@ -1,6 +1,10 @@
-/*! Backstretch - v2.0.0 - 2012-09-05
-* http://srobbin.com/jquery-plugins/backstretch/
-* Copyright (c) 2012 Scott Robbin; Licensed MIT */
+/*
+ * Backstretch
+ * http://srobbin.com/jquery-plugins/backstretch/
+ *
+ * Copyright (c) 2012 Scott Robbin
+ * Licensed under the MIT license.
+ */
 
 ;(function ($, window, undefined) {
   'use strict';
