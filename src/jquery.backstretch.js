@@ -47,6 +47,11 @@
             .data('backstretch');
   };
 
+  // Custom selector
+  $.expr[':'].backstretch = function(elem) {
+    return $(elem).data('backstretch') !== undefined;
+  };
+
   /* DEFAULTS
    * ========================= */
 
