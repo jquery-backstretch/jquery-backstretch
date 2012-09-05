@@ -22,15 +22,44 @@
       raises(block, [expected], [message])
   */
 
-  module('jQuery#backstretch', {
-    setup: function() {
-      this.elems = $('#qunit-fixture').children();
-    }
+  var global = {
+      elems: $('#qunit-fixture').children()
+
+    , img1: 'image1.jpg'
+    , img2: 'image2.jpg'
+
+    , destroy: function () {
+        try {
+          $(':backstretch').data('backstretch').destroy();
+        } catch(err) { /* Do nothing */ }
+      }
+  };
+
+  /* Backstretch tests
+   * ========================= */
+  module('Backstretch', {
+    teardown: global.destroy
   });
 
-  test('is chainable', 1, function () {
-    // Not a bad test to run on collection methods.
-    strictEqual(this.elems.backstretch(), this.elems, 'should be chaninable');
+  test('instantiation', function () {
+    strictEqual(global.elems.backstretch(global.img1), global.elems, 'chaninable when executed on elements');
+    strictEqual($.backstretch(global.img1).constructor, Object, 'returns Backstretch object');
+  });
+
+  test('images', function () {
+    raises(function() { $.backstretch(); }, 'raise an error when no image is supplied');
+    raises(function() { $.backstretch([]); }, 'raise an error when an empty image array is supplied');
+  });
+
+  test('options', function () {
+    // Make sure previous instances are destroyed
+    global.destroy();
+
+    var duration = 999999
+      , instance = $.backstretch(global.img1, {duration: duration});
+
+    // Test to make sure the options are being set
+    strictEqual(instance.options.duration, duration, 'passed options are being set');
   });
 
 }(jQuery));

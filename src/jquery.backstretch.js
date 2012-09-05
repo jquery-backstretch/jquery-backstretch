@@ -13,6 +13,11 @@
    * ========================= */
 
   $.fn.backstretch = function (images, options) {
+    // We need at least one image
+    if (images === undefined || images.length === 0) {
+      $.error("No images were supplied for Backstretch");
+    }
+
     /*
      * Scroll the page one pixel to get the right window height on iOS
      * Pretty harmless for everyone else
