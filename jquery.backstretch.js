@@ -50,7 +50,7 @@
       centeredX: true   // Should we center the image on the X axis?
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
-    , fade: 'fast'      // Speed of fade transition between slides
+    , fade: 0           // Speed of fade transition between slides
   };
 
   /* STYLES
@@ -219,7 +219,8 @@
                         self.resize();
 
                         // Show the image, then delete the old one
-                        $(this).fadeIn(self.options.fade, function () {
+                        // "speed" option has been deprecated, but we want backwards compatibilty
+                        $(this).fadeIn(self.options.fade || self.options.speed, function () {
                           oldImage.remove();
 
                           // Resume the slideshow
@@ -264,7 +265,9 @@
     , cycle: function () {
         // Start/resume the slideshow
         if(this.images.length > 1) {
+          // Clear the interval, just in case
           clearInterval(this.interval);
+
           this.interval = setInterval($.proxy(function () {
             // Check for paused slideshow
             if (!this.paused) {
