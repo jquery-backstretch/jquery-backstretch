@@ -90,6 +90,12 @@ Resume a paused slideshow.
 
 Destroy the Backstretch instance. Optionally, you can pass in a Boolean parameter, preserveBackground, to determine whether or not you'd like to keep the current image stretched as the background image.
 
+## Events
+
+### backstretch.show
+
+Backstretch will fire a "backstretch.show" event everytime a new image loads. If you listen for that event, you can, for example, coordinate other changes to coincide with your slideshow.
+
 ## Changelog
 
 ### Version 2.0
