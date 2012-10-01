@@ -1,4 +1,4 @@
-/*! Backstretch - v2.0.0 - 2012-09-05
+/*! Backstretch - v2.0.1 - 2012-10-01
 * http://srobbin.com/jquery-plugins/backstretch/
 * Copyright (c) 2012 Scott Robbin; Licensed MIT */
 
@@ -9,6 +9,11 @@
    * ========================= */
 
   $.fn.backstretch = function (images, options) {
+    // We need at least one image
+    if (images === undefined || images.length === 0) {
+      $.error("No images were supplied for Backstretch");
+    }
+
     /*
      * Scroll the page one pixel to get the right window height on iOS
      * Pretty harmless for everyone else
@@ -225,7 +230,7 @@
 
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.fade || self.options.speed, function () {
+                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
                           oldImage.remove();
 
                           // Resume the slideshow

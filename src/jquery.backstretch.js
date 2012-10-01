@@ -234,7 +234,7 @@
 
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.fade || self.options.speed, function () {
+                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
                           oldImage.remove();
 
                           // Resume the slideshow
