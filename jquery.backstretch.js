@@ -228,6 +228,8 @@
                         // Resize
                         self.resize();
 
+                        var fade = self.options.fade;
+
                         //if first slide then do not fade
                         if(!self.has_drawn_first_slide) {
                           fade = 0;
@@ -236,7 +238,7 @@
 
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
+                        $(this).fadeIn(fade, function () {
                           oldImage.remove();
 
                           // Resume the slideshow
