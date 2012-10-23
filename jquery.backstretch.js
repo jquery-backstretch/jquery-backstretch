@@ -301,6 +301,18 @@
         }
         this.$container.removeData('backstretch');
       }
+    , addImages: function(images) {
+        var self = this
+        this.images_to_add = $.isArray(images) ? images : [images];
+
+        // Preload images
+        $.each(this.images_to_add, function () {
+          $('<img />')[0].src = this;
+          self.images.push(this);
+        }); 
+
+        return this;
+      }
   };
 
   /* SUPPORTS FIXED POSITION?
