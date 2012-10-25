@@ -61,11 +61,13 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
-      centeredX: true   // Should we center the image on the X axis?
-    , centeredY: true   // Should we center the image on the Y axis?
-    , duration: 5000    // Amount of time in between slides (if slideshow)
-    , fade: 0           // Speed of fade transition between slides
-    , fit: false        // Should we fit the image to the viewport
+      centeredX: true    // Should we center the image on the X axis?
+    , centeredY: true    // Should we center the image on the Y axis?
+    , duration: 5000     // Amount of time in between slides (if slideshow)
+    , fade: 0            // Speed of fade transition between slides
+    , fit: false         // Should we fit the image to the viewport
+    , startIndex: 0      // For slideshow, what image to start with
+    , startRandom: false // For slideshow, start with random image (ignore startIndex)
   };
 
   /* STYLES
@@ -103,16 +105,8 @@
   var Backstretch = function (container, images, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
-    /* In its simplest form, we allow Backstretch to be called on an image path.
-     * e.g. $.backstretch('/path/to/image.jpg')
-     * So, we need to turn this back into an array.
-     */
-    this.images = $.isArray(images) ? images : [images];
-
-    // Preload images
-    $.each(this.images, function () {
-      $('<img />')[0].src = this;
-    });
+    // Initialize images and index
+    this.initImages(images);
 
     // Convenience reference to know if the container is body.
     this.isBody = container === document.body;
@@ -150,7 +144,6 @@
     });
 
     // Set the first image
-    this.index = 0;
     this.show(this.index);
 
     // Listen for resize
@@ -176,32 +169,32 @@
             , bgHeight = bgWidth / imgRatio
             , bgOffset, bgCSS;
 
-            // Make adjustments based on image ratio
-            if (rootWidth >= rootHeight) {
-                if ((this.options.fit && bgHeight > rootHeight) || (!this.options.fit && bgHeight < rootHeight)) {
-                    bgHeight = rootHeight;
-                    bgWidth = bgHeight * imgRatio;
-                }
-            } else {
-                bgHeight = rootHeight;
-                bgWidth = bgHeight * imgRatio;
-                if ((this.options.fit && bgWidth > rootWidth) || (!this.options.fit && bgWidth < rootWidth)) {
-                    bgWidth = rootWidth;
-                    bgHeight = bgWidth / imgRatio;
-                }
+          // Make adjustments based on image ratio
+          if (rootWidth >= rootHeight) {
+            if ((this.options.fit && bgHeight > rootHeight) || (!this.options.fit && bgHeight < rootHeight)) {
+              bgHeight = rootHeight;
+              bgWidth = bgHeight * imgRatio;
             }
+          } else {
+            bgHeight = rootHeight;
+            bgWidth = bgHeight * imgRatio;
+            if ((this.options.fit && bgWidth > rootWidth) || (!this.options.fit && bgWidth < rootWidth)) {
+              bgWidth = rootWidth;
+              bgHeight = bgWidth / imgRatio;
+            }
+          }
 
-            // adjust background position according to settings
-            bgCSS = {width: bgWidth, height: bgHeight, left: 0, top: 0};
-            if(this.options.centeredX) {
-                bgCSS.left = ((rootWidth - bgWidth) / 2) + "px";
-            }
-            if(this.options.centeredY) {
-                bgCSS.top = ((rootHeight - bgHeight) / 2) + "px";
-            }
+          // adjust background position according to settings
+          bgCSS = {width: bgWidth, height: bgHeight, left: 0, top: 0};
+          if(this.options.centeredX) {
+            bgCSS.left = ((rootWidth - bgWidth) / 2) + "px";
+          }
+          if(this.options.centeredY) {
+            bgCSS.top = ((rootHeight - bgHeight) / 2) + "px";
+          }
 
-            this.$wrap.css({width: rootWidth, height: rootHeight})
-                      .find('img:not(.deleteable)').css(bgCSS);
+          this.$wrap.css({width: rootWidth, height: rootHeight})
+                    .find('img:not(.deleteable)').css(bgCSS);
         } catch(err) {
             // IE7 seems to trigger resize before the image is loaded.
             // This try/catch block is a hack to let it fail gracefully.
@@ -303,6 +296,24 @@
         }
         return this;
       }
+
+    , initImages: function(images) {
+        /* In its simplest form, we allow Backstretch to be called on an image path.
+         * e.g. $.backstretch('/path/to/image.jpg')
+         * So, we need to turn this back into an array.
+         */
+        this.images = $.isArray(images) ? images : [images];
+
+        // preload images
+        $.each(images, function () {
+          $('<img />')[0].src = this;
+        });
+
+        // set index
+        this.index = this.options.startRandom ?
+                     Math.floor(Math.random() * (this.images.length + 1)) :
+                     this.options.startIndex;
+    }
 
     , destroy: function (preserveBackground) {
         // Stop the resize events
