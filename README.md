@@ -97,6 +97,14 @@ Pause the slideshow.
 
 Resume a paused slideshow.
 
+### cacheNext()
+
+Force the next image to be loaded. Useful for when lazyload option is true.
+
+### cachePrev()
+
+Force the previous image to be loaded. Useful for when lazyload option is true.
+
 ### destroy(preserveBackground)
 
 Destroy the Backstretch instance. Optionally, you can pass in a Boolean parameter, preserveBackground, to determine whether or not you'd like to keep the current image stretched as the background image.
