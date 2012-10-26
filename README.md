@@ -46,6 +46,18 @@ This is the speed at which the image will fade in. Integers in milliseconds are 
 
 The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. (type=Integer, default=5000)
 
+### pause
+
+the default state of the slide show is to start playing but this will turn it off (type=Bool, default=false)
+
+### lazyload
+
+default loads all images at start. Or you can load an image by command or as next slide is requested (type=Bool, default=false)
+
+### start
+
+the slide index you want to show first (type=Integer, default=0)
+
 ## Slideshow API
 
 Once you've instantiated Backstretch, you can access its instance via that element's data attribute. There are many actions that you can perform on an instance, though most of them are only applicable if you've created a slideshow:
