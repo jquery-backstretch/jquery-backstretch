@@ -223,7 +223,9 @@
                       .css(styles.img)
                       .bind('load', function (e) {
                         var imgWidth = this.width || $(e.target).width()
-                          , imgHeight = this.height || $(e.target).height();
+                          , imgHeight = this.height || $(e.target).height()
+                          // "speed" option has been deprecated, but we want backwards compatibilty
+                          , fade = self.options.speed || self.options.fade;
 
                         // Save the ratio
                         $(this).data('ratio', imgWidth / imgHeight);
@@ -231,11 +233,16 @@
                         // Resize
                         self.resize();
 
+                        //if first slide then do not fade
+                        if (!self.has_drawn_first_slide) {
+                          fade = 0;
+                          self.has_drawn_first_slide = true;
+                        }
+
                         // Show the image, then delete the old one
-                        // "speed" option has been deprecated, but we want backwards compatibilty
                         // Fade out old image in case fit is true and new image is smaller than old image
-                        oldImage.fadeOut(self.options.speed || self.options.fade);
-                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
+                        oldImage.fadeOut(fade);
+                        $(this).fadeIn(fade, function () {
                           oldImage.remove();
 
                           // Resume the slideshow
