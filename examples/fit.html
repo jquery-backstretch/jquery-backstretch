@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <style>
+      body { font-family: Helvetica, Arial, sans-serif; }
+      .container {
+          width: 90%;
+          margin: 20px auto;
+          background-color: #FFF;
+          padding: 20px;
+      }
+      pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fit Demo</h1>
+        <p>
+          The image is shrunk to fit the viewport. Enable this by passing {fit: true} as the options.
+        </p>
+        <pre><code>
+&lt;script src=&quot;../libs/jquery/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;../jquery.backstretch.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $.backstretch(&quot;pot-holder.jpg&quot;, {fit: true});
+&lt;/script&gt;
+        </code></pre>
+    </div>
+  <script src="../libs/jquery/jquery.js"></script>
+  <script src="../jquery.backstretch.js"></script>
+  <script>
+      $.backstretch("pot-holder.jpg", {fit: true});
+    </script>
+</body>
+</html>

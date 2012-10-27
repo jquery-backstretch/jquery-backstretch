@@ -1,10 +1,6 @@
-/*
- * Backstretch
- * http://srobbin.com/jquery-plugins/backstretch/
- *
- * Copyright (c) 2012 Scott Robbin
- * Licensed under the MIT license.
- */
+/*! Backstretch - v2.0.1 - 2012-10-01
+* http://srobbin.com/jquery-plugins/backstretch/
+* Copyright (c) 2012 Scott Robbin; Licensed MIT */
 
 ;(function ($, window, undefined) {
   'use strict';
@@ -61,14 +57,17 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
-      centeredX: true   // Should we center the image on the X axis?
-    , centeredY: true   // Should we center the image on the Y axis?
-    , duration: 5000    // Amount of time in between slides (if slideshow)
-    , fade: 0           // Speed of fade transition between slides
+      centeredX: true    // Should we center the image on the X axis?
+    , centeredY: true    // Should we center the image on the Y axis?
+    , duration: 5000     // Amount of time in between slides (if slideshow)
+    , fade: 0            // Speed of fade transition between slides
+    , fit: false         // Should we fit the image to the viewport
+    , startIndex: 0      // For slideshow, what image to start with
+    , startRandom: false // For slideshow, start with random image (ignore startIndex)
   };
 
   /* STYLES
-   * 
+   *
    * Baked-in styles that we'll apply to our elements.
    * In an effort to keep the plugin simple, these are not exposed as options.
    * That said, anyone can override these in their own stylesheet.
@@ -102,16 +101,8 @@
   var Backstretch = function (container, images, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
-    /* In its simplest form, we allow Backstretch to be called on an image path.
-     * e.g. $.backstretch('/path/to/image.jpg')
-     * So, we need to turn this back into an array.
-     */
-    this.images = $.isArray(images) ? images : [images];
-
-    // Preload images
-    $.each(this.images, function () {
-      $('<img />')[0].src = this;
-    });    
+    // Initialize images and index
+    this.initImages(images);
 
     // Convenience reference to know if the container is body.
     this.isBody = container === document.body;
@@ -138,7 +129,7 @@
         , zIndex: zIndex === 'auto' ? 0 : zIndex
         , background: 'none'
       });
-      
+
       // Needs a higher z-index
       this.$wrap.css({zIndex: -999998});
     }
@@ -149,7 +140,6 @@
     });
 
     // Set the first image
-    this.index = 0;
     this.show(this.index);
 
     // Listen for resize
@@ -168,30 +158,39 @@
   Backstretch.prototype = {
       resize: function () {
         try {
-          var bgCSS = {left: 0, top: 0}
+          var imgRatio = this.$img.data('ratio')
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
             , bgWidth = rootWidth
             , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
-            , bgHeight = bgWidth / this.$img.data('ratio')
-            , bgOffset;
+            , bgHeight = bgWidth / imgRatio
+            , bgOffset, bgCSS;
 
-            // Make adjustments based on image ratio
-            if (bgHeight >= rootHeight) {
-                bgOffset = (bgHeight - rootHeight) / 2;
-                if(this.options.centeredY) {
-                  bgCSS.top = '-' + bgOffset + 'px';
-                }
-            } else {
-                bgHeight = rootHeight;
-                bgWidth = bgHeight * this.$img.data('ratio');
-                bgOffset = (bgWidth - rootWidth) / 2;
-                if(this.options.centeredX) {
-                  bgCSS.left = '-' + bgOffset + 'px';
-                }
+          // Make adjustments based on image ratio
+          if (rootWidth >= rootHeight) {
+            if ((this.options.fit && bgHeight > rootHeight) || (!this.options.fit && bgHeight < rootHeight)) {
+              bgHeight = rootHeight;
+              bgWidth = bgHeight * imgRatio;
             }
+          } else {
+            bgHeight = rootHeight;
+            bgWidth = bgHeight * imgRatio;
+            if ((this.options.fit && bgWidth > rootWidth) || (!this.options.fit && bgWidth < rootWidth)) {
+              bgWidth = rootWidth;
+              bgHeight = bgWidth / imgRatio;
+            }
+          }
 
-            this.$wrap.css({width: rootWidth, height: rootHeight})
-                      .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
+          // adjust background position according to settings
+          bgCSS = {width: bgWidth, height: bgHeight, left: 0, top: 0};
+          if(this.options.centeredX) {
+            bgCSS.left = ((rootWidth - bgWidth) / 2) + "px";
+          }
+          if(this.options.centeredY) {
+            bgCSS.top = ((rootHeight - bgHeight) / 2) + "px";
+          }
+
+          this.$wrap.css({width: rootWidth, height: rootHeight})
+                    .find('img:not(.deleteable)').css(bgCSS);
         } catch(err) {
             // IE7 seems to trigger resize before the image is loaded.
             // This try/catch block is a hack to let it fail gracefully.
@@ -224,17 +223,26 @@
                       .css(styles.img)
                       .bind('load', function (e) {
                         var imgWidth = this.width || $(e.target).width()
-                          , imgHeight = this.height || $(e.target).height();
-                        
+                          , imgHeight = this.height || $(e.target).height()
+                          // "speed" option has been deprecated, but we want backwards compatibilty
+                          , fade = self.options.speed || self.options.fade;
+
                         // Save the ratio
                         $(this).data('ratio', imgWidth / imgHeight);
 
                         // Resize
                         self.resize();
 
+                        //if first slide then do not fade
+                        if (!self.has_drawn_first_slide) {
+                          fade = 0;
+                          self.has_drawn_first_slide = true;
+                        }
+
                         // Show the image, then delete the old one
-                        // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
+                        // Fade out old image in case fit is true and new image is smaller than old image
+                        oldImage.fadeOut(fade);
+                        $(this).fadeIn(fade, function () {
                           oldImage.remove();
 
                           // Resume the slideshow
@@ -292,6 +300,24 @@
         return this;
       }
 
+    , initImages: function(images) {
+        /* In its simplest form, we allow Backstretch to be called on an image path.
+         * e.g. $.backstretch('/path/to/image.jpg')
+         * So, we need to turn this back into an array.
+         */
+        this.images = $.isArray(images) ? images : [images];
+
+        // preload images
+        $.each(images, function () {
+          $('<img />')[0].src = this;
+        });
+
+        // set index
+        this.index = this.options.startRandom ?
+                     Math.floor(Math.random() * (this.images.length + 1)) :
+                     this.options.startIndex;
+    }
+
     , destroy: function (preserveBackground) {
         // Stop the resize events
         $(window).off('resize.backstretch orientationchange.backstretch');
@@ -301,7 +327,7 @@
 
         // Remove Backstretch
         if(!preserveBackground) {
-          this.$wrap.remove();          
+          this.$wrap.remove();
         }
         this.$container.removeData('backstretch');
       }
@@ -336,23 +362,23 @@
     return !(
       // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
       ((platform.indexOf( "iPhone" ) > -1 || platform.indexOf( "iPad" ) > -1  || platform.indexOf( "iPod" ) > -1 ) && wkversion && wkversion < 534) ||
-      
+
       // Opera Mini
       (window.operamini && ({}).toString.call( window.operamini ) === "[object OperaMini]") ||
       (operammobilematch && omversion < 7458) ||
-      
+
       //Android lte 2.1: Platform is Android and Webkit version is less than 533 (Android 2.2)
       (ua.indexOf( "Android" ) > -1 && wkversion && wkversion < 533) ||
-      
+
       // Firefox Mobile before 6.0 -
       (ffversion && ffversion < 6) ||
-      
+
       // WebOS less than 3
       ("palmGetResource" in window && wkversion && wkversion < 534) ||
-      
+
       // MeeGo
       (ua.indexOf( "MeeGo" ) > -1 && ua.indexOf( "NokiaBrowser/8.5.0" ) > -1) ||
-      
+
       // IE6
       (ieversion && ieversion <= 6)
     );
