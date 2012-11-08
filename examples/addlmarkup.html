@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<style>
+		body { font-family: Helvetica, Arial, sans-serif; line-height: 1.3em; -webkit-font-smoothing: antialiased; }
+		.container {
+			width: 90%;
+			margin: 20px auto;
+			background-color: #FFF;
+			padding: 20px;
+		}
+
+		pre, code {
+			font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+			font-size: 12px;
+			color: #333;
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			border-radius: 3px;
+		}
+		pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; overflow: scroll; }
+		code { padding: 2px 4px; background-color: #F7F7F9; border: 1px solid #E1E1E8; color: #D14; }
+		.other { height: 300px; color: #FFF; }
+		.other div {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			background: #000;
+			background: rgba(0,0,0,0.7);
+		}
+		.other div p { padding: 10px; }
+
+		.backstretch > div {
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAGCAYAAAAG5SQMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0M0UzQ0NDMzM1OTkxMUUxODUyMkY1ODNBMEVFOTU3RCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0M0UzQ0NDNDM1OTkxMUUxODUyMkY1ODNBMEVFOTU3RCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQzRTNDQ0MxMzU5OTExRTE4NTIyRjU4M0EwRUU5NTdEIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjQzRTNDQ0MyMzU5OTExRTE4NTIyRjU4M0EwRUU5NTdEIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+20+oVgAAABhJREFUeNpiYIAAQwZ0BjIwZCBOGUCAAQArXwEnkh+BIQAAAABJRU5ErkJggg==") repeat scroll 0 0 transparent;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Additional Markup</h1>
+			<p>This demonstrates how to use additional markup in backstretch. Specifically, this example shows how to use a pattern overlay on top of Backstretch.</p>
+			<pre>&lt;style&gt;
+    .backstretch &gt; div {
+        background: url(&quot;bg-pattern.png&quot;) repeat scroll 0 0 transparent;
+    }
+&lt;/style&gt;
+
+&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $.backstretch(&quot;pot-holder.jpg&quot;, { addlMarkup: &quot;&lt;div /&gt;&quot; });
+&lt;/script&gt;</pre>
+			<h2>Other Elements</h2>
+			<p>Or, if you'd like, you can also attach Backstretch to another block level element on the page.</p>
+			<div class="other">
+				<div><p>The background image on this element was set using Backstretch with addlMarkup to provide the texture overlay.</p></div>
+			</div>
+			<pre>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(&quot;.other&quot;).backstretch(&quot;coffee.jpg&quot;, { addlMarkup: &quot;&lt;div /&gt;&quot; });
+&lt;/script&gt;</pre>
+	</div>
+
+	<script src="../libs/jquery/jquery.js"></script>
+	<script src="../jquery.backstretch.js"></script>
+
+	<script>
+		$.backstretch("pot-holder.jpg", { addlMarkup: "<div />" });
+		$(".other").backstretch("coffee.jpg", { addlMarkup: "<div />" });
+	</script>
+
+</body>
+</html>
