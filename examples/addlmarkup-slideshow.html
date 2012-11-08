@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<style>
+		body { font-family: Helvetica, Arial, sans-serif; line-height: 1.3em; -webkit-font-smoothing: antialiased; }
+		.container {
+			width: 90%;
+			margin: 60px auto;
+			background-color: #FFF;
+			padding: 20px;
+		}
+
+		pre, code {
+			font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+			font-size: 12px;
+			color: #333;
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			border-radius: 3px;
+		}
+		pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; overflow: scroll; }
+		code { padding: 2px 4px; background-color: #F7F7F9; border: 1px solid #E1E1E8; color: #D14; }
+
+
+		.backstretch > div {
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAGCAYAAAAG5SQMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0M0UzQ0NDMzM1OTkxMUUxODUyMkY1ODNBMEVFOTU3RCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0M0UzQ0NDNDM1OTkxMUUxODUyMkY1ODNBMEVFOTU3RCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQzRTNDQ0MxMzU5OTExRTE4NTIyRjU4M0EwRUU5NTdEIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjQzRTNDQ0MyMzU5OTExRTE4NTIyRjU4M0EwRUU5NTdEIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+20+oVgAAABhJREFUeNpiYIAAQwZ0BjIwZCBOGUCAAQArXwEnkh+BIQAAAABJRU5ErkJggg==") repeat scroll 0 0 transparent;
+		}
+		.backstretch h1 {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Slideshow With Additional Markup</h1>
+			<p>This demonstrates how to use additional markup in a backstretch slideshow. Just pass in an array of addlMarkup in the options.</p>
+			<p>Something to note: if you do not supply a <code>div</code> surrounding the addlMarkup, it will be added for you. This is a convenience to prevent the generated styles from conflicting with your additional markup.</p>
+			<pre>&lt;style&gt;
+    .backstretch &gt; div {
+        background: url(&quot;bg-pattern.png&quot;) repeat scroll 0 0 transparent;
+    }
+    .backstretch h1 {
+        color: red;
+    }
+&lt;/style&gt;
+
+&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  $.backstretch([
+      &quot;pot-holder.jpg&quot;,
+      &quot;coffee.jpg&quot;,
+      &quot;dome.jpg&quot;
+    ], {
+      fade: 750,
+      duration: 4000,
+      addlMarkup: [
+        '&lt;h1&gt;Pot Holder&lt;/h1&gt;',
+        '&lt;h1&gt;Coffee&lt;/h1&gt;',
+        '&lt;h1&gt;Dome&lt;/h1&gt;'
+      ]
+  });
+&lt;/script&gt;</pre>
+	</div>
+
+	<script src="../libs/jquery/jquery.js"></script>
+	<script src="../jquery.backstretch.js"></script>
+
+	<script>
+		$.backstretch([
+				"pot-holder.jpg",
+				"coffee.jpg",
+				"dome.jpg"
+			], {
+				fade: 750,
+				duration: 4000,
+				addlMarkup: [
+					'<h1>Pot Holder</h1>',
+					'<h1>Coffee</h1>',
+					'<h1>Dome</h1>'
+				]
+		});
+	</script>
+
+</body>
+</html>
