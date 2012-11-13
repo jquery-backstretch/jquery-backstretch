@@ -38,6 +38,14 @@ The ratio of the width/height of the image doesn't always jive with the width/he
 
 This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. (type=Boolean, default=true)
 
+### default_height
+
+set a default height to be used to resize image before image loads and we check for real image size. (type=Number, default=undefined)
+
+### default_width
+
+set a default width to be used to resize image before image loads and we check for real image size. (type=number, default=undefined)
+
 ### fade
 
 This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer or String, default=0)
