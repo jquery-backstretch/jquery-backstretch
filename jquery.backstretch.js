@@ -71,7 +71,7 @@
    * ========================= */
   var styles = {
       wrap: {
-          left: 0
+          right: 0
         , top: 0
         , overflow: 'hidden'
         , margin: 0
@@ -164,7 +164,7 @@
   Backstretch.prototype = {
       resize: function () {
         try {
-          var bgCSS = {left: 0, top: 0}
+          var bgCSS = {right: 0, top: 0}
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
             , bgWidth = rootWidth
             , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
@@ -182,7 +182,7 @@
                 bgWidth = bgHeight * this.$img.data('ratio');
                 bgOffset = (bgWidth - rootWidth) / 2;
                 if(this.options.centeredX) {
-                  bgCSS.left = '-' + bgOffset + 'px';
+                  bgCSS.right = '-' + bgOffset + 'px';
                 }
             }
 
