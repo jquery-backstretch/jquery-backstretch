@@ -14,6 +14,10 @@
       $.error("No images were supplied for Backstretch");
     }
 
+    if (images === undefined) {
+      $.error("No images were supplied for Backstretch");
+    }
+
     /*
      * Scroll the page one pixel to get the right window height on iOS
      * Pretty harmless for everyone else
@@ -61,6 +65,9 @@
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
     , fade: 0           // Speed of fade transition between slides
+    , paused: false   // the default is the slideshow will advance to next slide
+    , lazyload: false // load all the images be default
+    , start: 0      // start on the first image passed
   };
 
   /* STYLES
@@ -98,16 +105,25 @@
   var Backstretch = function (container, images, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
+    //let slideshow start paused
+    if(this.options.paused) {
+      this.paused = true;
+    }
+
     /* In its simplest form, we allow Backstretch to be called on an image path.
      * e.g. $.backstretch('/path/to/image.jpg')
      * So, we need to turn this back into an array.
      */
     this.images = $.isArray(images) ? images : [images];
 
-    // Preload images
-    $.each(this.images, function () {
-      $('<img />')[0].src = this;
-    });    
+    if(options.lazyload && this.images[options.start]) {
+      $('<img />')[0].src = this.images[options.start];
+    } else {
+      // Preload images
+      $.each(this.images, function () {
+        $('<img />')[0].src = this;
+      });    
+    }
 
     // Convenience reference to know if the container is body.
     this.isBody = container === document.body;
@@ -145,7 +161,7 @@
     });
 
     // Set the first image
-    this.index = 0;
+    this.index = options.start;
     this.show(this.index);
 
     // Listen for resize
@@ -207,10 +223,10 @@
 
         // Vars
         var self = this
-          , oldImage = self.$wrap.find('img').addClass('deleteable')
-          , evt = $.Event('backstretch.show', {
+        this.evt = $.Event('backstretch.show', {
               relatedTarget: self.$container[0]
             });
+        this.oldImage = self.$wrap.find('img').addClass('deleteable')
 
         // Pause the slideshow
         clearInterval(self.interval);
@@ -219,6 +235,11 @@
         self.$img = $('<img />')
                       .css(styles.img)
                       .bind('load', function (e) {
+
+                        self.draw(e, this);
+
+                        return;
+
                         var imgWidth = this.width || $(e.target).width()
                           , imgHeight = this.height || $(e.target).height();
                         
@@ -228,10 +249,18 @@
                         // Resize
                         self.resize();
 
+                        var fade = self.options.fade;
+
+                        //if first slide then do not fade
+                        if(!self.has_drawn_first_slide) {
+                          fade = 0;
+                          self.has_drawn_first_slide = true;
+                        }
+
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
-                          oldImage.remove();
+                        $(this).fadeIn(fade, function () {
+                          self.oldImage.remove();
 
                           // Resume the slideshow
                           if (!self.paused) {
@@ -239,19 +268,72 @@
                           }
 
                           // Trigger the event
-                          self.$container.trigger(evt);
+                          self.$container.trigger(self.evt);
                         });
+
                       })
                       .appendTo(self.$wrap);
+
+          if(!self.has_drawn_first_slide) {
+            //draw the first slide befor it loads
+            self.draw({}, self.$img[0]);
+          }
 
         // Hack for IE img onload event
         self.$img.attr('src', self.images[index]);
         return self;
       }
 
+    , draw: function(e, _this) {
+
+        var imgWidth = _this.width || $(e.target).width() || this.options.default_width
+          , imgHeight = _this.height || $(e.target).height() || this.options.default_height
+          , self = this;
+        
+        // Save the ratio
+        $(_this).data('ratio', imgWidth / imgHeight);
+
+        // Resize
+        self.resize();
+
+        var fade = self.options.fade;
+
+        //if first slide then do not fade
+        if(!self.has_drawn_first_slide) {
+          fade = 0;
+          self.has_drawn_first_slide = true;
+        }
+
+        // Show the image, then delete the old one
+        // "speed" option has been deprecated, but we want backwards compatibilty
+        $(_this).fadeIn(fade, function () {
+          self.oldImage.remove();
+
+          // Resume the slideshow
+          if (!self.paused) {
+            self.cycle();
+          }
+
+          // Trigger the event
+          self.$container.trigger(self.evt);
+        });
+    }
+
+    , cacheNext: function () {
+        // Cache Next slide
+        var index = (this.index < this.images.length - 1 ? this.index + 1 : 0);
+        $('<img />')[0].src = this.images[index];
+      }
+
     , next: function () {
         // Next slide
         return this.show(this.index < this.images.length - 1 ? this.index + 1 : 0);
+      }
+
+    , cachePrev: function () {
+        // Cache Previous slide
+        var index = (this.index === 0 ? this.images.length - 1 : this.index - 1);
+        $('<img />')[0].src = this.images[index];
       }
 
     , prev: function () {
@@ -300,6 +382,20 @@
           this.$wrap.remove();          
         }
         this.$container.removeData('backstretch');
+      }
+    , addImages: function(images) {
+        var self = this
+        this.images_to_add = $.isArray(images) ? images : [images];
+
+        // Preload images
+        $.each(this.images_to_add, function () {
+          if(!self.options.lazyload) {
+              $('<img />')[0].src = this;
+          }
+            self.images.push(this);
+        }); 
+
+        return this;
       }
   };
 

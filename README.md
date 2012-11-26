@@ -38,6 +38,14 @@ The ratio of the width/height of the image doesn't always jive with the width/he
 
 This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. (type=Boolean, default=true)
 
+### default_height
+
+set a default height to be used to resize image before image loads and we check for real image size. (type=Number, default=undefined)
+
+### default_width
+
+set a default width to be used to resize image before image loads and we check for real image size. (type=number, default=undefined)
+
 ### fade
 
 This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer or String, default=0)
@@ -45,6 +53,18 @@ This is the speed at which the image will fade in. Integers in milliseconds are 
 ### duration
 
 The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. (type=Integer, default=5000)
+
+### pause
+
+the default state of the slide show is to start playing but this will turn it off (type=Bool, default=false)
+
+### lazyload
+
+default loads all images at start. Or you can load an image by command or as next slide is requested (type=Bool, default=false)
+
+### start
+
+the slide index you want to show first (type=Integer, default=0)
 
 ## Slideshow API
 
@@ -84,6 +104,14 @@ Pause the slideshow.
 ### resume()
 
 Resume a paused slideshow.
+
+### cacheNext()
+
+Force the next image to be loaded. Useful for when lazyload option is true.
+
+### cachePrev()
+
+Force the previous image to be loaded. Useful for when lazyload option is true.
 
 ### destroy(preserveBackground)
 
