@@ -99,6 +99,24 @@ This method is called automatically when the container (window or block-level el
 
 Backstretch will fire a "backstretch.show" event everytime a new image loads. If you listen for that event, you can, for example, coordinate other changes to coincide with your slideshow.
 
+## Images
+
+Sometimes, you'll want to access Backstretch's images after you've instantiated the plugin. For example, perhaps you'd like to be able add more images to a slideshow. Doing so is easy. You can access the images array as follows:
+
+```javascript
+$('.foo').backstretch([
+  'path/to/image.jpg',
+  'path/to/image2.jpg',
+  'path/to/image3.jpg'
+]);
+
+// Access the instance
+var instance = $('.foo').data('backstretch');
+
+// Then, you can manipulate the images array directly
+instance.images.push('path/to/image4.jpg')
+```
+
 ## Changelog
 
 ### Version 2.0
