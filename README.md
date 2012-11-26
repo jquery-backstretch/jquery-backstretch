@@ -117,6 +117,12 @@ var instance = $('.foo').data('backstretch');
 instance.images.push('path/to/image4.jpg')
 ```
 
+Additionally, the current index of a slideshow is available through the instance as well:
+
+```javascript
+$("body").data("backstretch").index;
+```
+
 ## Changelog
 
 ### Version 2.0
