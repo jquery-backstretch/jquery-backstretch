@@ -10,7 +10,7 @@ There are a couple of examples included with this package, or feel free to check
 Include the jQuery library and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
 
 ```html
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="jquery.backstretch.min.js"></script>
 <script>
   // To attach Backstrech as the body's backgroun
