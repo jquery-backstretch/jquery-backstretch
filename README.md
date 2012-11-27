@@ -93,13 +93,7 @@ Destroy the Backstretch instance. Optionally, you can pass in a Boolean paramete
 
 This method is called automatically when the container (window or block-level element) is resized, however you can always call this manually if needed.
 
-## Events
-
-### backstretch.show
-
-Backstretch will fire a "backstretch.show" event everytime a new image loads. If you listen for that event, you can, for example, coordinate other changes to coincide with your slideshow.
-
-## Images
+### Public Variables
 
 Sometimes, you'll want to access Backstretch's images after you've instantiated the plugin. For example, perhaps you'd like to be able add more images to a slideshow. Doing so is easy. You can access the images array as follows:
 
@@ -121,6 +115,21 @@ Additionally, the current index of a slideshow is available through the instance
 
 ```javascript
 $("body").data("backstretch").index;
+```
+
+## Events
+
+### backstretch.show
+
+Backstretch will fire a "backstretch.show" event everytime a new image loads, triggering a function that is passed the event and Backstetch instance. If you listen for that event, you can, for example, coordinate other changes to coincide with your slideshow.
+
+```javascript
+$(window).on("backstretch.show", function (e, instance) {
+  // If we wanted to stop the slideshow after it reached the end
+  if (instance.index === instance.images.length - 1) {
+    instance.pause();
+  };
+});
 ```
 
 ## Changelog

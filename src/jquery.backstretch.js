@@ -243,7 +243,7 @@
                           }
 
                           // Trigger the event
-                          self.$container.trigger(evt);
+                          self.$container.trigger(evt, self);
                         });
                       })
                       .appendTo(self.$wrap);

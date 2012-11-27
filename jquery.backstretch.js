@@ -1,4 +1,4 @@
-/*! Backstretch - v2.0.1 - 2012-10-01
+/*! Backstretch - v2.0.2 - 2012-11-27
 * http://srobbin.com/jquery-plugins/backstretch/
 * Copyright (c) 2012 Scott Robbin; Licensed MIT */
 
@@ -239,7 +239,7 @@
                           }
 
                           // Trigger the event
-                          self.$container.trigger(evt);
+                          self.$container.trigger(evt, self);
                         });
                       })
                       .appendTo(self.$wrap);
