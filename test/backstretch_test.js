@@ -62,4 +62,21 @@
     strictEqual(instance.options.duration, duration, 'passed options are being set');
   });
 
+  test('resize event', function() {
+    // Make sure previous instances are destroyed
+    global.destroy();
+
+    var duration = 999999
+      , instance = $('body').backstretch(global.img1, {duration: duration})
+      , onResize = function() {
+        resized = true;
+      }
+      , resized = false;
+
+    instance.on('backstretch.resize', onResize);
+    $(window).trigger('resize');
+
+    strictEqual(resized, true, 'passed resize event being called');
+  })
+
 }(jQuery));
