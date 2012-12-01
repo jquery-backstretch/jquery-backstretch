@@ -1,4 +1,4 @@
-/*! Backstretch - v2.0.2 - 2012-11-27
+/*! Backstretch - v2.0.3 - 2012-11-30
 * http://srobbin.com/jquery-plugins/backstretch/
 * Copyright (c) 2012 Scott Robbin; Licensed MIT */
 
@@ -225,9 +225,6 @@
                         // Save the ratio
                         $(this).data('ratio', imgWidth / imgHeight);
 
-                        // Resize
-                        self.resize();
-
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
                         $(this).fadeIn(self.options.speed || self.options.fade, function () {
@@ -241,6 +238,9 @@
                           // Trigger the event
                           self.$container.trigger(evt, self);
                         });
+
+                        // Resize
+                        self.resize();
                       })
                       .appendTo(self.$wrap);
 
