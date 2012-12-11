@@ -7,7 +7,7 @@ There are a couple of examples included with this package, or feel free to check
 
 ## Setup
 
-Include the jQuery library and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
+Include the jQuery library (version 1.7 or newer) and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
 
 ```html
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
