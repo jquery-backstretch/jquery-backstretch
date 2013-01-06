@@ -92,6 +92,7 @@
         , border: 'none'
         , width: 'auto'
         , height: 'auto'
+        , maxHeight: 'none'
         , maxWidth: 'none'
         , zIndex: -999999
       }
