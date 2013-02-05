@@ -247,6 +247,11 @@
                         self.resize();
                       })
                       .appendTo(self.$wrap);
+					  
+		if(this.options.callback
+			&& (typeof(this.options.callback) === 'function')
+				&& (this.images.length > 1))
+			this.options.callback(this.index);
 
         // Hack for IE img onload event
         self.$img.attr('src', self.images[index]);
@@ -286,7 +291,7 @@
             // Check for paused slideshow
             if (!this.paused) {
               this.next();
-            }
+            }			  
           }, this), this.options.duration);
         }
         return this;
