@@ -1,6 +1,10 @@
-/*! Backstretch - v2.0.3 - 2012-11-30
-* http://srobbin.com/jquery-plugins/backstretch/
-* Copyright (c) 2012 Scott Robbin; Licensed MIT */
+/*
+ * Backstretch
+ * http://srobbin.com/jquery-plugins/backstretch/
+ *
+ * Copyright (c) 2012 Scott Robbin
+ * Licensed under the MIT license.
+ */
 
 ;(function ($, window, undefined) {
   'use strict';
@@ -88,6 +92,7 @@
         , border: 'none'
         , width: 'auto'
         , height: 'auto'
+        , maxHeight: 'none'
         , maxWidth: 'none'
         , zIndex: -999999
       }
@@ -266,9 +271,11 @@
       }
 
     , resume: function () {
-        // Resume the slideshow
-        this.paused = false;
-        this.next();
+        // Resume the slideshow, do nothing if not paused
+        if (this.paused == true) {
+            this.paused = false;
+            this.next();
+        }
         return this;
       }
 
