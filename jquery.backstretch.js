@@ -272,7 +272,7 @@
 
     , resume: function () {
         // Resume the slideshow, do nothing if not paused
-        if (this.paused == true) {
+        if (!this.paused) {
             this.paused = false;
             this.next();
         }
