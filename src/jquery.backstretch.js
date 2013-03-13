@@ -6,7 +6,7 @@
  * Licensed under the MIT license.
  */
 
-;(function ($, window, undefined) {
+;(function ($, window, document, undefined) {
   'use strict';
 
   /* PLUGIN DEFINITION
@@ -68,12 +68,15 @@
   };
 
   /* STYLES
-   * 
+   *
    * Baked-in styles that we'll apply to our elements.
    * In an effort to keep the plugin simple, these are not exposed as options.
    * That said, anyone can override these in their own stylesheet.
    * ========================= */
-  var styles = {
+  var defaultZIndex = -999999
+    , styles;
+
+  styles = {
       wrap: {
           left: 0
         , top: 0
@@ -82,7 +85,7 @@
         , padding: 0
         , height: '100%'
         , width: '100%'
-        , zIndex: -999999
+        , zIndex: defaultZIndex
       }
     , img: {
           position: 'absolute'
@@ -94,13 +97,15 @@
         , height: 'auto'
         , maxHeight: 'none'
         , maxWidth: 'none'
-        , zIndex: -999999
+        , zIndex: defaultZIndex
       }
   };
 
   /* CLASS DEFINITION
    * ========================= */
   var Backstretch = function (container, images, options) {
+    var self = this;
+
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
     /* In its simplest form, we allow Backstretch to be called on an image path.
@@ -108,11 +113,6 @@
      * So, we need to turn this back into an array.
      */
     this.images = $.isArray(images) ? images : [images];
-
-    // Preload images
-    $.each(this.images, function () {
-      $('<img />')[0].src = this;
-    });    
 
     // Convenience reference to know if the container is body.
     this.isBody = container === document.body;
@@ -139,9 +139,10 @@
         , zIndex: zIndex === 'auto' ? 0 : zIndex
         , background: 'none'
       });
-      
+
       // Needs a higher z-index
-      this.$wrap.css({zIndex: -999998});
+      // "+2" because the visible img gets "+1"
+      this.$wrap.css({zIndex: defaultZIndex + 2});
     }
 
     // Fixed or absolute positioning?
@@ -149,19 +150,32 @@
       position: this.isBody && supportsFixedPosition ? 'fixed' : 'absolute'
     });
 
-    // Set the first image
-    this.index = 0;
-    this.show(this.index);
+    // Preload images
+    $.each(this.images, function () {
+      $('<img />')
+        .addClass('hideable')
+        .css(styles.img)
+        .appendTo(self.$wrap)
+        .attr('src', this);
+    });
 
-    // Listen for resize
-    $(window).on('resize.backstretch', $.proxy(this.resize, this))
-             .on('orientationchange.backstretch', $.proxy(function () {
-                // Need to do this in order to get the right window height
-                if (this.isBody && window.pageYOffset === 0) {
-                  window.scrollTo(0, 1);
-                  this.resize();
-                }
-             }, this));
+    // Give the browser a chance to complete the rendering,
+    // so we can get the width/height of the initial image correctly.
+    setTimeout(function () {
+      // Set the first image
+      self.index = 0;
+      self.show(self.index);
+
+      // Listen for resize
+      $(window).on('resize.backstretch', $.proxy(self.resize, self))
+               .on('orientationchange.backstretch', $.proxy(function () {
+                  // Need to do this in order to get the right window height
+                  if (this.isBody && window.pageYOffset === 0) {
+                    window.scrollTo(0, 1);
+                    this.resize();
+                  }
+               }, self));
+    }, 0);
   };
 
   /* PUBLIC METHODS
@@ -192,7 +206,7 @@
             }
 
             this.$wrap.css({width: rootWidth, height: rootHeight})
-                      .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
+                      .find('img:not(.hideable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
         } catch(err) {
             // IE7 seems to trigger resize before the image is loaded.
             // This try/catch block is a hack to let it fail gracefully.
@@ -212,46 +226,79 @@
 
         // Vars
         var self = this
-          , oldImage = self.$wrap.find('img').addClass('deleteable')
+          , docImgs = document.images
+          , totalDocImgs, i, imgPathParts, relativeImgPath
+          , prevImg, nextImg, imgWidth, imgHeight
           , evt = $.Event('backstretch.show', {
-              relatedTarget: self.$container[0]
+              relatedTarget: this.$container[0]
             });
 
         // Pause the slideshow
-        clearInterval(self.interval);
+        clearInterval(this.interval);
 
-        // New image
-        self.$img = $('<img />')
-                      .css(styles.img)
-                      .bind('load', function (e) {
-                        var imgWidth = this.width || $(e.target).width()
-                          , imgHeight = this.height || $(e.target).height();
-                        
-                        // Save the ratio
-                        $(this).data('ratio', imgWidth / imgHeight);
+        // Get prev/next image elements
+        // ----------------------------
 
-                        // Show the image, then delete the old one
-                        // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
-                          oldImage.remove();
+        // Get the previous image from the DOM,
+        // based on the next image's index.
+        // Tag it also as "hideable" with a class,
+        // so we can ignore it while resizing.
+        prevImg = this.$wrap
+                     .find('img')
+                     .eq(index > 0 ? index - 1 : this.images.length - 1)
+                     .addClass('hideable')
 
-                          // Resume the slideshow
-                          if (!self.paused) {
-                            self.cycle();
-                          }
+        // Get the next image from document.images, based on its src url.
+        totalDocImgs = docImgs.length;
+        for (i = 0; i < totalDocImgs; i += 1) {
+          imgPathParts = docImgs[i].src.split('//')[1].split('/');
+          imgPathParts.shift();
+          relativeImgPath = '/' + imgPathParts.join('/');
+          if (relativeImgPath === this.images[index]) {
+            nextImg = $(docImgs[i]);
+            break;
+          }
+        }
 
-                          // Trigger the event
-                          self.$container.trigger(evt, self);
-                        });
+        // Prepare next image
+        // ------------------
 
-                        // Resize
-                        self.resize();
-                      })
-                      .appendTo(self.$wrap);
+        // Put it on top of the others
+        styles.img.zIndex = defaultZIndex + 1;
 
-        // Hack for IE img onload event
-        self.$img.attr('src', self.images[index]);
-        return self;
+        // Set its styles, remove its "hideable" class and cache it.
+        this.$img = nextImg.removeClass('hideable').css(styles.img);
+
+        // Get its ratio and save it
+        imgWidth = nextImg[0].width || nextImg.width();
+        imgHeight = nextImg[0].height || nextImg.height();
+        nextImg.data('ratio', imgWidth / imgHeight);
+
+        // Resize it
+        this.resize();
+
+        // Show next image
+        // ---------------
+
+        // Reset z-index of the previous image
+        prevImg.css('zIndex', defaultZIndex);
+
+        // Fade in the next one
+        // "speed" option has been deprecated, but we want backwards compatibilty
+        nextImg.fadeIn(this.options.speed || this.options.fade, function () {
+          // Hide the previous
+          prevImg.hide();
+
+          // Resume the slideshow
+          if (!self.paused) {
+            self.cycle();
+          }
+
+          // Trigger the event
+          self.$container.trigger(evt, self);
+        });
+
+        return this;
       }
 
     , next: function () {
@@ -302,7 +349,7 @@
 
         // Remove Backstretch
         if(!preserveBackground) {
-          this.$wrap.remove();          
+          this.$wrap.remove();
         }
         this.$container.removeData('backstretch');
       }
@@ -337,26 +384,26 @@
     return !(
       // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
       ((platform.indexOf( "iPhone" ) > -1 || platform.indexOf( "iPad" ) > -1  || platform.indexOf( "iPod" ) > -1 ) && wkversion && wkversion < 534) ||
-      
+
       // Opera Mini
       (window.operamini && ({}).toString.call( window.operamini ) === "[object OperaMini]") ||
       (operammobilematch && omversion < 7458) ||
-      
+
       //Android lte 2.1: Platform is Android and Webkit version is less than 533 (Android 2.2)
       (ua.indexOf( "Android" ) > -1 && wkversion && wkversion < 533) ||
-      
+
       // Firefox Mobile before 6.0 -
       (ffversion && ffversion < 6) ||
-      
+
       // WebOS less than 3
       ("palmGetResource" in window && wkversion && wkversion < 534) ||
-      
+
       // MeeGo
       (ua.indexOf( "MeeGo" ) > -1 && ua.indexOf( "NokiaBrowser/8.5.0" ) > -1) ||
-      
+
       // IE6
       (ieversion && ieversion <= 6)
     );
   }());
 
-}(jQuery, window));
+}(jQuery, window, document));
