@@ -13,7 +13,7 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="jquery.backstretch.min.js"></script>
 <script>
-  // To attach Backstrech as the body's backgroun
+  // To attach Backstrech as the body's background
   $.backstretch("path/to/image.jpg");
 
   // You may also attach Backstretch to a block-level element
