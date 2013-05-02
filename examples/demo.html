@@ -29,14 +29,14 @@
 		
 		<h1>Solution: <em>using jQuery Anystretch</em></h1>
 		
-	    <div class="div01">
+	    <div class="div01 stretchMe" data-stretch="img01.jpg">
 			<div>
 	        	<h2>Element with hardly any content</h2>
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
 			</div>
 	    </div>
 	
-		<div class="div02">
+		<div class="div02 stretchMe" data-stretch="img02.jpg">
 			<div>
 	        	<h2>Element with much more content</h2>
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
@@ -44,7 +44,7 @@
 			</div>
 	    </div>
 	
-		<div class="div03">
+		<div class="div03 stretchMe" data-stretch="img03.jpg">
 			<div>
 	        	<h2>Element with loads and loads of content</h2>
 				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.</p>
@@ -56,12 +56,14 @@
 		<p>This is an example page by <a href="http://elliotjaystocks.com/">Elliot Jay Stocks</a> showing the benefit of <a href="https://github.com/danmillar/jquery-anystretch">jQuery Anystretch</a>, <a href="http://decode.uk.com/">Decode</a>&#8217;s fork of <a href="http://srobbin.com/blog/jquery-plugins/jquery-backstretch/">jQuery Backstretch by Scott Robbin</a>. For context, please refer to <a href="http://elliotjaystocks.com/blog/better-background-images-for-responsive-web-design/">this blog post</a>. Photos by <a href="http://www.flickr.com/photos/elliotjaystocks/">EJS</a>. <strong>Can&#8217;t see the benefit? Refer to <a href="problem1.html">the problem with inline images</a> and <a href="problem2.html">the problem with CSS&#8217; <em>background-size</em> property</a>.</strong></p>
 
 		<script src="../lib/jquery-1.7.1.min.js"></script>
-		<script src="../jquery.anystretch.min.js"></script>
+		<script src="../jquery.anystretch.js"></script>
 		
 		<script>
-		    $('.div01').anystretch("img01.jpg");
-		    $('.div02').anystretch("img02.jpg");
-		    $('.div03').anystretch("img03.jpg");
+		    // $('.div01').anystretch("img01.jpg");
+		    // $('.div02').anystretch("img02.jpg");
+		    // $('.div03').anystretch("img03.jpg");
+
+		    $(".stretchMe").anystretch();
 	    </script>
 
 	</body>
