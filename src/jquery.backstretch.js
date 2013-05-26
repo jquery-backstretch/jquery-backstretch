@@ -1,10 +1,6 @@
-/*
- * Backstretch
- * http://srobbin.com/jquery-plugins/backstretch/
- *
- * Copyright (c) 2012 Scott Robbin
- * Licensed under the MIT license.
- */
+/*! Backstretch - v2.0.3 - 2012-11-30
+* http://srobbin.com/jquery-plugins/backstretch/
+* Copyright (c) 2012 Scott Robbin; Licensed MIT */
 
 ;(function ($, window, undefined) {
   'use strict';
@@ -14,8 +10,15 @@
 
   $.fn.backstretch = function (images, options) {
     // We need at least one image
+
+    console.log (this.css('backgroundImage'));
+
+    if (images === undefined && this.css('backgroundImage')) {
+        images = [this.css('backgroundImage').replace(/url\(|\)|"|'/g,"")];
+    }
+
     if (images === undefined || images.length === 0) {
-      $.error("No images were supplied for Backstretch");
+	$.error("No images were supplied for Backstretch");
     }
 
     /*
@@ -92,7 +95,6 @@
         , border: 'none'
         , width: 'auto'
         , height: 'auto'
-        , maxHeight: 'none'
         , maxWidth: 'none'
         , zIndex: -999999
       }
@@ -103,12 +105,13 @@
   var Backstretch = function (container, images, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
-    /* In its simplest form, we allow Backstretch to be called on an image path.
-     * e.g. $.backstretch('/path/to/image.jpg')
-     * So, we need to turn this back into an array.
-     */
-    this.images = $.isArray(images) ? images : [images];
 
+    /* In its simplest form, we allow Backstretch to be called on an image path.
+    * e.g. $.backstretch('/path/to/image.jpg')
+    * So, we need to turn this back into an array.
+    */
+    this.images = $.isArray(images) ? images : [images];
+	
     // Preload images
     $.each(this.images, function () {
       $('<img />')[0].src = this;
