@@ -11,8 +11,6 @@
   $.fn.backstretch = function (images, options) {
     // We need at least one image
 
-    console.log (this.css('backgroundImage'));
-
     if (images === undefined && this.css('backgroundImage')) {
         images = [this.css('backgroundImage').replace(/url\(|\)|"|'/g,"")];
     }
