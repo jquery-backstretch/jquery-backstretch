@@ -5,7 +5,6 @@
  * Copyright (c) 2012 Scott Robbin
  * Licensed under the MIT license.
  */
-
 (function ($, window, undefined) {
   'use strict';
 
@@ -271,7 +270,7 @@
 
       resume: function () {
         // Resume the slideshow, do nothing if not paused
-        if (!this.paused) {
+        if (this.paused) {
             this.paused = false;
             this.next();
         }
