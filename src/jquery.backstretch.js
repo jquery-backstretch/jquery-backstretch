@@ -2,7 +2,7 @@
  * Backstretch
  * http://srobbin.com/jquery-plugins/backstretch/
  *
- * Copyright (c) 2012 Scott Robbin
+ * Copyright (c) 2013 Scott Robbin
  * Licensed under the MIT license.
  */
 
@@ -13,7 +13,7 @@
    * ========================= */
 
   $.fn.backstretch = function (images, options) {
-    // We need at least one image
+    // We need at least one image or method name
     if (images === undefined || images.length === 0) {
       $.error("No images were supplied for Backstretch");
     }
@@ -30,8 +30,18 @@
       var $this = $(this)
         , obj = $this.data('backstretch');
 
-      // If we've already attached Backstretch to this element, remove the old instance.
+      // Do we already have an instance attached to this element?
       if (obj) {
+
+        // Is this a method they're trying to execute?
+        if (typeof images == 'string' && typeof obj[images] == 'function') {
+          // Call the method
+          obj[images](options);
+
+          // No need to do anything further
+          return;
+        }
+
         // Merge the old options with the new
         options = $.extend(obj.options, options);
 
