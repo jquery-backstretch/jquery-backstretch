@@ -56,35 +56,17 @@ $('.foo').backstretch("pause");
 $('.foo').backstretch("next");
 ```
 
-### .backstretch("show", n)
+| Method | Description |
+|------|-------------|
+| .backstretch("show", n) | Jump to the slide at a given index, where n is the number of the image that you'd like to display. Slide number starts at 0. |
+| .backstretch("prev") | Display the previous image in a slideshow. |
+| .backstretch("next") | Advance to the next image in a slideshow. |
+| .backstretch("pause") | Pause the slideshow. |
+| .backstretch("resume") | Resume a paused slideshow. |
+| .backstretch("destroy", preserveBackground) | Destroy the Backstretch instance. Optionally, you can pass in a Boolean parameter, preserveBackground, to determine whether or not you'd like to keep the current image stretched as the background image. |
+| .backstretch("resize") | This method is called automatically when the container (window or block-level element) is resized, however you can always call this manually if needed. |
 
-Jump to the slide at a given index, where n is the number of the image that you'd like to display. Slide number starts at 0.
-
-### .backstretch("prev")
-
-Display the previous image in a slideshow.
-
-### .backstretch("next")
-
-Advance to the next image in a slideshow.
-
-### .backstretch("pause")
-
-Pause the slideshow.
-
-### .backstretch("resume")
-
-Resume a paused slideshow.
-
-### .backstretch("destroy", preserveBackground)
-
-Destroy the Backstretch instance. Optionally, you can pass in a Boolean parameter, preserveBackground, to determine whether or not you'd like to keep the current image stretched as the background image.
-
-### .backstretch("resize")
-
-This method is called automatically when the container (window or block-level element) is resized, however you can always call this manually if needed.
-
-### Public Variables
+## Public Variables
 
 Sometimes, you'll want to access Backstretch's images after you've instantiated the plugin. For example, perhaps you'd like to be able add more images to a slideshow. Doing so is easy. You can access the images array as follows:
 
