@@ -32,10 +32,10 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
-| centeredX | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
-| centeredY | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
-| fade | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
-| duration | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
+| `centeredX` | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
+| `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
+| `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
+| `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 
 ## Slideshow API
 
@@ -58,13 +58,13 @@ $('.foo').backstretch("next");
 
 | Method | Description |
 |------|-------------|
-| .backstretch("show", n) | Jump to the slide at a given index, where n is the number of the image that you'd like to display. Slide number starts at 0. |
-| .backstretch("prev") | Display the previous image in a slideshow. |
-| .backstretch("next") | Advance to the next image in a slideshow. |
-| .backstretch("pause") | Pause the slideshow. |
-| .backstretch("resume") | Resume a paused slideshow. |
-| .backstretch("destroy", preserveBackground) | Destroy the Backstretch instance. Optionally, you can pass in a Boolean parameter, preserveBackground, to determine whether or not you'd like to keep the current image stretched as the background image. |
-| .backstretch("resize") | This method is called automatically when the container (window or block-level element) is resized, however you can always call this manually if needed. |
+| `.backstretch("show", n)` | Jump to the slide at a given index, where n is the number of the image that you'd like to display. Slide number starts at 0. |
+| `.backstretch("prev")` | Display the previous image in a slideshow. |
+| `.backstretch("next")` | Advance to the next image in a slideshow. |
+| `.backstretch("pause")` | Pause the slideshow. |
+| `.backstretch("resume")` | Resume a paused slideshow. |
+| `.backstretch("destroy", preserveBackground)` | Destroy the Backstretch instance. Optionally, you can pass in a Boolean parameter, preserveBackground, to determine whether or not you'd like to keep the current image stretched as the background image. |
+| `.backstretch("resize")` | This method is called automatically when the container (window or block-level element) is resized, however you can always call this manually if needed. |
 
 ## Public Variables
 
