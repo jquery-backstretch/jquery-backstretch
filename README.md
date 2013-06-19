@@ -30,25 +30,16 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 
 ## Options
 
-### centeredX
-
-The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. (type=Boolean, default=true)
-
-### centeredY
-
-This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. (type=Boolean, default=true)
-
-### fade
-
-This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). (type=Integer or String, default=0)
-
-### duration
-
-The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. (type=Integer, default=5000)
+| Name | Description | Type | Default |
+|------|-------------|------|---------|
+| centeredX | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
+| centeredY | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
+| fade | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
+| duration | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 
 ## Slideshow API
 
-Once you've instantiated Backstretch, you can access its instance via that element's data attribute. There are many actions that you can perform on an instance, though most of them are only applicable if you've created a slideshow:
+Once you've instantiated a Backstretch slideshow, there are many actions that you can perform it:
 
 ```javascript
 // Start a slideshow
@@ -59,37 +50,37 @@ $('.foo').backstretch([
 ]);
 
 // Pause the slideshow
-$('.foo').data('backstretch').pause();
+$('.foo').backstretch("pause");
 
 // Advance to the next slide
-$('.foo').data('backstretch').next();
+$('.foo').backstretch("next");
 ```
 
-### show(index)
+### .backstretch("show", n)
 
-Jump to the slide at a given index.
+Jump to the slide at a given index, where n is the number of the image that you'd like to display. Slide number starts at 0.
 
-### prev()
+### .backstretch("prev")
 
 Display the previous image in a slideshow.
 
-### next()
+### .backstretch("next")
 
 Advance to the next image in a slideshow.
 
-### pause()
+### .backstretch("pause")
 
 Pause the slideshow.
 
-### resume()
+### .backstretch("resume")
 
 Resume a paused slideshow.
 
-### destroy(preserveBackground)
+### .backstretch("destroy", preserveBackground)
 
 Destroy the Backstretch instance. Optionally, you can pass in a Boolean parameter, preserveBackground, to determine whether or not you'd like to keep the current image stretched as the background image.
 
-### resize()
+### .backstretch("resize")
 
 This method is called automatically when the container (window or block-level element) is resized, however you can always call this manually if needed.
 
@@ -119,18 +110,27 @@ $("body").data("backstretch").index;
 
 ## Events
 
-### backstretch.show
+### backstretch.before
 
-Backstretch will fire a "backstretch.show" event everytime a new image loads, triggering a function that is passed the event and Backstetch instance. If you listen for that event, you can, for example, coordinate other changes to coincide with your slideshow.
+Backstretch will fire a "backstretch.before" event before a new image loads, triggering a function that is passed the event, Backstretch instance, and index of the image that will be displayed. If you listen for that event, you can, for example, coordinate other changes to coincide with your slideshow.
 
 ```javascript
-$(window).on("backstretch.show", function (e, instance) {
+$(window).on("backstretch.before", function (e, instance, index) {
   // If we wanted to stop the slideshow after it reached the end
-  if (instance.index === instance.images.length - 1) {
+  if (index === instance.images.length - 1) {
     instance.pause();
   };
 });
 ```
+
+### backstretch.after
+
+Backstretch will also fire a "backstretch.after" event after the new images has completed loading.
+
+```javascript
+$(window).on("backstretch.after", function (e, instance, index) {
+  // Do something
+});
 
 ## Changelog
 
