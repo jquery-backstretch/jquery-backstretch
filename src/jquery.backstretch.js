@@ -134,8 +134,11 @@
      * Root: Convenience reference to help calculate the correct height.
      */
     this.$container = $(container);
-    this.$wrap = $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
     this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
+
+    // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
+    var $existing = this.$container.children(".backstretch").first();
+    this.$wrap = $existing.length ? $existing : $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
 
     // Non-body elements need some style adjustments
     if (!this.isBody) {
