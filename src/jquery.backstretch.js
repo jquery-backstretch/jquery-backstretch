@@ -215,20 +215,23 @@
       }
 
       // Show the slide at a certain position
-    , show: function (index) {
+    , show: function (newIndex) {
+
         // Validate index
-        if (Math.abs(index) > this.images.length - 1) {
+        if (Math.abs(newIndex) > this.images.length - 1) {
           return;
-        } else {
-          this.index = index;
         }
 
         // Vars
         var self = this
           , oldImage = self.$wrap.find('img').addClass('deleteable')
-          , evt = $.Event('backstretch.show', {
-              relatedTarget: self.$container[0]
-            });
+          , evtOptions = { relatedTarget: self.$container[0] };
+
+        // Trigger the "before" event
+        self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]); 
+
+        // Set the new index
+        this.index = newIndex;
 
         // Pause the slideshow
         clearInterval(self.interval);
@@ -253,8 +256,11 @@
                             self.cycle();
                           }
 
-                          // Trigger the event
-                          self.$container.trigger(evt, self);
+                          // Trigger the "after" and "show" events
+                          // "show" is being deprecated
+                          $(['after', 'show']).each(function () {
+                            self.$container.trigger($.Event('backstretch.' + this, evtOptions), [self, newIndex]);
+                          });
                         });
 
                         // Resize
@@ -263,7 +269,7 @@
                       .appendTo(self.$wrap);
 
         // Hack for IE img onload event
-        self.$img.attr('src', self.images[index]);
+        self.$img.attr('src', self.images[newIndex]);
         return self;
       }
 
