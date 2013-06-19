@@ -113,6 +113,7 @@ Backstretch will also fire a "backstretch.after" event after the new images has 
 $(window).on("backstretch.after", function (e, instance, index) {
   // Do something
 });
+```
 
 ## Changelog
 
