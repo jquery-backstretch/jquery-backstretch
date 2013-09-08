@@ -115,6 +115,9 @@ $(window).on("backstretch.after", function (e, instance, index) {
 });
 ```
 
+## Running with Zepto
+There's a Zepto version of Backstretch. It relies on the [`fx`](https://github.com/madrobby/zepto/blob/master/src/fx.js), [`fx_methods`](https://github.com/madrobby/zepto/blob/master/src/fx_methods.js) and [`data`](https://github.com/madrobby/zepto/blob/master/src/data.js) modules, so make sure you have them available before making a call to Backstretch.
+
 ## Changelog
 
 ### Version 2.0
