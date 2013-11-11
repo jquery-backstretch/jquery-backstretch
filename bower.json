@@ -1,0 +1,18 @@
+{
+  "name": "jquery-anystretch",
+  "description": "Anystretch is a jQuery plugin that allows you to add a dynamically-resized background image to any page or block level element.",
+  "version": "1.2.6",
+  "homepage": "http://static.elliotjaystocks.com/responsive-background-images/examples/solution.html",
+  "author": {
+    "name": "Dan Millar",
+    "url": "http://decode.uk.com"
+  },
+  "main": ["jquery.anystretch.js"],
+  "dependencies": {
+    "jquery": "~1.7.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/danmillar/jquery-anystretch.git"
+  }
+}
