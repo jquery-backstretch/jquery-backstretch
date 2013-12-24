@@ -185,8 +185,13 @@
      * fit for our screen.
      */
     if (typeof this.images[0] === 'object') {
-      this.allSizes = this.images;
+      this.allSizes = $.isArray(this.images[0]) ? this.images : [this.images];
       this.images = optimalSizeImages(this.$root, this.allSizes);
+      
+      // a default fade for image replacement
+      if (this.images.length == 1 && this.options.fade !== undefined) {
+        this.options.fade = 750;
+      }
     }
 
     // Preload images
@@ -242,17 +247,30 @@
       resize: function () {
         try {
 
-          // check for a better suited image after the resize
+          // Check for a better suited image after the resize
           if (this.allSizes) { 
             var newContainerWidth = this.$root.width();
             var currentImageWidth = this.$img.width();
+
             // check for big changes in container size
             if (newContainerWidth > (currentImageWidth * 1.03)) {
-              // big change: rebuild the entire images array
+
+              // Big change: rebuild the entire images array
               this.images = optimalSizeImages(this.$root, this.allSizes);
               
-              // preload them
+              // Preload them (they will be automatically inserted on the next cycle)
               preload(this.images);
+
+              // In case there is no cycle
+              if (this.images.length == 1) {
+
+                // Wait a little an update the image being showed
+                var self = this;
+                clearTimeout(self.timeout);
+                self.timeout = setTimeout(function () {
+                  self.show(0);
+                }, 2500)
+              }
             }
           }
 
