@@ -10,7 +10,7 @@
 
   $.fn.backstretch = function (images, options) {
     // We need at least one image or method name
-    if (images === undefined || images.length === 0) {
+    if (!images) {
       $.error("No images were supplied for Backstretch");
     }
 
@@ -115,26 +115,53 @@
      */
     this.images = $.isArray(images) ? images : [images];
 
+    /* We're keeping track of a few different elements
+     *
+     * Container: the element that Backstretch was called on.
+     * Root: Convenience reference to help calculate the correct height.
+     * Wrap: a DIV that we place the image into, so we can hide the overflow.
+     */
+
+    this.$container = $(container);
+    this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
+
+
+    /* If images is an array of arrays, instead of an array of strings, it is an
+     * because the images have multiple sizes available, and we must choose the best
+     * fit for our screen.
+     */
+    if (typeof this.images[0] === 'object') {
+      var containerWidth = this.$root.width();
+      var chosenImages = [];
+      var sortByWidth = function (a,b) { return a.width - b.width };
+      for (var i = 0; i < this.images.length; i++) {
+
+        // Sort the array, put the smaller images firts
+        var imageWidths = this.images[i].sort(sortByWidth);
+
+        var j = 0;
+        while (j < imageWidths.length && imageWidths[j].width < containerWidth) {
+          j++;
+        }
+
+        // Use the image where we stopped
+        chosenImages.push(imageWidths[j].url)
+      }
+      
+      this.images = chosenImages
+    }
+
     // Preload images
     $.each(this.images, function () {
       $('<img />')[0].src = this;
     });    
 
-    // Convenience reference to know if the container is body.
-    this.isBody = container === document.body;
-
-    /* We're keeping track of a few different elements
-     *
-     * Container: the element that Backstretch was called on.
-     * Wrap: a DIV that we place the image into, so we can hide the overflow.
-     * Root: Convenience reference to help calculate the correct height.
-     */
-    this.$container = $(container);
-    this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
-
     // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
     var $existing = this.$container.children(".backstretch").first();
     this.$wrap = $existing.length ? $existing : $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
+
+    // Convenience reference to know if the container is body.
+    this.isBody = container === document.body;
 
     // Non-body elements need some style adjustments
     if (!this.isBody) {
