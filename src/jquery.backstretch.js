@@ -14,7 +14,7 @@
 
   $.fn.backstretch = function (images, options) {
     // We need at least one image or method name
-    if (images === undefined || images.length === 0) {
+    if (!images) {
       $.error("No images were supplied for Backstretch");
     }
 
@@ -108,6 +108,62 @@
       }
   };
 
+  /* IMAGE SELECTION UTILITIES
+   * ========================= */
+
+  /* Given an array of arrays and a container object, 
+   * create a simple array of image urls with the optimal
+   * image choices for that container.
+   */
+  function optimalSizeImages ($container, allSizes) {
+    var containerWidth = $container.width();
+    var chosenImages = [];
+    for (var i = 0; i < allSizes.length; i++) {
+      
+      allSizes[i] = widthInsertSort(allSizes[i]);
+      var chosen = selectBest(containerWidth, allSizes[i]);
+      chosenImages.push(chosen);
+    }
+    return chosenImages;
+  }
+
+ /* Given an array of various sizes of the same image and a container width,
+  * return the best image.
+  */
+  function selectBest (containerWidth, imageSizes) {
+    // stop when the width is larger
+    var j = 0;
+    while (j < imageSizes.length && imageSizes[j].width < containerWidth) {
+      j++;
+    }
+    // Use the image located at where we stopped
+    return imageSizes[j - 1].url;
+  }
+
+ /* Sorts the array of image sizes based on width
+  */
+  function widthInsertSort(arr) {
+    for (var i = 1; i < arr.length; i++) {
+      var tmp = arr[i],
+          j = i;
+      while (arr[j - 1] && parseInt(arr[j - 1].width) > parseInt(tmp.width)) {
+        arr[j] = arr[j - 1];
+        --j;
+      }
+      arr[j] = tmp;
+    }
+  
+    return arr;
+  }
+ /* Preload images
+  */
+  function preload (images) {
+    $.each(images, function () {
+      $('<img />')[0].src = this;
+    });    
+  }
+
+
   /* CLASS DEFINITION
    * ========================= */
   var Backstretch = function (container, images, options) {
@@ -119,26 +175,38 @@
      */
     this.images = $.isArray(images) ? images : [images];
 
-    // Preload images
-    $.each(this.images, function () {
-      $('<img />')[0].src = this;
-    });    
-
-    // Convenience reference to know if the container is body.
-    this.isBody = container === document.body;
-
     /* We're keeping track of a few different elements
      *
      * Container: the element that Backstretch was called on.
-     * Wrap: a DIV that we place the image into, so we can hide the overflow.
      * Root: Convenience reference to help calculate the correct height.
+     * Wrap: a DIV that we place the image into, so we can hide the overflow.
      */
     this.$container = $(container);
     this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
 
+    /* If images is an array of arrays, instead of an array of strings, it is an
+     * because the images have multiple sizes available, and we must choose the best
+     * fit for our screen.
+     */
+    if (typeof this.images[0] === 'object') {
+      this.allSizes = $.isArray(this.images[0]) ? this.images : [this.images];
+      this.images = optimalSizeImages(this.$root, this.allSizes);
+      
+      // a default fade for image replacement
+      if (this.images.length == 1 && this.options.fade !== undefined) {
+        this.options.fade = 750;
+      }
+    }
+
+    // Preload images
+    preload(this.images);
+
     // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
     var $existing = this.$container.children(".backstretch").first();
     this.$wrap = $existing.length ? $existing : $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
+
+    // Convenience reference to know if the container is body.
+    this.isBody = container === document.body;
 
     // Non-body elements need some style adjustments
     if (!this.isBody) {
@@ -151,7 +219,7 @@
           position: position === 'static' ? 'relative' : position
         , zIndex: zIndex === 'auto' ? 0 : zIndex
         , background: 'none'
-      });
+        });
       
       // Needs a higher z-index
       this.$wrap.css({zIndex: -999998});
@@ -174,7 +242,7 @@
                   window.scrollTo(0, 1);
                   this.resize();
                 }
-             }, this));
+              }, this));
   };
 
   /* PUBLIC METHODS
@@ -182,6 +250,34 @@
   Backstretch.prototype = {
       resize: function () {
         try {
+
+          // Check for a better suited image after the resize
+          if (this.allSizes) { 
+            var newContainerWidth = this.$root.width();
+            var currentImageWidth = this.$img.width();
+
+            // check for big changes in container size
+            if (newContainerWidth > (currentImageWidth * 1.03)) {
+
+              // Big change: rebuild the entire images array
+              this.images = optimalSizeImages(this.$root, this.allSizes);
+              
+              // Preload them (they will be automatically inserted on the next cycle)
+              preload(this.images);
+
+              // In case there is no cycle
+              if (this.images.length == 1) {
+
+                // Wait a little an update the image being showed
+                var self = this;
+                clearTimeout(self.timeout);
+                self.timeout = setTimeout(function () {
+                  self.show(0);
+                }, 2500)
+              }
+            }
+          }
+
           var bgCSS = {left: 0, top: 0}
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
             , bgWidth = rootWidth
@@ -189,22 +285,22 @@
             , bgHeight = bgWidth / this.$img.data('ratio')
             , bgOffset;
 
-            // Make adjustments based on image ratio
-            if (bgHeight >= rootHeight) {
-                bgOffset = (bgHeight - rootHeight) / 2;
-                if(this.options.centeredY) {
-                  bgCSS.top = '-' + bgOffset + 'px';
-                }
-            } else {
-                bgHeight = rootHeight;
-                bgWidth = bgHeight * this.$img.data('ratio');
-                bgOffset = (bgWidth - rootWidth) / 2;
-                if(this.options.centeredX) {
-                  bgCSS.left = '-' + bgOffset + 'px';
-                }
+          // Make adjustments based on image ratio
+          if (bgHeight >= rootHeight) {
+            bgOffset = (bgHeight - rootHeight) / 2;
+            if(this.options.centeredY) {
+              bgCSS.top = '-' + bgOffset + 'px';
             }
+          } else {
+            bgHeight = rootHeight;
+            bgWidth = bgHeight * this.$img.data('ratio');
+            bgOffset = (bgWidth - rootWidth) / 2;
+            if(this.options.centeredX) {
+              bgCSS.left = '-' + bgOffset + 'px';
+            }
+          }
 
-            this.$wrap.css({width: rootWidth, height: rootHeight})
+          this.$wrap.css({width: rootWidth, height: rootHeight})
                       .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
         } catch(err) {
             // IE7 seems to trigger resize before the image is loaded.
