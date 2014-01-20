@@ -39,7 +39,9 @@
         }
 
         // Merge the old options with the new
-        options = $.extend(obj.options, options);
+        for (var opt in options) {
+          obj.options[opt] = options[opt];
+        }
 
         // Remove the old instance
         obj.destroy(true);
@@ -56,11 +58,6 @@
     return $('body')
             .backstretch(images, options)
             .data('backstretch');
-  };
-
-  // Custom selector
-  $.expr[':'].backstretch = function(elem) {
-    return $(elem).data('backstretch') !== undefined;
   };
 
   /* DEFAULTS
@@ -163,7 +160,11 @@
   /* CLASS DEFINITION
    * ========================= */
   var Backstretch = function (container, images, options) {
-    this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
+    this.options = {};
+    options = options || {};
+    for (var opt in $.fn.backstretch.defaults) {
+      this.options[opt] = options[opt] || $.fn.backstretch.defaults[opt];
+    }
 
     /* In its simplest form, we allow Backstretch to be called on an image path.
      * e.g. $.backstretch('/path/to/image.jpg')
@@ -320,7 +321,7 @@
           , evtOptions = { relatedTarget: self.$container[0] };
 
         // Trigger the "before" event
-        self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]); 
+        self.$container.trigger($.Event('backstretch:before', evtOptions), [self, newIndex]); 
 
         // Set the new index
         this.index = newIndex;
@@ -331,7 +332,7 @@
         // New image
         self.$img = $('<img />')
                       .css(styles.img)
-                      .bind('load', function (e) {
+                      .on('load', function (e) {
                         var imgWidth = this.width || $(e.target).width()
                           , imgHeight = this.height || $(e.target).height();
                         
@@ -340,19 +341,27 @@
 
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
-                          oldImage.remove();
+                        $(this).css({
+                          opacity: 0,
+                          display: 'block',
+                        }).animate({
+                          opacity: 1
+                        },{
+                          duration: self.options.speed || self.options.fade, 
+                          complete: function () {
+                            oldImage.remove();
 
-                          // Resume the slideshow
-                          if (!self.paused) {
-                            self.cycle();
+                            // Resume the slideshow
+                            if (!self.paused) {
+                              self.cycle();
+                            }
+
+                            // Trigger the "after" and "show" events
+                            // "show" is being deprecated
+                            $(['after', 'show']).each(function () {
+                              self.$container.trigger($.Event('backstretch:' + this, evtOptions), [self, newIndex]);
+                            });
                           }
-
-                          // Trigger the "after" and "show" events
-                          // "show" is being deprecated
-                          $(['after', 'show']).each(function () {
-                            self.$container.trigger($.Event('backstretch.' + this, evtOptions), [self, newIndex]);
-                          });
                         });
 
                         // Resize
@@ -470,4 +479,4 @@
     );
   }());
 
-}(jQuery, window));
+}(window.jQuery || window.Zepto || window.$, window));

@@ -1,16 +1,22 @@
 # Backstretch
 
-Backstretch is a simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element. The image will stretch to fit the page/element, and will automatically resize as the window/element size changes.
+Zepto-Backstretch is a simple Zepto (jQuery compatible) plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element. The image will stretch to fit the page/element, and will automatically resize as the window/element size changes.
+
+This is a fork of the origin jquery.backstretch plugin which works just like its parent, but adds two things:
+
+* The option to pass various image urls -- with various sizes -- and Backstretch will choose the best suitable for your screen size, and also load the corresponding bigger images if and when the screen size changes
+* Zepto compatibility
+
 ## Demo
 
-There are a couple of examples included with this package, or feel free to check it out live [on the project page itself](http://srobbin.com/jquery-plugins/backstretch/).
+There are a couple of examples included with this package, or feel free to check it out live [in this Demo](http://srobbin.com/jquery-plugins/backstretch/).
 
 ## Setup
 
-Include the jQuery library (version 1.7 or newer) and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
+Include the Zepto library (version 1.0) and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
 
 ```html
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
 <script src="jquery.backstretch.min.js"></script>
 <script>
   // To attach Backstrech as the body's background
@@ -19,12 +25,31 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
   // You may also attach Backstretch to a block-level element
   $(".foo").backstretch("path/to/image.jpg");
 
-  // Or, to start a slideshow, just pass in an array of images
+  // to start a slideshow, just pass in an array of images
   $(".foo").backstretch([
     "path/to/image.jpg",
     "path/to/image2.jpg",
     "path/to/image3.jpg"    
   ], {duration: 4000});
+
+  // to use different sizes (optimally choosed) for each image, pass an array of objects
+  $.backstretch([ 
+     [ 
+        { width: "400", url: "path/to/image1-400.jpg" }, 
+        { width: "600", url: "path/to/image1-600.jpg" }, 
+        { width: "1200", url: "path/to/image1-1200.jpg" }, 
+     ], 
+     [ 
+        { width: "400", url: "path/to/image2-400.jpg" }, 
+        { width: "600", url: "path/to/image2-600.jpg" }, 
+        { width: "1200", url: "path/to/image2-1200.jpg" }, 
+     ], 
+     [ 
+        { width: "400", url: "path/to/image3-400.jpg" }, 
+        { width: "600", url: "path/to/image3-600.jpg" }, 
+        { width: "1200", url: "path/to/image3-1200.jpg" }, 
+     ], 
+  ], {duration: 4000, fade: 750}); 
 </script>
 ```
 
@@ -34,7 +59,7 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 |------|-------------|------|---------|
 | `centeredX` | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
 | `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
-| `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
+| `fade` | This is the speed at which the image will fade in. Integers in milliseconds | Integer | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 
 ## Slideshow API
