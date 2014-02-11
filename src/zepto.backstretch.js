@@ -180,6 +180,7 @@
      */
     this.$container = $(container);
     this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
+    this.$width = this.$container.width();
 
     /* If images is an array of arrays, instead of an array of strings, it is an
      * because the images have multiple sizes available, and we must choose the best
@@ -332,6 +333,7 @@
         // New image
         self.$img = $('<img />')
                       .css(styles.img)
+                      .width(this.$width)
                       .on('load', function (e) {
                         var imgWidth = this.width || $(e.target).width()
                           , imgHeight = this.height || $(e.target).height();
