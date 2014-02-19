@@ -50,6 +50,12 @@ Include the Zepto library (version 1.0) and Backstretch plugin files in your web
         { width: "1200", url: "path/to/image3-1200.jpg" }, 
      ], 
   ], {duration: 4000, fade: 750}); 
+
+  // to use a custom-sized image with height and/or width specified in the url itself (like the services offered by some image CDNs like [Cloudinary](http://cloudinary.com/) and [Thumbrio](http://www.thumbr.io/)) pass the image url with the field to be completed with the actual container size
+    $('.container').backstretch([
+      'http://api.thumbr.io/3405e2d162a99a1c7a9fc558c8aa8efc/test/api.thumbr.io/static/ladies-800.png/{{width}}x{{height}}c-ebarcelona-eframe1/thumb.jpg',
+      'http://a2.res.cloudinary.com/demo/image/upload/c_fill,h_{{ height }},w_{{ width }}/a_hflip/sheep.jpg'
+    ], {duration: 2000});
 </script>
 ```
 

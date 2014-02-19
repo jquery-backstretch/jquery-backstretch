@@ -104,6 +104,27 @@
   /* IMAGE SELECTION UTILITIES
    * ========================= */
 
+  /* Given an image template (a string with {{ width }} and/or
+   * {{height}} inside) and a container object, returns the
+   * image url with the exact values for the size of that
+   * container.
+   */
+  function buildImageUrls ($container, templates) {
+    var actualImages = [];
+    for (var i = 0; i < templates.length; i++) {
+      var im = templates[i].replace(/{{ *(\w+) *}}/g, function (match, key) {
+        try {
+          return $container[key]();
+        }
+        catch (e) {
+          return match;
+        }
+      });
+      actualImages.push(im);
+    }
+    return actualImages;
+  }
+
   /* Given an array of arrays and a container object, 
    * create a simple array of image urls with the optimal
    * image choices for that container.
@@ -182,9 +203,9 @@
     this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
     this.$width = this.$container.width();
 
-    /* If images is an array of arrays, instead of an array of strings, it is an
-     * because the images have multiple sizes available, and we must choose the best
-     * fit for our screen.
+    /* If images is an array of arrays, instead of an array
+     * of strings, it is because the images have multiple sizes 
+     * available, and we must choose the best fit for our screen.
      */
     if (typeof this.images[0] === 'object') {
       this.allSizes = $.isArray(this.images[0]) ? this.images : [this.images];
@@ -194,6 +215,17 @@
       if (this.images.length == 1 && this.options.fade !== undefined) {
         this.options.fade = 750;
       }
+    }
+    
+    else {
+
+     /* If the image urls contain {{width}} or {{height}} it is because
+      * they are url templates for loading images with custom sizes from
+      * a CDN image provider like Thumbr.io or Cloudinary, and we must
+      * discover the best size and load the best image.
+      */
+      this.imageTemplates = this.images;
+      this.images = buildImageUrls(this.$root, this.imageTemplates);
     }
 
     // Preload images
@@ -250,15 +282,24 @@
         try {
 
           // Check for a better suited image after the resize
-          if (this.allSizes) { 
+          // or: Make another url and fetch another image from CDN
+          if (this.allSizes || this.imageTemplates) { 
             var newContainerWidth = this.$root.width();
             var currentImageWidth = this.$img.width();
+            var newContainerHeight = this.$root.height();
+            var currentImageHeight = this.$img.height();
 
             // check for big changes in container size
-            if (newContainerWidth > (currentImageWidth * 1.03)) {
+            if (newContainerWidth > (currentImageWidth * 1.10) ||
+                newContainerHeight > (currentImageHeight * 1.10)) {
 
               // Big change: rebuild the entire images array
-              this.images = optimalSizeImages(this.$root, this.allSizes);
+              if (this.allSizes) {
+                this.images = optimalSizeImages(this.$root, this.allSizes);
+              }
+              else if (this.imageTemplates) {
+                this.images = buildImageUrls(this.$root, this.imageTemplates);
+              }
               
               // Preload them (they will be automatically inserted on the next cycle)
               preload(this.images);
