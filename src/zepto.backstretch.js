@@ -318,9 +318,9 @@
           }
 
           var bgCSS = {left: 0, top: 0}
-            , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
+            , rootWidth = this.isBody ? this.$root.width() : this.$root.width() + parseInt(this.$root.css('padding-left')) + parseInt(this.$root.css('padding-right'))
             , bgWidth = rootWidth
-            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
+            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.height() + parseInt(this.$root.css('padding-left')) + parseInt(this.$root.css('padding-right'))
             , bgHeight = bgWidth / this.$img.data('ratio')
             , bgOffset;
 
@@ -342,6 +342,7 @@
           this.$wrap.css({width: rootWidth, height: rootHeight})
                       .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
         } catch(err) {
+            console.log(err);
             // IE7 seems to trigger resize before the image is loaded.
             // This try/catch block is a hack to let it fail gracefully.
         }
