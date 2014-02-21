@@ -3,7 +3,6 @@
 * Copyright (c) 2013 Scott Robbin; Licensed MIT */
 
 ;(function ($, window, undefined) {
-  'use strict';
 
   /* PLUGIN DEFINITION
    * ========================= */
@@ -64,7 +63,8 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
-      centeredX: true   // Should we center the image on the X axis?
+      preload: 2        // How many images preload at a time?
+    , centeredX: true   // Should we center the image on the X axis?
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
     , fade: 0           // Speed of fade transition between slides
@@ -170,13 +170,91 @@
     return arr;
   }
  /* Preload images
+  * https://raw.github.com/htmlhero/jQuery.preload/master/src/jquery.preload.js
   */
-  function preload (images) {
-    $.each(images, function () {
-      $('<img />')[0].src = this;
-    });    
-  }
+  var preload = (function (sources, part, callback) {
+    // Plugin cache
+    var cache = [];
 
+    // Wrapper for cache
+    var caching = function(image){
+      for (var i = 0; i < cache.length; i++) {
+        if (cache[i].src === image.src) {
+          return cache[i];
+        }
+      }
+      cache.push(image);
+      return image;
+    };
+
+    // Execute callback
+    var exec = function(sources, callback, last){
+      if (typeof callback === 'function') {
+        callback.call(sources, last);
+      }
+    };
+
+    // Closure to hide cache
+    return function(sources, part, callback){
+      // Check input data
+      if (typeof sources === 'undefined') {
+        return;
+      }
+      if (typeof sources === 'string') {
+        sources = [sources];
+      }
+      if (arguments.length === 2 && typeof part === 'function') {
+        callback = part;
+        part = 0;
+      }
+
+      // Split to pieces
+      var total = sources.length,
+          next;
+
+      if (part > 0 && part < total) {
+        next = sources.slice(part, total);
+        sources = sources.slice(0, part);
+        total = sources.length;
+      }
+
+      // If sources array is empty
+      if (!total) {
+        exec(sources, callback, true);
+        return;
+      }
+
+      // Image loading callback
+      var preload = arguments.callee,
+          count = 0;
+
+      var loaded = function(){
+        count++;
+        if (count !== total) {
+          return;
+        }
+
+        exec(sources, callback, !next);
+        preload(next, part, callback);
+      };
+
+      // Loop sources to preload
+      var image;
+
+      for (var i = 0; i < sources.length; i++) {
+        image = new Image();
+        image.src = sources[i];
+
+        image = caching(image);
+
+        if (image.complete) {
+          loaded();
+        } else {
+          $(image).on('load error', loaded);
+        }
+      }
+    };
+  })();
 
   /* CLASS DEFINITION
    * ========================= */
@@ -229,7 +307,7 @@
     }
 
     // Preload images
-    preload(this.images);
+    preload(this.images, this.options.preload);
 
     // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
     var $existing = this.$container.children(".backstretch").first();
@@ -302,7 +380,7 @@
               }
               
               // Preload them (they will be automatically inserted on the next cycle)
-              preload(this.images);
+              preload(this.images, this.options.preload);
 
               // In case there is no cycle
               if (this.images.length == 1) {
