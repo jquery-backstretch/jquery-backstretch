@@ -183,9 +183,9 @@
       resize: function () {
         try {
           var bgCSS = {left: 0, top: 0}
-            , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
+            , rootWidth = this.isBody ? (isMobile ? screen.width : this.$root.width()) : this.$root.innerWidth()
             , bgWidth = rootWidth
-            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
+            , rootHeight = this.isBody ? (isMobile ? screen.height : (window.innerHeight ? window.innerHeight : this.$root.height() )) : this.$root.innerHeight()
             , bgHeight = bgWidth / this.$img.data('ratio')
             , bgOffset;
             
@@ -193,24 +193,6 @@
             if (isNaN(bgHeight)) {
               return this;
             }
-            
-            // Fixes ugly delayed resize while scrolling the location bar away on iOS
-            if (navigator.platform.indexOf("iPhone") > -1) {
-        
-        		// If width hasn't changed we don't trigger
-            	if (this.iPhoneWidth === rootWidth) {
-            		return this;
-            	}
-            	
-            	this.iPhoneWidth = rootWidth;
-            	
-            	// Always use the height without the location bar
-            	if (rootHeight < 320) {
-            		rootHeight = 320;
-            	} else if (rootHeight < 417) {
-            		rootHeight = 417;
-            	}
-           	}
            
             // Make adjustments based on image ratio
             if (bgHeight >= rootHeight) {
@@ -399,6 +381,19 @@
       // IE6
       (ieversion && ieversion <= 6)
     );
+  }());
+
+  var isMobile = (function () {
+
+    try {
+      document.createEvent("TouchEvent");
+      return true;
+    }
+
+    catch(e){
+      return false;
+    }
+
   }());
 
 }(jQuery, window));
