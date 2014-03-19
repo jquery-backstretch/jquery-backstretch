@@ -1,6 +1,10 @@
-/*! Backstretch - v2.0.4 - 2013-06-19
-* http://srobbin.com/jquery-plugins/backstretch/
-* Copyright (c) 2013 Scott Robbin; Licensed MIT */
+/*
+ * Backstretch
+ * http://srobbin.com/jquery-plugins/backstretch/
+ *
+ * Copyright (c) 2013 Scott Robbin
+ * Licensed under the MIT license.
+ */
 
 ;(function ($, window, undefined) {
   'use strict';
@@ -67,10 +71,11 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
-      centeredX: true   // Should we center the image on the X axis?
-    , centeredY: true   // Should we center the image on the Y axis?
-    , duration: 5000    // Amount of time in between slides (if slideshow)
-    , fade: 0           // Speed of fade transition between slides
+      centeredX: true       // Should we center the image on the X axis?
+    , centeredY: true       // Should we center the image on the Y axis?
+    , duration: 5000        // Amount of time in between slides (if slideshow)
+    , fade: 0               // Speed of fade transition between slides
+    , fadeFirstImage: true  // Fade in the first image of slideshow?
   };
 
   /* STYLES
@@ -108,6 +113,8 @@
    * ========================= */
   var Backstretch = function (container, images, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
+
+    this.firstShow = !this.options.fadeFirstImage;
 
     /* In its simplest form, we allow Backstretch to be called on an image path.
      * e.g. $.backstretch('/path/to/image.jpg')
@@ -241,10 +248,20 @@
                         
                         // Save the ratio
                         $(this).data('ratio', imgWidth / imgHeight);
+                        self.oldSpeed = self.options.speed;
+                        self.oldFade = self.options.fade;
+                        if (self.firstShow)
+                        {
+                          self.options.speed = undefined;
+                          self.options.fade = 0;
+                          self.firstShow = false;
+                        }
 
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
                         $(this).fadeIn(self.options.speed || self.options.fade, function () {
+                          self.options.speed = self.oldSpeed;
+                          self.options.fade = self.oldFade;
                           oldImage.remove();
 
                           // Resume the slideshow
@@ -258,6 +275,10 @@
                             self.$container.trigger($.Event('backstretch.' + this, evtOptions), [self, newIndex]);
                           });
                         });
+
+                        
+
+
 
                         // Resize
                         self.resize();
