@@ -179,9 +179,10 @@
       resize: function () {
         try {
           var bgCSS = {left: 0, top: 0}
-            , rootWidth = this.isBody ? (isMobile ? screen.width : this.$root.width()) : this.$root.innerWidth()
+            , orientation = Math.abs(window.orientation)
+            , rootWidth = this.isBody ? (isMobile ? (orientation === 90 ? screen.height : screen.width) : this.$root.width()) : this.$root.innerWidth()
             , bgWidth = rootWidth
-            , rootHeight = this.isBody ? (isMobile ? screen.height : (window.innerHeight ? window.innerHeight : this.$root.height() )) : this.$root.innerHeight()
+            , rootHeight = this.isBody ? (isMobile ? (orientation === 90 ? screen.width : screen.height) : (window.innerHeight ? window.innerHeight : this.$root.height() )) : this.$root.innerHeight()
             , bgHeight = bgWidth / this.$img.data('ratio')
             , bgOffset;
             
