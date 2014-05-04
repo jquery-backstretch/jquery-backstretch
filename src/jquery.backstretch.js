@@ -164,7 +164,7 @@
 
     // Set the first image
     this.index = 0;
-    this.show(this.index);
+    this.show(this.index, 1);
 
     // Listen for resize
     $(window).on('resize.backstretch', $.proxy(this.resize, this))
@@ -215,7 +215,7 @@
       }
 
       // Show the slide at a certain position
-    , show: function (newIndex) {
+    , show: function (newIndex, isFirstFade) {
 
         // Validate index
         if (Math.abs(newIndex) > this.images.length - 1) {
@@ -246,9 +246,14 @@
                         // Save the ratio
                         $(this).data('ratio', imgWidth / imgHeight);
 
+                        // Set duration of the fade to 0 for the first fade
+                        // Prevents ugly site loading
+                        var fadeDuration = (isFirstFade == 1) ? 0 : self.options.fade;
+                        var speedDuration = (isFirstFade == 1) ? 0 : self.options.speed; 
+                        
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
+                        $(this).fadeIn(speedDuration || fadeDuration, function () {
                           oldImage.remove();
 
                           // Resume the slideshow
