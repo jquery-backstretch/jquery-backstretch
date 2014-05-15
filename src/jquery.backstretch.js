@@ -179,7 +179,7 @@
       resize: function () {
         try {
           var bgCSS = {left: 0, top: 0}
-          	, landscape = (Math.ceil(window.innerWidth / window.innerHeight) > Math.ceil(screen.width / screen.height))
+            , landscape = (Math.ceil(window.innerWidth / window.innerHeight) > Math.ceil(screen.width / screen.height))
             , rootWidth = this.isBody ? (isMobile ? (landscape ? screen.height : screen.width) : this.$root.width()) : this.$root.innerWidth()
             , bgWidth = rootWidth
             , rootHeight = this.isBody ? (isMobile ? (landscape ? screen.width : screen.height) : (window.innerHeight ? window.innerHeight : this.$root.height() )) : this.$root.innerHeight()
