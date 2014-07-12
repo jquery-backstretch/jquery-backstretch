@@ -16,5 +16,13 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/srobbin/jquery-backstretch.git"
+  },
+  "ignore": {
+    "grunt.js",
+    "examples",
+    "libs",
+    "test",
+    ".gitignore",
+    "src"
   }
 }
