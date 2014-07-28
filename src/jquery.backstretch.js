@@ -137,17 +137,24 @@
      * ========================= */
     var Backstretch = function(container, images, options) {
         this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
+        //let slideshow start paused
+        if (this.options.paused) {
+            this.paused = true;
+        }
 
         /* In its simplest form, we allow Backstretch to be called on an image path.
          * e.g. $.backstretch('/path/to/image.jpg')
          * So, we need to turn this back into an array.
          */
         this.images = $.isArray(images) ? images : [images];
-
+        if (options.lazyload && this.images[this.options.start]) {
+            $('<img />')[0].src = this.images[this.options.start];
+        } else {
         // Preload images
         $.each(this.images, function() {
             $('<img />')[0].src = this;
         });
+        }
 
         // Convenience reference to know if the container is body.
         this.isBody = container === document.body;
@@ -214,12 +221,12 @@
                 var bgCSS = {
                     left: 0,
                     top: 0
-                }
-                , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
-                        , bgWidth = rootWidth
-                        , rootHeight = this.isBody ? (window.innerHeight ? window.innerHeight : this.$root.height()) : this.$root.innerHeight()
-                        , bgHeight = bgWidth / this.$img.data('ratio')
-                        , bgOffset;
+                };
+                var rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth();
+                var bgWidth = rootWidth;
+                var rootHeight = this.isBody ? (window.innerHeight ? window.innerHeight : this.$root.height()) : this.$root.innerHeight();
+                var bgHeight = (bgWidth) / this.$img.data('ratio');
+                var bgOffset;
 
                 // Make adjustments based on image ratio
                 if (bgHeight >= rootHeight) {
