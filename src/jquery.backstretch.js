@@ -150,10 +150,10 @@
         if (options.lazyload && this.images[this.options.start]) {
             $('<img />')[0].src = this.images[this.options.start];
         } else {
-        // Preload images
-        $.each(this.images, function() {
-            $('<img />')[0].src = this;
-        });
+            // Preload images
+            $.each(this.images, function() {
+                $('<img />')[0].src = this;
+            });
         }
 
         // Convenience reference to know if the container is body.
@@ -180,10 +180,8 @@
                     , zIndex = this.$container.css('zIndex');
 
             this.$container.css({
-                position: position === 'static' ? 'relative' : position
-                ,
-                zIndex: zIndex === 'auto' ? 0 : zIndex
-                ,
+                position: position === 'static' ? 'relative' : position,
+                zIndex: zIndex === 'auto' ? 0 : zIndex,
                 background: 'none'
             });
 
@@ -243,19 +241,21 @@
                     }
                 }
 
-                this.$wrap.css({
-                    width: rootWidth,
-                    height: rootHeight
-                })
-                        .find('img:not(.deleteable)').css({
-                    width: bgWidth,
-                    height: bgHeight
-                }).css(bgCSS);
+                this.$wrap
+                        .css({
+                            width: rootWidth,
+                            height: rootHeight
+                        })
+                        .find('img:not(.deleteable)')
+                        .css({
+                            width: bgWidth,
+                            height: bgHeight
+                        })
+                        .css(bgCSS);
             } catch (err) {
                 // IE7 seems to trigger resize before the image is loaded.
                 // This try/catch block is a hack to let it fail gracefully.
             }
-
             return this;
         }
 
@@ -269,11 +269,11 @@
             }
 
             // Vars
-            var self = this
-                    , oldImage = self.$wrap.find('img').addClass('deleteable')
-                    , evtOptions = {
-                        relatedTarget: self.$container[0]
-                    };
+            var self = this;
+            var oldImage = self.$wrap.find('img').addClass('deleteable')
+            var evtOptions = {
+                relatedTarget: self.$container[0]
+            };
 
             // Trigger the "before" event
             self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]);
