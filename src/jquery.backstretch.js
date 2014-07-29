@@ -147,9 +147,20 @@
          * So, we need to turn this back into an array.
          */
         this.images = $.isArray(images) ? images : [images];
+        //Check if start is in range
+        if (this.options.start >= this.images.length)
+        {
+            this.options.start = this.images.length - 1;
+        }
+        if (this.options.start < 0)
+        {
+            this.options.start = 0;
+        }
         if (options.lazyload && this.images[this.options.start]) {
             $('<img />')[0].src = this.images[this.options.start];
-        } else {
+        }
+        else
+        {
             // Preload images
             $.each(this.images, function() {
                 $('<img />')[0].src = this;
