@@ -14,6 +14,8 @@
      * ========================= */
 
     $.fn.backstretch = function(images, options) {
+
+        var options = typeof options === 'object' ? options : {};
         // We need at least one image or method name
         if (images === undefined || images.length === 0) {
             $.error("No images were supplied for Backstretch");
@@ -28,8 +30,8 @@
         }
 
         return this.each(function() {
-            var $this = $(this)
-                    , obj = $this.data('backstretch');
+            var $this = $(this);
+            var obj = $this.data('backstretch');
 
             // Do we already have an instance attached to this element?
             if (obj) {
