@@ -281,7 +281,7 @@
 
             // Vars
             var self = this;
-            var oldImage = self.$wrap.find('img').addClass('deleteable')
+            var oldImage = self.$wrap.find('img').addClass('deleteable');
             var evtOptions = {
                 relatedTarget: self.$container[0]
             };
