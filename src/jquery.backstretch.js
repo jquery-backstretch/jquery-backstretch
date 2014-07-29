@@ -208,7 +208,7 @@
         });
 
         // Set the first image
-        this.index = 0;
+        this.index = this.options.start;
         this.show(this.index);
 
         // Listen for resize
@@ -299,8 +299,8 @@
             self.$img = $('<img />')
                     .css(styles.img)
                     .bind('load', function(e) {
-                        var imgWidth = this.width || $(e.target).width()
-                                , imgHeight = this.height || $(e.target).height();
+                        var imgWidth = this.width || $(e.target).width();
+                        var imgHeight = this.height || $(e.target).height();
 
                         // Save the ratio
                         $(this).data('ratio', imgWidth / imgHeight);
