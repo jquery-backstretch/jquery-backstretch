@@ -13,21 +13,21 @@ module.exports = function(grunt) {
     },
     concat: {
       dist: {
-        src: ['<banner:meta.banner>', '<file_strip_banner:../src/<%= pkg.name %>.js>'],
-        dest: '../<%= pkg.name %>.js'
+        src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>'],
+        dest: '<%= pkg.name %>.js'
       }
     },
     min: {
       dist: {
         src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
-        dest: '../<%= pkg.name %>.min.js'
+        dest: '<%= pkg.name %>.min.js'
       }
     },
     qunit: {
-      files: ['../test/**/*.html']
+      files: ['test/**/*.html']
     },
     lint: {
-      files: ['grunt.js', '../src/**/*.js', '../test/**/*.js']
+      files: ['grunt.js', 'src/**/*.js', 'test/**/*.js']
     },
     watch: {
       files: '<config:lint.files>',
