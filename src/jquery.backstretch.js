@@ -35,7 +35,7 @@
             if (obj) {
 
                 // Is this a method they're trying to execute?
-                if (typeof images == 'string' && typeof obj[images] == 'function') {
+                if (typeof images === 'string' && typeof obj[images] === 'function') {
                     // Call the method
                     obj[images](options);
 
