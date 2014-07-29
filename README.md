@@ -38,7 +38,7 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 | `paused` | For slideshows: Disables the change between slides | Boolean | false |
-| `lazyload` | Activates the lazy-loading-functionality für slideshows. This means the next slide that is about to be shown, is loaded right before showing. *Dependent on the time it takes to load your image, the duration may vary.* | Boolean | false |
+| `lazyload` | Activates the lazy-loading-functionality für slideshows. This means the next slide that is about to be shown, is loaded right before showing. *Dependent on the time it takes to load your image, the actual duration may vary from the one in the options.* | Boolean | false |
 | `start` | The index of the image in the array you want to start your slideshow with. | Integer | 0 |
 
 ## Slideshow API
