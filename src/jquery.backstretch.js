@@ -5,7 +5,6 @@
  * Copyright (c) 2013 Scott Robbin
  * Licensed under the MIT license.
  */
-
 ;
 (function($, window, undefined) {
     'use strict';
@@ -15,7 +14,7 @@
 
     $.fn.backstretch = function(images, options) {
 
-        var options = typeof options === 'object' ? options : {};
+        options = typeof options === 'object' ? options : {};
         // We need at least one image or method name
         if (images === undefined || images.length === 0) {
             $.error("No images were supplied for Backstretch");
