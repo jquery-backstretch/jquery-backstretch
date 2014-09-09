@@ -75,6 +75,8 @@
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
     , fade: 0           // Speed of fade transition between slides
+    , alignX: "auto"    // When used it takes precedence over ceteredX
+    , alignY: "auto"    // When used it takes precedence over ceteredY
   };
 
   /* STYLES
@@ -114,8 +116,8 @@
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
     // set the centeredX/Y properties based on alignX/Y options if they're provided
-    this.options.centeredX = this.options.alignX !== undefined ? this.options.alignX === 'center' : this.options.centeredX;
-    this.options.centeredY = this.options.alignY !== undefined ? this.options.alignY === 'center' : this.options.centeredY;
+    this.options.centeredX = this.options.alignX !== 'auto' ? this.options.alignX === 'center' : this.options.centeredX;
+    this.options.centeredY = this.options.alignY !== 'auto' ? this.options.alignY === 'center' : this.options.centeredY;
 
     /* In its simplest form, we allow Backstretch to be called on an image path.
      * e.g. $.backstretch('/path/to/image.jpg')
