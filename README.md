@@ -34,6 +34,8 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 |------|-------------|------|---------|
 | `centeredX` | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
 | `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
+| `alignX` | This parameter controls the horizontal alignment of the image. If used, it takes prcedence over the value of `ceteredX`. Can be one of: "center", "left", "right". | String | "center" |
+| `alignY` | If used, it takes prcedence over the value of `ceteredY`. Can be one of: "center", "top", "bottom". | String | "center" |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 
