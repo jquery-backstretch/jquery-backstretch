@@ -113,6 +113,10 @@
   var Backstretch = function (container, images, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
+    // set the centeredX/Y properties based on alignX/Y options if they're provided
+    this.options.centeredX = this.options.alignX !== undefined ? this.options.alignX === 'center' : this.options.centeredX;
+    this.options.centeredY = this.options.alignY !== undefined ? this.options.alignY === 'center' : this.options.centeredY;
+
     /* In its simplest form, we allow Backstretch to be called on an image path.
      * e.g. $.backstretch('/path/to/image.jpg')
      * So, we need to turn this back into an array.
@@ -182,7 +186,7 @@
   Backstretch.prototype = {
       resize: function () {
         try {
-          var bgCSS = {left: 0, top: 0}
+          var bgCSS = {left: 0, top: 0, right: 'auto', bottom: 'auto'}
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
             , bgWidth = rootWidth
             , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
@@ -194,6 +198,8 @@
                 bgOffset = (bgHeight - rootHeight) / 2;
                 if(this.options.centeredY) {
                   bgCSS.top = '-' + bgOffset + 'px';
+                } else if (this.options.alignY === 'bottom') {
+                  bgCSS.top = 'auto'; bgCSS.bottom = 0;
                 }
             } else {
                 bgHeight = rootHeight;
@@ -201,6 +207,8 @@
                 bgOffset = (bgWidth - rootWidth) / 2;
                 if(this.options.centeredX) {
                   bgCSS.left = '-' + bgOffset + 'px';
+                } else if (this.options.alignX === 'right') {
+                  bgCSS.left = 'auto'; bgCSS.right = 0;
                 }
             }
 
