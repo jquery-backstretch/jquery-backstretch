@@ -1,4 +1,4 @@
-/*! Backstretch - v2.1 - 2014-09-03
+/*! Backstretch - v2.1.1 - 2014-09-30
  * http://srobbin.com/jquery-plugins/backstretch/
  * Copyright (c) 2014 Scott Robbin; Licensed MIT */
 
@@ -11,7 +11,7 @@
 
     $.fn.backstretch = function(images, options) {
 
-        options = typeof options === 'object' ? options : {};
+        options = typeof options === 'undefined' ? {} : options;
         // We need at least one image or method name
         if (images === undefined || images.length === 0) {
             $.error("No images were supplied for Backstretch");
