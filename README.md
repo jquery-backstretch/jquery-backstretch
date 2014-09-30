@@ -1,9 +1,10 @@
-# Backstretch
+# Backstretch!
+Backstretch is a simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable (with lazy-loading), background image to any page or element. The image will stretch to fit the page/element, and will automatically resize as the window/element size changes.
 
-Backstretch is a simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element. The image will stretch to fit the page/element, and will automatically resize as the window/element size changes.
 ## Demo
 
 There are a couple of examples included with this package, or feel free to check it out live [on the project page itself](http://srobbin.com/jquery-plugins/backstretch/).
+(The lazy-loading example is only in this package for now.)
 
 ## Setup
 
@@ -36,6 +37,9 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 | `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
+| `paused` | For slideshows: Disables the change between slides | Boolean | false |
+| `lazyload` | Activates the lazy-loading-functionality für slideshows. This means the next slide that is about to be shown, is loaded right before showing. *Dependent on the time it takes to load your image, the actual duration may vary from the one in the options.* | Boolean | false |
+| `start` | The index of the image in the array you want to start your slideshow with. | Integer | 0 |
 
 ## Slideshow API
 
@@ -116,6 +120,8 @@ $(window).on("backstretch.after", function (e, instance, index) {
 ```
 
 ## Changelog
+
+* Added lazy-loading functionality
 
 ### Version 2.0
 
