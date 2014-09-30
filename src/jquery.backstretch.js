@@ -14,7 +14,7 @@
 
     $.fn.backstretch = function(images, options) {
 
-        options = typeof options === 'object' ? options : {};
+        options = typeof options === 'undefined' ? {} : options;
         // We need at least one image or method name
         if (images === undefined || images.length === 0) {
             $.error("No images were supplied for Backstretch");
