@@ -2,6 +2,8 @@
 * http://srobbin.com/jquery-plugins/backstretch/
 * Copyright (c) 2013 Scott Robbin; Licensed MIT */
 
+/* jshint laxcomma:true */
+
 ;(function ($, window, undefined) {
   'use strict';
 
