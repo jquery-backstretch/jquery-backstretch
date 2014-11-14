@@ -1,6 +1,6 @@
-/*! Backstretch - v2.0.4 - 2013-06-19
+/*! Backstretch - v2.1.0 - 2014-11-14
 * http://srobbin.com/jquery-plugins/backstretch/
-* Copyright (c) 2013 Scott Robbin; Licensed MIT */
+* Copyright (c) 2014 Scott Robbin; Licensed MIT */
 
 ;(function ($, window, undefined) {
   'use strict';
@@ -30,7 +30,7 @@
       if (obj) {
 
         // Is this a method they're trying to execute?
-        if (typeof images == 'string' && typeof obj[images] == 'function') {
+        if (typeof images === 'string' && typeof obj[images] === 'function') {
           // Call the method
           obj[images](options);
 
@@ -45,7 +45,7 @@
         obj.destroy(true);
       }
 
-      obj = new Backstretch(this, images, options);
+      obj = new Backstretch(this, images, options || {});
       $this.data('backstretch', obj);
     });
   };
@@ -71,6 +71,9 @@
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
     , fade: 0           // Speed of fade transition between slides
+    , paused: false   // Whether the images should slide after given duration
+    , lazyload: false // Should the images be lazy loaded?
+    , start: 0      // Index of the first image to show
   };
 
   /* STYLES
@@ -115,10 +118,39 @@
      */
     this.images = $.isArray(images) ? images : [images];
 
-    // Preload images
-    $.each(this.images, function () {
-      $('<img />')[0].src = this;
-    });    
+    /**
+     * Paused-Option
+     */
+    if (this.options.paused) {
+        this.paused = true;
+    }
+    /**
+     * Start-Option (Index)
+     */
+    if (this.options.start >= this.images.length)
+    {
+        this.options.start = this.images.length - 1;
+    }
+    if (this.options.start < 0)
+    {
+        this.options.start = 0;
+    }
+    
+    /**
+     * Lazy-Loading
+     */
+    if (options.lazyload && this.images[this.options.start])
+    {
+        $('<img />')[0].src = this.images[this.options.start];
+    }
+    /**
+     * Pre-Loading
+     */
+    else{
+        $.each(this.images, function () {
+            $('<img />')[0].src = this;
+        });
+    }
 
     // Convenience reference to know if the container is body.
     this.isBody = container === document.body;
@@ -159,7 +191,7 @@
     });
 
     // Set the first image
-    this.index = 0;
+    this.index = this.options.start;
     this.show(this.index);
 
     // Listen for resize
