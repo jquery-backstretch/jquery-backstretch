@@ -27,7 +27,7 @@
 
     , img1: 'image1.jpg'
     , img2: 'image2.jpg'
-
+    , imgs: ['image1.jpg', 'image2.jpg']
     , destroy: function () {
         try {
           $(':backstretch').data('backstretch').destroy();
@@ -56,10 +56,26 @@
     global.destroy();
 
     var duration = 999999
-      , instance = $.backstretch(global.img1, {duration: duration});
-
+      , start = 1
+      , lazyload = false
+      , paused = true
+      , instance = $.backstretch(global.imgs, {duration: duration,lazyload:lazyload,start:start,paused:paused});
+      
     // Test to make sure the options are being set
     strictEqual(instance.options.duration, duration, 'passed options are being set');
+    strictEqual(instance.options.lazyload, lazyload, 'passed options are being set');
+    strictEqual(instance.options.start, start, 'passed options are being set');
+    strictEqual(instance.options.paused, paused, 'passed options are being set');
   });
+  
+    test('optionValidation', function() {
+        var instance = null;
+        //Out of bounds
+        instance = $.backstretch(global.imgs,{start: 100});
+        strictEqual(instance.options.start, global.imgs.length - 1, 'start-option is validated correctly');
+        //Negative Index
+        instance = $.backstretch(global.imgs, {start: -12});
+        strictEqual(instance.options.start, 0, 'start-option is validated correctly');
+    });
 
 }(jQuery));
