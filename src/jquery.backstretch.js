@@ -292,7 +292,7 @@
     , resume: function () {
         // Resume the slideshow
         this.paused = false;
-        this.next();
+        this.cycle();
         return this;
       }
 
