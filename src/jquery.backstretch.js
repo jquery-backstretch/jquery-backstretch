@@ -290,7 +290,7 @@
         this.index = newIndex;
 
         // Pause the slideshow
-        clearInterval(self.interval);
+        clearTimeout(self._cycleTimeout);
 
         // New image
         self.$img = $('<img />')
@@ -308,7 +308,7 @@
                           oldImage.remove();
 
                           // Resume the slideshow
-                          if (!self.paused) {
+                          if (!self.paused && this.images.length > 1) {
                             self.cycle();
                           }
 
@@ -358,17 +358,17 @@
     , resume: function () {
         // Resume the slideshow
         this.paused = false;
-        this.next();
+        this.cycle();
         return this;
       }
 
     , cycle: function () {
         // Start/resume the slideshow
         if(this.images.length > 1) {
-          // Clear the interval, just in case
-          clearInterval(this.interval);
+          // Clear the timeout, just in case
+          clearTimeout(this._cycleTimeout);
 
-          this.interval = setInterval($.proxy(function () {
+          this._cycleTimeout = setTimeout($.proxy(function () {
             // Check for paused slideshow
             if (!this.paused) {
               this.next();
@@ -382,8 +382,8 @@
         // Stop the resize events
         $(window).off('resize.backstretch orientationchange.backstretch');
 
-        // Clear the interval
-        clearInterval(this.interval);
+        // Clear the timeout
+        clearTimeout(this._cycleTimeout);
 
         // Remove Backstretch
         if(!preserveBackground) {
