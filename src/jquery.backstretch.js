@@ -13,10 +13,6 @@
    * ========================= */
 
   $.fn.backstretch = function (images, options) {
-    // We need at least one image or method name
-    if (images === undefined || images.length === 0) {
-      $.error("No images were supplied for Backstretch");
-    }
 
     /*
      * Scroll the page one pixel to get the right window height on iOS
@@ -48,6 +44,15 @@
         // Remove the old instance
         if ( obj.hasOwnProperty('destroy') ) {
           obj.destroy(true);
+        }
+      }
+
+      // We need at least one image
+      if (images === undefined) {
+        if ($this.css('backgroundImage')) {
+          images = [$this.css('backgroundImage').replace(/url\(|\)|"|'/g,"")];
+        } else {
+          $.error('No images were supplied for Backstretch, or element must have a CSS-defined background image.');
         }
       }
 
@@ -105,7 +110,6 @@
         , border: 'none'
         , width: 'auto'
         , height: 'auto'
-        , maxHeight: 'none'
         , maxWidth: 'none'
         , zIndex: -999999
       }
@@ -118,12 +122,13 @@
     this.firstShow = true;
     
 
-    /* In its simplest form, we allow Backstretch to be called on an image path.
-     * e.g. $.backstretch('/path/to/image.jpg')
-     * So, we need to turn this back into an array.
-     */
-    this.images = $.isArray(images) ? images : [images];
 
+    /* In its simplest form, we allow Backstretch to be called on an image path.
+    * e.g. $.backstretch('/path/to/image.jpg')
+    * So, we need to turn this back into an array.
+    */
+    this.images = $.isArray(images) ? images : [images];
+	
     // Preload images
     $.each(this.images, function () {
       $('<img />')[0].src = this;
