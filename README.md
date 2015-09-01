@@ -146,6 +146,19 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.0.5
+
+* New `fadeFirst` feature
+* New `alignX` feature
+* New `alignY` feature
+* New `paused` feature
+* New `start` feature
+* New `preload` feature
+* New `preloadSize` feature
+* New feature: url templates
+* New feature: automatic resolution selection
+* Minor bug fixes
+
 ### Version 2.0
 
 * Now accepts an array of images to create a slideshow
