@@ -48,8 +48,9 @@
       }
 
       // We need at least one image
-      if (images === undefined || (images && images.length === 0)) {
-        if ($this.css('backgroundImage')) {
+      if (!images || (images && images.length === 0)) {
+        var cssBackgroundImage = $this.css('background-image');
+        if (cssBackgroundImage && cssBackgroundImage !== 'none') {
           images = [$this.css('backgroundImage').replace(/url\(|\)|"|'/g,"")];
         } else {
           $.error('No images were supplied for Backstretch, or element must have a CSS-defined background image.');

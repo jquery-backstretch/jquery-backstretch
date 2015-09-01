@@ -93,6 +93,6 @@
     $(window).trigger('resize');
 
     strictEqual(resized, true, 'passed resize event being called');
-  })
+  });
 
 }(jQuery));
