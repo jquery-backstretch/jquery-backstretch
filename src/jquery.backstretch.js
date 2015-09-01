@@ -46,7 +46,9 @@
         options = $.extend(obj.options, options);
 
         // Remove the old instance
-        obj.destroy(true);
+        if ( obj.hasOwnProperty('destroy') ) {
+          obj.destroy(true);
+        }
       }
 
       obj = new Backstretch(this, images, options);
