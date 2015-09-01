@@ -11,7 +11,7 @@
   "version": "2.0.4",
   "main": ["jquery.backstretch.js"],
   "dependencies": {
-    "jquery": "~1.9.1"
+    "jquery": ">=1.9.x"
   },
   "repository": {
     "type": "git",
