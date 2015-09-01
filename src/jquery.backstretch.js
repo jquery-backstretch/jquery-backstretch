@@ -187,6 +187,9 @@
             , bgWidth = rootWidth
             , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
             , bgHeight = bgWidth / this.$img.data('ratio')
+            , evt = $.Event('backstretch.resize', {
+              relatedTarget: this.$container[0]
+            })
             , bgOffset;
 
             // Make adjustments based on image ratio
@@ -206,6 +209,7 @@
 
             this.$wrap.css({width: rootWidth, height: rootHeight})
                       .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
+            this.$container.trigger(evt, this);
         } catch(err) {
             // IE7 seems to trigger resize before the image is loaded.
             // This try/catch block is a hack to let it fail gracefully.
