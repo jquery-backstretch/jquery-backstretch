@@ -26,5 +26,13 @@
   "dependencies": {
     "jquery": ">= 1.7"
   },
+  "devDependencies": {
+    "grunt": "0.4.*",
+    "grunt-contrib-qunit": "0.7.*",
+    "grunt-contrib-jshint": "0.11.*",
+    "grunt-contrib-concat": "0.5.*",
+    "grunt-contrib-uglify": "0.9.*",
+    "grunt-contrib-watch": "0.6.*"
+  },
   "keywords": []
 }
