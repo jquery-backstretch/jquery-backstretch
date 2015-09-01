@@ -28,6 +28,25 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
     "path/to/image2.jpg",
     "path/to/image3.jpg"    
   ], {duration: 4000});
+
+  // Or, to load from a url that can accept a resolution and provide the best image for that resolution
+  $(".foo").backstretch([
+    "path/to/image.jpg?max_width={width}&max_height={height}"
+  ]);
+
+  // Or, to automatically choose from a set of resolutions
+  $(".foo").backstretch([
+    [
+      width: 1080, url: "path/to/image1_1080.jpg",
+      width: 720, url: "path/to/image1_720.jpg",
+      width: 320, url: "path/to/image1_320.jpg"
+    ],
+    [
+      width: 1080, url: "path/to/image2_1080.jpg",
+      width: 720, url: "path/to/image2_720.jpg",
+      width: 320, url: "path/to/image2_320.jpg"
+    ]
+  ]);
 </script>
 ```
 
@@ -43,8 +62,9 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 | `fadeFirst` | If `true`, the first image will fade in like all the others. | Boolean | true |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 | `paused` | For slideshows: Disables the change between slides | Boolean | false |
-| `lazyload` | Activates the lazy-loading-functionality für slideshows. This means the next slide that is about to be shown, is loaded right before showing. *Dependent on the time it takes to load your image, the actual duration may vary from the one in the options.* | Boolean | false |
 | `start` | The index of the image in the array you want to start your slideshow with. | Integer | 0 |
+| `preload` | How many images to preload at once? I.e. Lazy-loading can be enabled by specifying 0. | Integer | 2 |
+| `preloadSize` | How many images to preload in parallel? If we are preloading 5 images for the next slides, we might want to still limit it to only preload 2 or 3 at once, according to the expected available bandwidth. | Integer | 1 |
 
 ## Slideshow API
 

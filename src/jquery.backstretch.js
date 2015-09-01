@@ -48,7 +48,7 @@
       }
 
       // We need at least one image
-      if (images === undefined) {
+      if (images === undefined || (images && images.length === 0)) {
         if ($this.css('backgroundImage')) {
           images = [$this.css('backgroundImage').replace(/url\(|\)|"|'/g,"")];
         } else {
@@ -86,8 +86,9 @@
     , alignX: "auto"    // When used it takes precedence over ceteredX
     , alignY: "auto"    // When used it takes precedence over ceteredY
     , paused: false     // Whether the images should slide after given duration
-    , lazyload: false   // Should the images be lazy loaded?
     , start: 0          // Index of the first image to show
+    , preload: 2        // How many images preload at a time?
+    , preloadSize: 1    // How many images can we preload in parallel?
   };
 
   /* STYLES
@@ -120,6 +121,169 @@
       }
   };
 
+  /* Given an array of different options for an image, 
+   * choose the optimal image for the container size.
+   *
+   * Given an image template (a string with {{ width }} and/or
+   * {{height}} inside) and a container object, returns the
+   * image url with the exact values for the size of that
+   * container.
+   *
+   * Returns an array of urls optimized for the specified resolution.
+   *
+   */
+  var optimalSizeImages = (function () {
+      
+    /* Sorts the array of image sizes based on width */
+    var widthInsertSort = function (arr) {
+      for (var i = 1; i < arr.length; i++) {
+        var tmp = arr[i],
+            j = i;
+        while (arr[j - 1] && parseInt(arr[j - 1].width, 10) > parseInt(tmp.width, 10)) {
+          arr[j] = arr[j - 1];
+          --j;
+        }
+        arr[j] = tmp;
+      }
+    
+      return arr;
+    };
+
+    /* Given an array of various sizes of the same image and a container width,
+     * return the best image.
+     */
+    var selectBest = function (containerWidth, imageSizes) {
+      // stop when the width is larger
+      var j = 0;
+      while (j < imageSizes.length && imageSizes[j].width < containerWidth) {
+        j++;
+      }
+      // Use the image located at where we stopped
+      return imageSizes[j - 1].url;
+    };
+  
+    return function ($container, images) {
+      var containerWidth = $container.width(),
+          containerHeight = $container.height();
+          
+      var chosenImages = [];
+      
+      var templateReplacer = function (match, key) {
+        if (key === 'width') {
+          return containerWidth;
+        }
+        if (key === 'height') {
+          return containerHeight;
+        }
+        return match;
+      };
+      
+      for (var i = 0; i < images.length; i++) {
+        if ($.isArray(images[0])) {
+          images[i] = widthInsertSort(images[i]);
+          var chosen = selectBest(containerWidth, images[i]);
+          chosenImages.push(chosen);
+        } else {
+          var url = images[i].replace(/{{(width|height)}}/g, templateReplacer);
+          chosenImages.push(url);
+        }
+      }
+      return chosenImages;
+    };
+  
+  })();
+ 
+  /* Preload images */
+  var preload = (function (sources, startAt, count, batchSize, callback) {
+    // Plugin cache
+    var cache = [];
+
+    // Wrapper for cache
+    var caching = function(image){
+      for (var i = 0; i < cache.length; i++) {
+        if (cache[i].src === image.src) {
+          return cache[i];
+        }
+      }
+      cache.push(image);
+      return image;
+    };
+
+    // Execute callback
+    var exec = function(sources, callback, last){
+      if (typeof callback === 'function') {
+        callback.call(sources, last);
+      }
+    };
+
+    // Closure to hide cache
+    return function preload (sources, startAt, count, batchSize, callback){
+      // Check input data
+      if (typeof sources === 'undefined') {
+        return;
+      }
+      if (typeof sources === 'string') {
+        sources = [sources];
+      }
+      
+      if (arguments.length < 5 && typeof arguments[arguments.length - 1] === 'function') {
+        callback = arguments[arguments.length - 1];
+      }
+      
+      startAt = (typeof startAt === 'function' || !startAt) ? 0 : startAt;
+      count = (typeof count === 'function' || !count || count < 0) ? sources.length : Math.min(count, sources.length);
+      batchSize = (typeof batchSize === 'function' || !batchSize) ? 1 : batchSize;
+      
+      if (startAt >= sources.length) {
+          startAt = 0;
+          count = 0;
+      }
+      if (batchSize < 0) {
+          batchSize = count;
+      }
+      batchSize = Math.min(batchSize, count);
+      
+      var next = sources.slice(startAt + batchSize, count - batchSize);
+      sources = sources.slice(startAt, batchSize);
+      count = sources.length;
+
+      // If sources array is empty
+      if (!count) {
+        exec(sources, callback, true);
+        return;
+      }
+
+      // Image loading callback
+      var countLoaded = 0;
+
+      var loaded = function() {
+        countLoaded++;
+        if (countLoaded !== count) {
+          return;
+        }
+
+        exec(sources, callback, !next);
+        preload(next, 0, 0, batchSize, callback);
+      };
+
+      // Loop sources to preload
+      var image;
+
+      for (var i = 0; i < sources.length; i++) {
+        image = new Image();
+        image.src = sources[i];
+
+        image = caching(image);
+
+        if (image.complete) {
+          loaded();
+        } else {
+          $(image).on('load error', loaded);
+        }
+      }
+    };
+  })();
+ 
   /* CLASS DEFINITION
    * ========================= */
   var Backstretch = function (container, images, options) {
@@ -143,6 +307,7 @@
     if (this.options.paused) {
         this.paused = true;
     }
+    
     /**
      * Start-Option (Index)
      */
@@ -154,24 +319,7 @@
     {
         this.options.start = 0;
     }
-    
-    /**
-     * Lazy-Loading
-     */
-    if (options.lazyload && this.images[this.options.start])
-    {
-        $('<img />')[0].src = this.images[this.options.start];
-    }
-    
-    /**
-     * Pre-Loading
-     */
-    else {
-        $.each(this.images, function () {
-            $('<img />')[0].src = this;
-        });
-    }
-
+        
     // Convenience reference to know if the container is body.
     this.isBody = container === document.body;
 
@@ -184,6 +332,15 @@
     this.$container = $(container);
     this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
 
+    this.originalImages = this.images;
+    this.images = optimalSizeImages(this.$root, this.originalImages);
+
+    /**
+     * Pre-Loading.
+     * This is the first image, so we will preload a minimum of 1 images.
+     */
+    preload(this.images, this.options.start || 0, this.options.preload || 1);
+    
     // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
     var $existing = this.$container.children(".backstretch").first();
     this.$wrap = $existing.length ? $existing : $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
@@ -230,6 +387,41 @@
   Backstretch.prototype = {
       resize: function () {
         try {
+
+          // Check for a better suited image after the resize
+          var newContainerWidth = this.$root.width();
+          var newContainerHeight = this.$root.height();
+          var changeRatioW = newContainerWidth / (this._lastResizeContainerWidth || 0);
+          var changeRatioH = newContainerHeight / (this._lastResizeContainerHeight || 0);
+          
+          // check for big changes in container size
+          if (changeRatioW < 0.9 || changeRatioW > 1.1 || isNaN(changeRatioW) ||
+              changeRatioH < 0.9 || changeRatioH > 1.1 || isNaN(changeRatioH)) {
+
+            this._lastResizeContainerWidth = newContainerWidth;
+            this._lastResizeContainerHeight = newContainerHeight;
+            
+            // Big change: rebuild the entire images array
+            this.images = optimalSizeImages(this.$root, this.originalImages);
+              
+            // Preload them (they will be automatically inserted on the next cycle)
+            if (this.options.preload) {
+              preload(this.images, (this.index + 1) % this.images.length, this.options.preload);
+            }
+
+            // In case there is no cycle and the new source is different than the current
+            if (this.images.length === 1 && 
+                this._currentImageSrc !== this.images[0]) {
+
+              // Wait a little an update the image being showed
+              var that = this;
+              clearTimeout(that._selectAnotherResolutionTimeout);
+              that._selectAnotherResolutionTimeout = setTimeout(function () {
+                that.show(0);
+              }, 2500);
+            }
+          }
+
           var bgCSS = {left: 0, top: 0, right: 'auto', bottom: 'auto'}
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
             , bgWidth = rootWidth
@@ -336,6 +528,8 @@
 
         // Hack for IE img onload event
         self.$img.attr('src', self.images[newIndex]);
+        self._currentImageSrc = self.images[newIndex];
+        
         return self;
       }
 
