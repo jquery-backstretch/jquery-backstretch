@@ -77,6 +77,7 @@
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
     , fade: 0           // Speed of fade transition between slides
+    , fadeFirst: true   // Fade in the first image of slideshow?
   };
 
   /* STYLES
@@ -114,6 +115,8 @@
    * ========================= */
   var Backstretch = function (container, images, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
+    this.firstShow = true;
+    
 
     /* In its simplest form, we allow Backstretch to be called on an image path.
      * e.g. $.backstretch('/path/to/image.jpg')
@@ -254,7 +257,7 @@
 
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
-                        $(this).fadeIn(self.options.speed || self.options.fade, function () {
+                        var bringInNextImage = function () {
                           oldImage.remove();
 
                           // Resume the slideshow
@@ -267,7 +270,17 @@
                           $(['after', 'show']).each(function () {
                             self.$container.trigger($.Event('backstretch.' + this, evtOptions), [self, newIndex]);
                           });
-                        });
+                        };
+
+                        if (this.firstShow && !this.options.fadeFirstImage) {
+                            // Avoid fade-in on first show
+                            bringInNextImage();
+                        } else {
+                            // Any other show, fade-in!
+                            $(this).fadeIn(self.options.speed || self.options.fade, bringInNextImage);
+                        }
+                        
+                        this.firstShow = false;
 
                         // Resize
                         self.resize();
