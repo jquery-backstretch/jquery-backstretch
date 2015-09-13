@@ -501,7 +501,7 @@
                           oldImage.remove();
 
                           // Resume the slideshow
-                          if (!self.paused && this.images.length > 1) {
+                          if (!self.paused && self.images.length > 1) {
                             self.cycle();
                           }
 
