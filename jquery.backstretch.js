@@ -512,15 +512,16 @@
                           });
                         };
 
-                        if (this.firstShow && !this.options.fadeFirstImage) {
+                        if (self.firstShow && !self.options.fadeFirst) {
                             // Avoid fade-in on first show
+                            $(this).show();
                             bringInNextImage();
                         } else {
                             // Any other show, fade-in!
                             $(this).fadeIn(self.options.speed || self.options.fade, bringInNextImage);
                         }
                         
-                        this.firstShow = false;
+                        self.firstShow = false;
 
                         // Resize
                         self.resize();
