@@ -153,6 +153,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.0.6
+
+* Minor bug fixes due to latest PRs
+
 ### Version 2.0.5
 
 * New `fadeFirst` feature
