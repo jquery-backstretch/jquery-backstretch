@@ -41,16 +41,17 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
   ]);
 
   // Or, to automatically choose from a set of resolutions
+  // (Each width specifies the minimum resolution for specific image)
   $(".foo").backstretch([
     [
-      width: 1080, url: "path/to/image1_1080.jpg",
-      width: 720, url: "path/to/image1_720.jpg",
-      width: 320, url: "path/to/image1_320.jpg"
+      width: 720, url: "path/to/image1_1080.jpg",
+      width: 320, url: "path/to/image1_720.jpg",
+      width: 0, url: "path/to/image1_320.jpg"
     ],
     [
-      width: 1080, url: "path/to/image2_1080.jpg",
-      width: 720, url: "path/to/image2_720.jpg",
-      width: 320, url: "path/to/image2_320.jpg"
+      width: 720, url: "path/to/image2_1080.jpg",
+      width: 320, url: "path/to/image2_720.jpg",
+      width: 0, url: "path/to/image2_320.jpg"
     ]
   ]);
 </script>
