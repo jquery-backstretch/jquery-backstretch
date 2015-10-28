@@ -365,8 +365,8 @@
     
     // Convert old options
     if (this.options.centeredX || this.options.centeredY) {
-        if (window.console && console.log) {
-            console.log('jquery.backstretch: `centeredX`/`centeredY` is deprecated, please use `alignX`/`alignY`');
+        if (window.console && window.console.log) {
+            window.console.log('jquery.backstretch: `centeredX`/`centeredY` is deprecated, please use `alignX`/`alignY`');
         }
         if (this.options.centeredX) {
             this.options.alignX = 0.5;
