@@ -61,17 +61,19 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
-| `centeredX` | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
-| `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
-| `alignX` | This parameter controls the horizontal alignment of the image. Can be one of: "auto", "center", "left", "right". If different from "auto", it takes prcedence over the value of `centeredX`. | String | "auto" |
-| `alignY` | This parameter controls the vertical alignment of the image. Can be one of: "auto", "center", "top", "bottom". If different from "auto", it takes prcedence over the value of `centeredY`. | String | "auto" |
-| `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
+| `alignX` * | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `alignY` * | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `fade` * | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `fadeFirst` | If `true`, the first image will fade in like all the others. | Boolean | true |
-| `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
+| `duration` * | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 | `paused` | For slideshows: Disables the change between slides | Boolean | false |
 | `start` | The index of the image in the array you want to start your slideshow with. | Integer | 0 |
 | `preload` | How many images to preload at once? I.e. Lazy-loading can be enabled by specifying 0. | Integer | 2 |
 | `preloadSize` | How many images to preload in parallel? If we are preloading 5 images for the next slides, we might want to still limit it to only preload 2 or 3 at once, according to the expected available bandwidth. | Integer | 1 |
+| `centeredX` | Deprecated. Still works but please do not use it. | Boolean | true |
+| `centeredY` | Deprecated. Still works but please do not use it. | Boolean | true |
+
+* Options marked with an `*` can be specified for individual images
 
 ## Slideshow API
 
@@ -83,6 +85,14 @@ $('.foo').backstretch([
   'path/to/image.jpg',
   'path/to/image2.jpg',
   'path/to/image3.jpg'
+]);
+
+```javascript
+// Slideshow with granular control
+$('.foo').backstretch([
+  { url: 'path/to/image.jpg', duration: 3000 }
+  { url: 'path/to/image2.jpg', fade: 250 },
+  { url: 'path/to/image3.jpg', alignY: 0.2 }
 ]);
 
 // Pause the slideshow
@@ -152,6 +162,13 @@ $(window).on("backstretch.after", function (e, instance, index) {
 ```
 
 ## Changelog
+
+### Version 2.0.7
+
+* More granular control over options
+* 1. Now you can specify `alignX`/`alignY`/`duration`/`fade` on an image basis
+* 2. Minor bugfixes
+* 3. Deprecated `centeredX`/`centeredY`
 
 ### Version 2.0.6
 
