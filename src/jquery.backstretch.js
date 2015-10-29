@@ -605,7 +605,9 @@
         // New image
         that.$img = $('<img />');
 
-        if (!this.options.bypassCss) {
+        if (this.options.bypassCss) {
+            that.$img.css({ 'display': 'none' });
+        } else {
             that.$img.css(styles.img);
         }
 
@@ -639,8 +641,8 @@
               });
             };
 
-            if (that.firstShow && !that.options.fadeFirst) {
-                // Avoid fade-in on first show
+            if ((that.firstShow && !that.options.fadeFirst) || !fadeDuration) {
+                // Avoid fade-in on first show or if there's no fade value
                 $(this).show();
                 bringInNextImage();
             } else {
