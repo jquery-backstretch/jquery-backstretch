@@ -636,8 +636,8 @@
                       })
                       .appendTo(self.$wrap);
 
-        // Hack for IE img onload event
         self.$img.attr('src', self.images[newIndex].url);
+        self.$img.attr('alt', self.images[newIndex].alt || '');
         self.$img.data('options', self.images[newIndex]);
         self._currentImage = self.images[newIndex];
         

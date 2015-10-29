@@ -123,6 +123,7 @@ Each image in the set can be a String specifying the URL for the image, *or* an 
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
 | `url` | The url of the image | String | |
+| `alt` | The alternative text for this image (If you want to play along with screen readers) | String | '' |
 | `alignX` | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `alignY` | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
@@ -135,8 +136,9 @@ If you have specified an array of resolutions for a single image, then these are
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
 | `url` | The url of the image | String | |
+| `alt` | The alternative text for this image (If you want to play along with screen readers) | String | '' |
 | `width` | The width of the image | Integer | |
-| `pixelRatio` | A strict rule to only choose for the specified device pixel ratio. If set to "auto", then the element's width will first be multiplied by the device's pixel ratio before evaluating. | Number or "auto" | undefined |
+| `pixelRatio` | A strict rule to only choose for the specified device pixel ratio. If set to 'auto', then the element's width will first be multiplied by the device's pixel ratio before evaluating. | Number or "auto" | undefined |
 | `alignX` | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `alignY` | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
