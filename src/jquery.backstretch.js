@@ -636,10 +636,11 @@
                       })
                       .appendTo(that.$wrap);
 
-        that.$img.attr('src', that.images[newIndex].url);
-        that.$img.attr('alt', that.images[newIndex].alt || '');
-        that.$img.data('options', that.images[newIndex]);
-        that._currentImage = that.images[newIndex];
+        var selectedImage = that.images[newIndex];
+        that.$img.attr('src', selectedImage.url);
+        that.$img.attr('alt', selectedImage.alt || '');
+        that.$img.data('options', selectedImage);
+        that._currentImage = selectedImage;
         
         return that;
       }
