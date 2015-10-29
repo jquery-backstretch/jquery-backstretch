@@ -1,6 +1,6 @@
 {
-  "name": "jquery-backstretch",
-  "description": "A simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element.",
+  "name": "jquery-backstretch-2",
+  "description": "An updated version of: A simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element.",
   "version": "2.1.0",
   "homepage": "http://srobbin.com/jquery-plugins/backstretch/",
   "author": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/srobbin/jquery-backstretch.git"
+    "url": "git://github.com/danielgindi/jquery-backstretch.git"
   },
   "ignore": {
     "grunt.js",
