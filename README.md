@@ -233,6 +233,11 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.0.9
+
+* New `alt` image property
+* New `bypassCss` options
+
 ### Version 2.0.8
 
 * Changed multi-res feature `width`'s meaning. `width` now means the actual width of the image to match against.
