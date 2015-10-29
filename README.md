@@ -114,6 +114,7 @@ However if you want to limit specific images to only be chosen if the device has
 | `bypassCss` | Avoid adding any CSS to the IMG element. I.e if you want a dynamic IMG tag that is laid out with the content. | Boolean | false |
 | `alwaysTestWindowResolution` | Always test against window's width instead of the element's width. | Boolean | false |
 | `resolutionRefreshRate` | Treshold for how long to wait before the image resolution will be switched? | Integer | 2500 |
+| `resolutionChangeRatioTreshold` | Treshold for how much should the different in the resolution be before switch image | Number | 0.1 (10%) |
 | `centeredX` | Deprecated. Still works but please do not use it. | Boolean | true |
 | `centeredY` | Deprecated. Still works but please do not use it. | Boolean | true |
 
@@ -235,10 +236,17 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.0
+
+* New `alwaysTestWindowResolution` option
+* New `resolutionRefreshRate` option
+* New `resolutionChangeRatioTreshold` option
+* Minor bugfix: If there was no `fade` duration, the new image was still being removed asynchronously. Possibly causing a glitch if custom CSS is used.
+
 ### Version 2.0.9
 
 * New `alt` image property
-* New `bypassCss` options
+* New `bypassCss` option
 
 ### Version 2.0.8
 

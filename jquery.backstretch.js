@@ -88,6 +88,8 @@
     , start: 0          // Index of the first image to show
     , preload: 2        // How many images preload at a time?
     , preloadSize: 1    // How many images can we preload in parallel?
+    , resolutionRefreshRate: 2500 // How long to wait before switching resolution?
+    , resolutionChangeRatioTreshold: 0.1 // How much a change should it be before switching resolution?
   };
 
   /* STYLES
@@ -439,11 +441,14 @@
      * Wrap: a DIV that we place the image into, so we can hide the overflow.
      * Root: Convenience reference to help calculate the correct height.
      */
+    var $window = $(window);
     this.$container = $(container);
-    this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
+    this.$root = this.isBody ? supportsFixedPosition ? $window : $(document) : this.$container;
 
     this.originalImages = this.images;
-    this.images = optimalSizeImages(this.$root, this.originalImages);
+    this.images = optimalSizeImages(
+        this.options.alwaysTestWindowResolution ? $window : this.$root, 
+        this.originalImages);
 
     /**
      * Pre-Loading.
@@ -489,14 +494,14 @@
     this.show(this.index);
 
     // Listen for resize
-    $(window).on('resize.backstretch', $.proxy(this.resize, this))
-             .on('orientationchange.backstretch', $.proxy(function () {
-                // Need to do this in order to get the right window height
-                if (this.isBody && window.pageYOffset === 0) {
-                  window.scrollTo(0, 1);
-                  this.resize();
-                }
-             }, this));
+    $window.on('resize.backstretch', $.proxy(this.resize, this))
+           .on('orientationchange.backstretch', $.proxy(function () {
+              // Need to do this in order to get the right window height
+              if (this.isBody && window.pageYOffset === 0) {
+                window.scrollTo(0, 1);
+                this.resize();
+              }
+           }, this));
   };
 
   /* PUBLIC METHODS
@@ -506,20 +511,24 @@
         try {
 
           // Check for a better suited image after the resize
-          var newContainerWidth = this.$root.width();
-          var newContainerHeight = this.$root.height();
+          var $resTest = this.options.alwaysTestWindowResolution ? $(window) : this.$root;
+          var newContainerWidth = $resTest.width();
+          var newContainerHeight = $resTest.height();
           var changeRatioW = newContainerWidth / (this._lastResizeContainerWidth || 0);
           var changeRatioH = newContainerHeight / (this._lastResizeContainerHeight || 0);
+          var resolutionChangeRatioTreshold = this.options.resolutionChangeRatioTreshold || 0.0;
 
           // check for big changes in container size
-          if (changeRatioW < 0.9 || changeRatioW > 1.1 || isNaN(changeRatioW) ||
-              changeRatioH < 0.9 || changeRatioH > 1.1 || isNaN(changeRatioH)) {
+          if ((newContainerWidth !== this._lastResizeContainerWidth ||
+               newContainerHeight !== this._lastResizeContainerHeight) &&
+              ((Math.abs(changeRatioW - 1) >= resolutionChangeRatioTreshold || isNaN(changeRatioW)) ||
+              (Math.abs(changeRatioH - 1) >= resolutionChangeRatioTreshold || isNaN(changeRatioH)))) {
 
             this._lastResizeContainerWidth = newContainerWidth;
             this._lastResizeContainerHeight = newContainerHeight;
 
             // Big change: rebuild the entire images array
-            this.images = optimalSizeImages(this.$root, this.originalImages);
+            this.images = optimalSizeImages($resTest, this.originalImages);
 
             // Preload them (they will be automatically inserted on the next cycle)
             if (this.options.preload) {
@@ -535,7 +544,7 @@
               clearTimeout(that._selectAnotherResolutionTimeout);
               that._selectAnotherResolutionTimeout = setTimeout(function () {
                 that.show(0);
-              }, 2500);
+              }, this.options.resolutionRefreshRate);
             }
           }
 
@@ -600,7 +609,9 @@
         // New image
         that.$img = $('<img />');
 
-        if (!this.options.bypassCss) {
+        if (this.options.bypassCss) {
+            that.$img.css({ 'display': 'none' });
+        } else {
             that.$img.css(styles.img);
         }
 
@@ -634,8 +645,8 @@
               });
             };
 
-            if (that.firstShow && !that.options.fadeFirst) {
-                // Avoid fade-in on first show
+            if ((that.firstShow && !that.options.fadeFirst) || !fadeDuration) {
+                // Avoid fade-in on first show or if there's no fade value
                 $(this).show();
                 bringInNextImage();
             } else {
