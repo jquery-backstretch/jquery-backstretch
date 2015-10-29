@@ -153,21 +153,47 @@
      */
     var selectBest = function (containerWidth, imageSizes) {
         
-      for (var j = 0; j < imageSizes.length; j++) {
+      var devicePixelRatio = window.devicePixelRatio || 1;
+      var lastAllowedImage = 0;
+      var testWidth;
+        
+      for (var j = 0, image; j < imageSizes.length; j++) {
+          
+          image = imageSizes[j];
           
           // In case a new image was pushed in, process it:
-          if (typeof imageSizes[j] === 'string') {
-              imageSizes[j] = { url: imageSizes[j] };
+          if (typeof image === 'string') {
+              image = imageSizes[j] = { url: image };
+          }
+          
+          if (image.pixelRatio && image.pixelRatio != devicePixelRatio) {
+              // We disallowed choosing this image for current device pixel ratio,
+              // So skip this one.
+              continue;
+          }
+          
+          // Mark this one as the last one we investigated
+          // which does not violate device pixel ratio rules.
+          // We may choose this one later if there's no match.
+          lastAllowedImage = j;
+          
+          // For most images, we match the specified width against element width,
+          // And enforcing a limit depending on the "pixelRatio" property if specified.
+          // But if a pixelRatio="auto", then we consider the width as the physical width of the image,
+          // And match it while considering the device's pixel ratio.
+          testWidth = containerWidth;
+          if (image.pixelRatio === 'auto') {
+              containerWidth *= devicePixelRatio;
           }
           
           // Stop when the width of the image is larger or equal to the container width
-          if (imageSizes[j].width > containerWidth) {
+          if (image.width >= testWidth) {
               break;
           }
       }
       
       // Use the image located at where we stopped
-      return imageSizes[j - 1];
+      return imageSizes[Math.min(j, lastAllowedImage)];
     };
   
     return function ($container, images) {

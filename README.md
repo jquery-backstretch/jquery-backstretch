@@ -37,25 +37,66 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 
   // Or, to load from a url that can accept a resolution and provide the best image for that resolution
   $(".foo").backstretch([
-    "path/to/image.jpg?max_width={width}&max_height={height}"
+    "path/to/image.jpg?width={width}&height={height}"
   ]);
 
-  // Or, to automatically choose from a set of resolutions
-  // (Each width specifies the minimum resolution for specific image)
+  // Or, to automatically choose from a set of resolutions.
+  // The width is the width of the image, and the algorithm chooses the best fit.
   $(".foo").backstretch([
     [
-      width: 720, url: "path/to/image1_1080.jpg",
-      width: 320, url: "path/to/image1_720.jpg",
-      width: 0, url: "path/to/image1_320.jpg"
+      { width: 1080, url: "path/to/image1_1080.jpg" },
+      { width: 720, url: "path/to/image1_720.jpg" },
+      { width: 320, url: "path/to/image1_320.jpg" }
     ],
     [
-      width: 720, url: "path/to/image2_1080.jpg",
-      width: 320, url: "path/to/image2_720.jpg",
-      width: 0, url: "path/to/image2_320.jpg"
+      { width: 1080, url: "path/to/image2_1080.jpg" },
+      { width: 720, url: "path/to/image2_720.jpg" },
+      { width: 320, url: "path/to/image2_320.jpg" }
+    ]
+  ]);
+
+  // If we wanted to specify different images for different pixel-ratios:
+  $(".foo").backstretch([
+    [
+      // Will only be chosed for a @2x device
+      { width: 1080, url: "path/to/image1_1080@2x.jpg", pixelRatio: 2 },
+      
+      // Will only be chosed for a @1x device
+      { width: 1080, url: "path/to/image1_1080.jpg", pixelRatio: 1 },
+      
+      { width: 720, url: "path/to/image1_720@2x.jpg", pixelRatio: 2 },
+      { width: 720, url: "path/to/image1_720.jpg", pixelRatio: 1 },
+      { width: 320, url: "path/to/image1_320@2x.jpg",  pixelRatio: 2 },
+      { width: 320, url: "path/to/image1_320.jpg", pixelRatio: 1 }
+    ]
+  ]);
+
+  // If we wanted the browser to automatically choose from a set of resolutions,
+  // While considering the pixel-ratio of the device
+  $(".foo").backstretch([
+    [
+      // Will be chosen for a 2160 device or a 1080*2 device
+      { width: 2160, url: "path/to/image1_2160.jpg", pixelRatio: "auto" }, 
+      
+      // Will be chosen for a 1080 device or a 540*2 device
+      { width: 1080, url: "path/to/image1_1080.jpg", pixelRatio: "auto" },
+      
+      // Will be chosen for a 1440 device or a 720*2 device
+      { width: 1440, url: "path/to/image1_1440.jpg", pixelRatio: "auto" },
+      { width: 720, url: "path/to/image1_720.jpg", pixelRatio: "auto" },
+      { width: 640, url: "path/to/image1_640.jpg", pixelRatio: "auto" }
+      { width: 320, url: "path/to/image1_320.jpg", pixelRatio: "auto" }
     ]
   ]);
 </script>
 ```
+
+## Automatic resolution selection
+
+The automatic resolution selection algorithm has multiple options to choose from.  
+The default behaviour is that it matches the logical width of the element against the specified image sizes. Which means that an element with a 320px width on a @2x device is still considered as 320px.  
+If you want 320px on a @2x device to be considered as 640px, then you can specify `pixelRatio: "auto"` on the specific image resolution.  
+However if you want to limit specific images to only be chosen if the device has a certain pixel ratio - you can specify that pixel ratio i.e `pixelRatio: 2.5`.
 
 ## Options
 
@@ -73,7 +114,31 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 | `centeredX` | Deprecated. Still works but please do not use it. | Boolean | true |
 | `centeredY` | Deprecated. Still works but please do not use it. | Boolean | true |
 
-* Options marked with an `*` can be specified for individual images
+## Image definition
+
+Each image in the set can be a String specifying the URL for the image, *or* an object with the following options, *or* an array of images for different resolutions to choose between.
+
+| Name | Description | Type | Default |
+|------|-------------|------|---------|
+| `url` | The url of the image | String | |
+| `alignX` * | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `alignY` * | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `fade` * | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
+| `duration` * | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
+
+## Per-resolution-image definition
+
+If you have specified an array of resolutions for a single image, then these are the available options:
+
+| Name | Description | Type | Default |
+|------|-------------|------|---------|
+| `url` | The url of the image | String | |
+| `width` | The width of the image | Integer | |
+| `pixelRatio` | A strict rule to only choose for the specified device pixel ratio. If set to "auto", then the element's width will first be multiplied by the device's pixel ratio before evaluating. | Number or "auto" | undefined |
+| `alignX` * | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `alignY` * | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `fade` * | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
+| `duration` * | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 
 ## Slideshow API
 
