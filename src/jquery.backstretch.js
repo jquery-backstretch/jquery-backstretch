@@ -88,6 +88,7 @@
     , start: 0          // Index of the first image to show
     , preload: 2        // How many images preload at a time?
     , preloadSize: 1    // How many images can we preload in parallel?
+    , resolutionRefreshRate: 2500 // How long to wait before switching resolution?
   };
 
   /* STYLES
@@ -539,7 +540,7 @@
               clearTimeout(that._selectAnotherResolutionTimeout);
               that._selectAnotherResolutionTimeout = setTimeout(function () {
                 that.show(0);
-              }, 2500);
+              }, this.options.resolutionRefreshRate);
             }
           }
 
