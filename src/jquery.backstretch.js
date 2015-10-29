@@ -89,6 +89,7 @@
     , preload: 2        // How many images preload at a time?
     , preloadSize: 1    // How many images can we preload in parallel?
     , resolutionRefreshRate: 2500 // How long to wait before switching resolution?
+    , resolutionChangeRatioTreshold: 0.1 // How much a change should it be before switching resolution?
   };
 
   /* STYLES
@@ -515,10 +516,13 @@
           var newContainerHeight = $resTest.height();
           var changeRatioW = newContainerWidth / (this._lastResizeContainerWidth || 0);
           var changeRatioH = newContainerHeight / (this._lastResizeContainerHeight || 0);
+          var resolutionChangeRatioTreshold = this.options.resolutionChangeRatioTreshold || 0.0;
 
           // check for big changes in container size
-          if (changeRatioW < 0.9 || changeRatioW > 1.1 || isNaN(changeRatioW) ||
-              changeRatioH < 0.9 || changeRatioH > 1.1 || isNaN(changeRatioH)) {
+          if ((newContainerWidth !== this._lastResizeContainerWidth ||
+               newContainerHeight !== this._lastResizeContainerHeight) &&
+              ((Math.abs(changeRatioW - 1) >= resolutionChangeRatioTreshold || isNaN(changeRatioW)) ||
+              (Math.abs(changeRatioH - 1) >= resolutionChangeRatioTreshold || isNaN(changeRatioH)))) {
 
             this._lastResizeContainerWidth = newContainerWidth;
             this._lastResizeContainerHeight = newContainerHeight;
