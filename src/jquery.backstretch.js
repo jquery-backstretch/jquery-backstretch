@@ -574,21 +574,21 @@
         }
 
         // Vars
-        var self = this
-          , oldImage = self.$wrap.find('img').addClass('deleteable')
-          , evtOptions = { relatedTarget: self.$container[0] };
+        var that = this
+          , oldImage = that.$wrap.find('img').addClass('deleteable')
+          , evtOptions = { relatedTarget: that.$container[0] };
 
         // Trigger the "before" event
-        self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]); 
+        that.$container.trigger($.Event('backstretch.before', evtOptions), [that, newIndex]); 
 
         // Set the new index
         this.index = newIndex;
 
         // Pause the slideshow
-        clearTimeout(self._cycleTimeout);
+        clearTimeout(that._cycleTimeout);
 
         // New image
-        self.$img = $('<img />')
+        that.$img = $('<img />')
                       .css(styles.img)
                       .bind('load', function (e) {
                         var $this = $(this);
@@ -602,25 +602,25 @@
                         // "speed" option has been deprecated, but we want backwards compatibilty
                         var fadeDuration = $this.data('options').fade !== undefined ?
                             $this.data('options').fade :
-                            (self.options.speed || self.options.fade);
+                            (that.options.speed || that.options.fade);
 
                         // Show the image, then delete the old one
                         var bringInNextImage = function () {
                           oldImage.remove();
 
                           // Resume the slideshow
-                          if (!self.paused && self.images.length > 1) {
-                            self.cycle();
+                          if (!that.paused && that.images.length > 1) {
+                            that.cycle();
                           }
 
                           // Trigger the "after" and "show" events
                           // "show" is being deprecated
                           $(['after', 'show']).each(function () {
-                            self.$container.trigger($.Event('backstretch.' + this, evtOptions), [self, newIndex]);
+                            that.$container.trigger($.Event('backstretch.' + this, evtOptions), [that, newIndex]);
                           });
                         };
 
-                        if (self.firstShow && !self.options.fadeFirst) {
+                        if (that.firstShow && !that.options.fadeFirst) {
                             // Avoid fade-in on first show
                             $(this).show();
                             bringInNextImage();
@@ -629,19 +629,19 @@
                             $(this).fadeIn(fadeDuration, bringInNextImage);
                         }
                         
-                        self.firstShow = false;
+                        that.firstShow = false;
 
                         // Resize
-                        self.resize();
+                        that.resize();
                       })
-                      .appendTo(self.$wrap);
+                      .appendTo(that.$wrap);
 
-        self.$img.attr('src', self.images[newIndex].url);
-        self.$img.attr('alt', self.images[newIndex].alt || '');
-        self.$img.data('options', self.images[newIndex]);
-        self._currentImage = self.images[newIndex];
+        that.$img.attr('src', that.images[newIndex].url);
+        that.$img.attr('alt', that.images[newIndex].alt || '');
+        that.$img.data('options', that.images[newIndex]);
+        that._currentImage = that.images[newIndex];
         
-        return self;
+        return that;
       }
 
     , next: function () {
