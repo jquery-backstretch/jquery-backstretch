@@ -111,6 +111,7 @@ However if you want to limit specific images to only be chosen if the device has
 | `start` | The index of the image in the array you want to start your slideshow with. | Integer | 0 |
 | `preload` | How many images to preload at once? I.e. Lazy-loading can be enabled by specifying 0. | Integer | 2 |
 | `preloadSize` | How many images to preload in parallel? If we are preloading 5 images for the next slides, we might want to still limit it to only preload 2 or 3 at once, according to the expected available bandwidth. | Integer | 1 |
+| `bypassCss` | Avoid adding any CSS to the IMG element. I.e if you want a dynamic IMG tag that is laid out with the content. | Boolean | false |
 | `centeredX` | Deprecated. Still works but please do not use it. | Boolean | true |
 | `centeredY` | Deprecated. Still works but please do not use it. | Boolean | true |
 
