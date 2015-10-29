@@ -228,6 +228,11 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.0.8
+
+* Changed multi-res feature `width`'s meaning. `width` now means the actual width of the image to match against.
+* Added `pixelRatio` option for multires.
+
 ### Version 2.0.7
 
 * More granular control over options
