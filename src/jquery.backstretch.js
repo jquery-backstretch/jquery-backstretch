@@ -439,11 +439,14 @@
      * Wrap: a DIV that we place the image into, so we can hide the overflow.
      * Root: Convenience reference to help calculate the correct height.
      */
+    var $window = $(window);
     this.$container = $(container);
-    this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
+    this.$root = this.isBody ? supportsFixedPosition ? $window : $(document) : this.$container;
 
     this.originalImages = this.images;
-    this.images = optimalSizeImages(this.$root, this.originalImages);
+    this.images = optimalSizeImages(
+        this.options.alwaysTestWindowResolution ? $window : this.$root, 
+        this.originalImages);
 
     /**
      * Pre-Loading.
@@ -489,14 +492,14 @@
     this.show(this.index);
 
     // Listen for resize
-    $(window).on('resize.backstretch', $.proxy(this.resize, this))
-             .on('orientationchange.backstretch', $.proxy(function () {
-                // Need to do this in order to get the right window height
-                if (this.isBody && window.pageYOffset === 0) {
-                  window.scrollTo(0, 1);
-                  this.resize();
-                }
-             }, this));
+    $window.on('resize.backstretch', $.proxy(this.resize, this))
+           .on('orientationchange.backstretch', $.proxy(function () {
+              // Need to do this in order to get the right window height
+              if (this.isBody && window.pageYOffset === 0) {
+                window.scrollTo(0, 1);
+                this.resize();
+              }
+           }, this));
   };
 
   /* PUBLIC METHODS
@@ -506,8 +509,9 @@
         try {
 
           // Check for a better suited image after the resize
-          var newContainerWidth = this.$root.width();
-          var newContainerHeight = this.$root.height();
+          var $resTest = this.options.alwaysTestWindowResolution ? $(window) : this.$root;
+          var newContainerWidth = $resTest.width();
+          var newContainerHeight = $resTest.height();
           var changeRatioW = newContainerWidth / (this._lastResizeContainerWidth || 0);
           var changeRatioH = newContainerHeight / (this._lastResizeContainerHeight || 0);
 
@@ -519,7 +523,7 @@
             this._lastResizeContainerHeight = newContainerHeight;
 
             // Big change: rebuild the entire images array
-            this.images = optimalSizeImages(this.$root, this.originalImages);
+            this.images = optimalSizeImages($resTest, this.originalImages);
 
             // Preload them (they will be automatically inserted on the next cycle)
             if (this.options.preload) {
