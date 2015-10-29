@@ -16,12 +16,12 @@
     "type": "git",
     "url": "git://github.com/danielgindi/jquery-backstretch.git"
   },
-  "ignore": {
+  "ignore": [
     "grunt.js",
     "examples",
     "libs",
     "test",
     ".gitignore",
     "src"
-  }
+  ]
 }
