@@ -236,6 +236,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.1
+
+* Published to bower under "jquery-backstretch-2"
+
 ### Version 2.1.0
 
 * New `alwaysTestWindowResolution` option
