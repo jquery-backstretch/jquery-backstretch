@@ -17,7 +17,7 @@
     "url": "git://github.com/danielgindi/jquery-backstretch.git"
   },
   "ignore": [
-    "grunt.js",
+    "Gruntfile.js",
     "examples",
     "libs",
     "test",
