@@ -11,6 +11,15 @@ But we haven't seen any kind of activity by the author for about 2 years already
 
 There are a couple of examples included with this package, or feel free to check it out live [on the project page itself](http://srobbin.com/jquery-plugins/backstretch/).
 
+## Installation
+
+1. Download/save the JS file from GitHub.
+2. Install via Bower with the following command.
+
+```
+bower install jquery-backstretch-2
+```
+
 ## Setup
 
 Include the jQuery library (version 1.7 or newer) and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
