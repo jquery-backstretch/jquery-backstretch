@@ -245,6 +245,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.2
+
+* Bugfix: Executing backstretch methods on already backstretched elements failed
+
 ### Version 2.1.1
 
 * Published to bower under "jquery-backstretch-2"
