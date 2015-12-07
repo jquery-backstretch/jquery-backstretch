@@ -13,6 +13,7 @@
    * ========================= */
 
   $.fn.backstretch = function (images, options) {
+    var args = arguments;
 
     /*
      * Scroll the page one pixel to get the right window height on iOS
@@ -30,9 +31,10 @@
       if (obj) {
 
         // Is this a method they're trying to execute?
-        if (typeof arguments[0] === 'string' && typeof obj[arguments[0]] === 'function') {
+        if (typeof args[0] === 'string' &&
+            typeof obj[args[0]] === 'function') {
           // Call the method
-          obj[arguments[0]](options);
+          obj[args[0]](options);
 
           // No need to do anything further
           return;
