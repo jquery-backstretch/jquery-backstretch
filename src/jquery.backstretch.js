@@ -832,6 +832,7 @@
               
               if (oldVideoWrapper) {
                 oldVideoWrapper.stop();
+                oldVideoWrapper.destroy();
               }
               
               $oldItemWrapper.remove();
@@ -985,7 +986,7 @@
 
         // Stop any videos
         if (this.videoWrapper) {
-          this.videoWrapper.stop();
+          this.videoWrapper.destroy();
         }
         
         // Clear the timeout
@@ -1282,6 +1283,18 @@
       that.video.pause();
       that.video.currentTime = 0;
     }
+
+    return that;
+  };
+
+  VideoWrapper.prototype.destroy = function () {
+    var that = this;
+
+    if (that.ytPlayer) {
+      that.ytPlayer.destroy();
+    }
+
+    that.$video.remove();
 
     return that;
   };
