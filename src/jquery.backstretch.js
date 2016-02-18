@@ -820,7 +820,7 @@
               var options = $wrapper.data('options');
               return options[opt] !== undefined ?
                 options[opt] :
-                that.options[opt]
+                that.options[opt];
             };
 
             var transition = getOption('transition');
