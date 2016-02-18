@@ -84,15 +84,16 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
-    duration: 5000      // Amount of time in between slides (if slideshow)
-    , fade: 0           // Speed of fade transition between slides
-    , fadeFirst: true   // Fade in the first image of slideshow?
-    , alignX: 0.5       // The x-alignment for the image, can be 'left'|'center'|'right' or any number between 0.0 and 1.0
-    , alignY: 0.5       // The y-alignment for the image, can be 'top'|'center'|'bottom' or any number between 0.0 and 1.0
-    , paused: false     // Whether the images should slide after given duration
-    , start: 0          // Index of the first image to show
-    , preload: 2        // How many images preload at a time?
-    , preloadSize: 1    // How many images can we preload in parallel?
+    duration: 5000                // Amount of time in between slides (if slideshow)
+    , transition: 'fade'          // Type of transition between slides
+    , transitionDuration: 0       // Duration of transition between slides
+    , animateFirst: true          // Animate the transition of first image of slideshow in?
+    , alignX: 0.5                 // The x-alignment for the image, can be 'left'|'center'|'right' or any number between 0.0 and 1.0
+    , alignY: 0.5                 // The y-alignment for the image, can be 'top'|'center'|'bottom' or any number between 0.0 and 1.0
+    , paused: false               // Whether the images should slide after given duration
+    , start: 0                    // Index of the first image to show
+    , preload: 2                  // How many images preload at a time?
+    , preloadSize: 1              // How many images can we preload in parallel?
     , resolutionRefreshRate: 2500 // How long to wait before switching resolution?
     , resolutionChangeRatioTreshold: 0.1 // How much a change should it be before switching resolution?
   };
@@ -104,27 +105,35 @@
    * That said, anyone can override these in their own stylesheet.
    * ========================= */
   var styles = {
-      wrap: {
-          left: 0
-        , top: 0
-        , overflow: 'hidden'
-        , margin: 0
-        , padding: 0
-        , height: '100%'
-        , width: '100%'
-        , zIndex: -999999
-      }
-    , img: {
-          position: 'absolute'
-        , display: 'none'
-        , margin: 0
-        , padding: 0
-        , border: 'none'
-        , width: 'auto'
-        , height: 'auto'
-        , maxWidth: 'none'
-        , zIndex: -999999
-      }
+    wrap: {
+      left: 0
+      , top: 0
+      , overflow: 'hidden'
+      , margin: 0
+      , padding: 0
+      , height: '100%'
+      , width: '100%'
+      , zIndex: -999999
+    }
+    , itemWrapper: {
+      position: 'absolute'
+      , display: 'none'
+      , margin: 0
+      , padding: 0
+      , border: 'none'
+      , width: '100%'
+      , height: '100%'
+      , zIndex: -999999
+    }
+    , item: {
+      position: 'absolute'
+      , margin: 0
+      , padding: 0
+      , border: 'none'
+      , width: '100%'
+      , height: '100%'
+      , maxWidth: 'none'
+    }
   };
 
   /* Given an array of different options for an image,
@@ -378,10 +387,53 @@
         processed.push(processImagesArray(images[i]));
       }
       else {
-        processed.push(processAlignOptions(images[i]));
+        processed.push(processOptions(images[i]));
       }
     }
     return processed;
+  };
+
+  /* Process options */
+  var processOptions = function (options, required) {
+
+    // Convert old options
+
+    // centeredX/centeredY are deprecated
+    if (options.centeredX || options.centeredY) {
+      if (window.console && window.console.log) {
+        window.console.log('jquery.backstretch: `centeredX`/`centeredY` is deprecated, please use `alignX`/`alignY`');
+      }
+      if (options.centeredX) {
+        options.alignX = 0.5;
+      }
+      if (options.centeredY) {
+        options.alignY = 0.5;
+      }
+    }
+
+    // Deprecated spec
+    if (options.speed !== undefined) {
+
+      if (window.console && window.console.log) {
+        window.console.log('jquery.backstretch: `speed` is deprecated, please use `transitionDuration`');
+      }
+
+      options.transitionDuration = options.speed;
+      options.transition = 'fade';
+    }
+
+    // Current spec that needs processing
+
+    if (options.fadeFirst !== undefined) {
+      options.animateFirst = options.fadeFirst;
+    }
+
+    if (options.fade !== undefined) {
+      options.transitionDuration = options.fade;
+      options.transition = 'fade';
+    }
+
+    return processAlignOptions(options);
   };
 
   /* Process align options */
@@ -432,21 +484,8 @@
 
     this.firstShow = true;
 
-    // Convert old options
-    if (this.options.centeredX || this.options.centeredY) {
-        if (window.console && window.console.log) {
-            window.console.log('jquery.backstretch: `centeredX`/`centeredY` is deprecated, please use `alignX`/`alignY`');
-        }
-        if (this.options.centeredX) {
-            this.options.alignX = 0.5;
-        }
-        if (this.options.centeredY) {
-            this.options.alignY = 0.5;
-        }
-    }
-
-    // Process align options
-    processAlignOptions(this.options, true);
+    // Process options
+    processOptions(this.options, true);
 
     /* In its simplest form, we allow Backstretch to be called on an image path.
      * e.g. $.backstretch('/path/to/image.jpg')
@@ -545,9 +584,95 @@
            }, this));
   };
 
+  var performTransition = function (options) {
+
+    var transition = options.transition || 'fade';
+
+    // Look for multiple options
+    if (typeof transition === 'string' && transition.indexOf('|') > -1) {
+      transition = transition.split('|');
+    }
+
+    if (transition instanceof Array) {
+      transition = transition[Math.round(Math.random() * (transition.length - 1))];
+    }
+
+    switch (transition.toString().toLowerCase()) {
+
+      default:
+      case 'fade':
+        options['new'].fadeIn({
+          duration: options.duration,
+          complete: options.complete,
+          easing: options.easing || undefined
+        });
+        break;
+
+      case 'pushleft':
+      case 'push_left':
+      case 'pushright':
+      case 'push_right':
+      case 'pushup':
+      case 'push_up':
+      case 'pushdown':
+      case 'push_down':
+      case 'coverleft':
+      case 'cover_left':
+      case 'coverright':
+      case 'cover_right':
+      case 'coverup':
+      case 'cover_up':
+      case 'coverdown':
+      case 'cover_down':
+
+        var transitionParts = transition.match(/^(cover|push)_?(.*)$/);
+
+        var animProp = transitionParts[2] === 'left' ? 'right' :
+            transitionParts[2] === 'right' ? 'left' :
+                transitionParts[2] === 'down' ? 'top' :
+                    transitionParts[2] === 'up' ? 'bottom' :
+                        'right';
+
+        var newCssStart = {
+          'display': ''
+        }, newCssAnim = {};
+        newCssStart[animProp] = '-100%';
+        newCssAnim[animProp] = 0;
+
+        options['new']
+            .css(newCssStart)
+            .animate(newCssAnim, {
+              duration: options.duration,
+              complete: function () {
+                options['new'].css('right', '');
+                options.complete.apply(this, arguments);
+              },
+              easing: options.easing || undefined
+            });
+
+        if (transitionParts[1] === 'push' && options['old']) {
+            var oldCssAnim = {};
+            oldCssAnim[animProp] = '100%';
+
+            options['old']
+                .animate(oldCssAnim, {
+                  duration: options.duration,
+                  complete: function () {
+                    options['old'].css('display', 'none');
+                  },
+                  easing: options.easing || undefined
+                });
+        }
+
+        break;
+    }
+
+  };
+
   /* PUBLIC METHODS
    * ========================= */
   Backstretch.prototype = {
+
       resize: function () {
         try {
 
@@ -591,9 +716,9 @@
 
           var bgCSS = {left: 0, top: 0, right: 'auto', bottom: 'auto'}
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
-            , bgWidth = rootWidth
             , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
-            , bgHeight = bgWidth / this.$img.data('ratio')
+            , bgWidth = rootWidth
+            , bgHeight = bgWidth / this.$itemWrapper.data('ratio')
             , evt = $.Event('backstretch.resize', {
               relatedTarget: this.$container[0]
             })
@@ -606,16 +731,22 @@
                 bgCSS.top = -(bgHeight - rootHeight) * alignY;
             } else {
                 bgHeight = rootHeight;
-                bgWidth = bgHeight * this.$img.data('ratio');
+                bgWidth = bgHeight * this.$itemWrapper.data('ratio');
                 bgOffset = (bgWidth - rootWidth) / 2;
                 bgCSS.left = -(bgWidth - rootWidth) * alignX;
             }
 
             if (!this.options.bypassCss) {
-                this.$wrap.css({width: rootWidth, height: rootHeight})
-                    .find('img,video,iframe').not('.deleteable')
-                    .css({width: bgWidth, height: bgHeight})
-                    .css(bgCSS);
+
+                this.$wrap
+                    .css({width: rootWidth, height: rootHeight})
+                    .find('>.backstretch-item').not('.deleteable')
+                    .each(function () {
+                        var $wrapper = $(this);
+                        $wrapper.find('img,video,iframe')
+                                .css({width: bgWidth, height: bgHeight})
+                                .css(bgCSS);
+                    });
             }
 
             this.$container.trigger(evt, this);
@@ -637,7 +768,7 @@
 
         // Vars
         var that = this
-          , oldImage = that.$wrap.find('img,video,iframe').addClass('deleteable')
+          , $oldItemWrapper = that.$wrap.find('>.backstretch-item').addClass('deleteable')
           , oldVideoWrapper = that.videoWrapper
           , evtOptions = { relatedTarget: that.$container[0] };
 
@@ -652,43 +783,59 @@
         clearTimeout(that._cycleTimeout);
 
         // New image
-        delete that.videoWrapper;
+
+        delete that.videoWrapper; // Current item may not be a video
+
         var isVideo = isVideoSource(selectedImage);
         if (isVideo) {
           that.videoWrapper = new VideoWrapper(selectedImage);
-          that.$img = that.videoWrapper.$video.css('pointer-events', 'none');
+          that.$item = that.videoWrapper.$video.css('pointer-events', 'none');
         } else {
-          that.$img = $('<img />');
+          that.$item = $('<img />');
         }
+
+        that.$itemWrapper = $('<div class="backstretch-item">')
+            .append(that.$item);
 
         if (this.options.bypassCss) {
-            that.$img.css({ 'display': 'none' });
+            that.$itemWrapper.css({
+              'display': 'none'
+            });
         } else {
-            that.$img.css(styles.img);
+          that.$itemWrapper.css(styles.itemWrapper);
+          that.$item.css(styles.item);
         }
 
-        that.$img.bind(isVideo ? 'canplay' : 'load', function (e) {
-            var $this = $(this);
+        that.$item.bind(isVideo ? 'canplay' : 'load', function (e) {
+            var $this = $(this)
+              , $wrapper = $this.parent();
 
-            var imgWidth = this.naturalWidth || this.videoWidth || this.width || $(e.target).width()
-              , imgHeight = this.naturalHeight || this.videoHeight || this.height || $(e.target).height();
+            var imgWidth = this.naturalWidth || this.videoWidth || this.width
+              , imgHeight = this.naturalHeight || this.videoHeight || this.height;
 
             // Save the ratio
-            $this.data('ratio', imgWidth / imgHeight);
+            $wrapper.data('ratio', imgWidth / imgHeight);
 
-            // "speed" option has been deprecated, but we want backwards compatibilty
-            var fadeDuration = $this.data('options').fade !== undefined ?
-                $this.data('options').fade :
-                (that.options.speed || that.options.fade);
+            var getOption = function (opt) {
+              var options = $wrapper.data('options');
+              return options[opt] !== undefined ?
+                options[opt] :
+                that.options[opt];
+            };
+
+            var transition = getOption('transition');
+            var transitionEasing = getOption('transitionEasing');
+            var transitionDuration = getOption('transitionDuration');
 
             // Show the image, then delete the old one
             var bringInNextImage = function () {
               
               if (oldVideoWrapper) {
                 oldVideoWrapper.stop();
+                oldVideoWrapper.destroy();
               }
               
-              oldImage.remove();
+              $oldItemWrapper.remove();
 
               // Resume the slideshow
               if (!that.paused && that.images.length > 1) {
@@ -706,28 +853,37 @@
               }
             };
 
-            if ((that.firstShow && !that.options.fadeFirst) || !fadeDuration) {
-                // Avoid fade-in on first show or if there's no fade value
-                $(this).show();
+            if ((that.firstShow && !that.options.animateFirst) || !transitionDuration || !transition) {
+                // Avoid transition on first show or if there's no transitionDuration value
+                $wrapper.show();
                 bringInNextImage();
             } else {
-                // Any other show, fade-in!
-                $(this).fadeIn(fadeDuration, bringInNextImage);
+
+                performTransition({
+                    'new': $wrapper,
+                    old: $oldItemWrapper,
+                    transition: transition,
+                    duration: transitionDuration,
+                    easing: transitionEasing,
+                    complete: bringInNextImage
+                });
+
             }
 
             that.firstShow = false;
 
             // Resize
             that.resize();
-        })
-        .appendTo(that.$wrap);
+        });
+
+        that.$itemWrapper.appendTo(that.$wrap);
+
+        that.$item.attr('alt', selectedImage.alt || '');
+        that.$itemWrapper.data('options', selectedImage);
 
         if (!isVideo) {
-          that.$img.attr('src', selectedImage.url);
+          that.$item.attr('src', selectedImage.url);
         }
-        
-        that.$img.attr('alt', selectedImage.alt || '');
-        that.$img.data('options', selectedImage);
         
         that._currentImage = selectedImage;
 
@@ -777,7 +933,7 @@
           var isVideo = isVideoSource(this._currentImage);
           
           var callNext = function () {
-            this.$img.off('.cycle');
+            this.$item.off('.cycle');
             
             // Check for paused slideshow
             if (!this.paused) {
@@ -792,7 +948,7 @@
             if (!this._currentImage.loop) {
               var lastFrameTimeout = 0;
 
-              this.$img
+              this.$item
                 .on('playing.cycle', function () {
                   var player = $(this).data('player');
 
@@ -808,12 +964,12 @@
             }
 
             // On error go to next
-            this.$img.on('error.cycle initerror.cycle', $.proxy(callNext, this));
+            this.$item.on('error.cycle initerror.cycle', $.proxy(callNext, this));
           }
 
           if (isVideo && !this._currentImage.duration) {
             // It's a video - playing until end
-            this.$img.on('ended.cycle', $.proxy(callNext, this));
+            this.$item.on('ended.cycle', $.proxy(callNext, this));
             
           } else {
             // Cycling according to specified duration
@@ -830,7 +986,7 @@
 
         // Stop any videos
         if (this.videoWrapper) {
-          this.videoWrapper.stop();
+          this.videoWrapper.destroy();
         }
         
         // Clear the timeout
@@ -1127,6 +1283,18 @@
       that.video.pause();
       that.video.currentTime = 0;
     }
+
+    return that;
+  };
+
+  VideoWrapper.prototype.destroy = function () {
+    var that = this;
+
+    if (that.ytPlayer) {
+      that.ytPlayer.destroy();
+    }
+
+    that.$video.remove();
 
     return that;
   };

@@ -278,6 +278,12 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.4
+
+* New: Added more transitions beside fade
+* Bugfix: Youtube Iframe API's `destroy` was not being called
+* Minor documentation updates
+
 ### Version 2.1.3
 
 * New: Youtube and `<video>` support!
