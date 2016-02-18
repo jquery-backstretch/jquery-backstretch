@@ -278,6 +278,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.5
+
+* Minor fix: `resolutionChangeRatioTreshold` was a typo. Changed to `resolutionChangeRatioThreshold`, but keeping backwards compatibility.
+
 ### Version 2.1.4
 
 * New: Added more transitions beside fade
