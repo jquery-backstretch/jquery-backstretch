@@ -144,9 +144,9 @@ Currently the plugin will automatically recognize a *youtube* url. If you pass u
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 | `isVideo` | Tell the plugin the this is a video (if cannot be recognized automatically) | Boolean | false |
-| `loop` | Should the video be looped? If yes, then the duration will be used to determine when to stop. | false |
-| `mute` | Should the video be muted? | true |
-| `poster` | This is for specifying the `poster` attribute in standard <video> tags | |
+| `loop` | Should the video be looped? If yes, then the duration will be used to determine when to stop. | Boolean | false |
+| `mute` | Should the video be muted? | Boolean | true |
+| `poster` | This is for specifying the `poster` attribute in standard <video> tags | String | |
 
 ## Per-resolution-image definition
 
@@ -155,7 +155,7 @@ If you have specified an array of resolutions for a single image, then these are
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
 | `url` | The url of the image | String | |
-| `url` for `<video>` | Instead of a single `url`, an array of sources can be specified. Each source has a `src` and `type` attributes. | String | |
+| `url` for `<video>` | Instead of a single `url`, an array of sources can be specified. Each source has a `src` and `type` attributes. | Array of `{ src, type }` | |
 | `alt` | The alternative text for this image (If you want to play along with screen readers) | String | '' |
 | `width` | The width of the image | Integer | |
 | `pixelRatio` | A strict rule to only choose for the specified device pixel ratio. If set to 'auto', then the element's width will first be multiplied by the device's pixel ratio before evaluating. | Number or "auto" | undefined |
