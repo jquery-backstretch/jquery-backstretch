@@ -132,15 +132,21 @@ However if you want to limit specific images to only be chosen if the device has
 ## Image definition
 
 Each image in the set can be a String specifying the URL for the image, *or* an object with the following options, *or* an array of images for different resolutions to choose between.
+A url can be a url to a video also.
+Currently the plugin will automatically recognize a *youtube* url. If you pass urls to raw videos, you have to specify `isVideo: true`.
 
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
-| `url` | The url of the image | String | |
+| `url` | The url of the image or video | String | |
 | `alt` | The alternative text for this image (If you want to play along with screen readers) | String | '' |
 | `alignX` | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `alignY` | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
+| `isVideo` | Tell the plugin the this is a video (if cannot be recognized automatically) | Boolean | false |
+| `loop` | Should the video be looped? If yes, then the duration will be used to determine when to stop. | false |
+| `mute` | Should the video be muted? | true |
+| `poster` | This is for specifying the `poster` attribute in standard <video> tags | |
 
 ## Per-resolution-image definition
 
@@ -149,6 +155,7 @@ If you have specified an array of resolutions for a single image, then these are
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
 | `url` | The url of the image | String | |
+| `url` for `<video>` | Instead of a single `url`, an array of sources can be specified. Each source has a `src` and `type` attributes. | String | |
 | `alt` | The alternative text for this image (If you want to play along with screen readers) | String | '' |
 | `width` | The width of the image | Integer | |
 | `pixelRatio` | A strict rule to only choose for the specified device pixel ratio. If set to 'auto', then the element's width will first be multiplied by the device's pixel ratio before evaluating. | Number or "auto" | undefined |
@@ -156,6 +163,11 @@ If you have specified an array of resolutions for a single image, then these are
 | `alignY` | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
+
+## Notes about video support:
+
+* If the video is not in `loop` mode, then it will play until the end. You have to specify a duration for the specific video in order to limit its playing duration.
+* Mobile browsers do not allow playback of videos without the users tapping a play button... So you may want to detect those and supply different media arrays for those browsers.
 
 ## Slideshow API
 
