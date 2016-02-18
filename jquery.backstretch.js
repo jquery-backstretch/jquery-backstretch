@@ -9,6 +9,9 @@
 ;(function ($, window, undefined) {
   'use strict';
 
+  /** @const */
+  var YOUTUBE_REGEXP = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/i;
+  
   /* PLUGIN DEFINITION
    * ========================= */
 
@@ -199,6 +202,23 @@
       // Use the image located at where we stopped
       return imageSizes[Math.min(j, lastAllowedImage)];
     };
+    
+    var replaceTagsInUrl = function (url, templateReplacer) {
+        
+        if (typeof url === 'string') {
+            url = url.replace(/{{(width|height)}}/g, templateReplacer);
+        } else if (url instanceof Array) {
+            for (var i = 0; i < url.length; i++) {
+                if (url[i].src) {
+                    url[i].src = replaceTagsInUrl(url[i].src, templateReplacer);
+                } else {
+                    url[i] = replaceTagsInUrl(url[i], templateReplacer);
+                }
+            }
+        }
+        
+        return url;
+    };
 
     return function ($container, images) {
       var containerWidth = $container.width(),
@@ -228,7 +248,7 @@
           }
 
           var item = $.extend({}, images[i]);
-          item.url = item.url.replace(/{{(width|height)}}/g, templateReplacer);
+          item.url = replaceTagsInUrl(item.url, templateReplacer);
           chosenImages.push(item);
         }
       }
@@ -236,6 +256,10 @@
     };
 
   })();
+  
+  var isVideoSource = function (source) {
+    return YOUTUBE_REGEXP.test(source.url) || source.isVideo;
+  };
 
   /* Preload images */
   var preload = (function (sources, startAt, count, batchSize, callback) {
@@ -314,16 +338,31 @@
       var image;
 
       for (var i = 0; i < sources.length; i++) {
-        image = new Image();
-        image.src = sources[i].url;
+        
+        if (isVideoSource(sources[i])) {
+          
+          // Do not preload videos. There are issues with that.
+          // First - we need to keep an instance of the preloaded and use that exactly, not a copy.
+          // Second - there are memory issues.
+          // If there will be a requirement from users - I'll try to implement this.
 
-        image = caching(image);
-
-        if (image.complete) {
-          loaded();
+          continue;
+            
         } else {
-          $(image).on('load error', loaded);
+      
+          image = new Image();
+          image.src = sources[i].url;
+
+          image = caching(image);
+
+          if (image.complete) {
+            loaded();
+          } else {
+            $(image).on('load error', loaded);
+          }
+            
         }
+        
       }
     };
   })();
@@ -574,7 +613,9 @@
 
             if (!this.options.bypassCss) {
                 this.$wrap.css({width: rootWidth, height: rootHeight})
-                          .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
+                    .find('img,video,iframe').not('.deleteable')
+                    .css({width: bgWidth, height: bgHeight})
+                    .css(bgCSS);
             }
 
             this.$container.trigger(evt, this);
@@ -596,20 +637,29 @@
 
         // Vars
         var that = this
-          , oldImage = that.$wrap.find('img').addClass('deleteable')
+          , oldImage = that.$wrap.find('img,video,iframe').addClass('deleteable')
+          , oldVideoWrapper = that.videoWrapper
           , evtOptions = { relatedTarget: that.$container[0] };
 
         // Trigger the "before" event
         that.$container.trigger($.Event('backstretch.before', evtOptions), [that, newIndex]);
 
-        // Set the new index
+        // Set the new frame index
         this.index = newIndex;
+        var selectedImage = that.images[newIndex];
 
         // Pause the slideshow
         clearTimeout(that._cycleTimeout);
 
         // New image
-        that.$img = $('<img />');
+        delete that.videoWrapper;
+        var isVideo = isVideoSource(selectedImage);
+        if (isVideo) {
+          that.videoWrapper = new VideoWrapper(selectedImage);
+          that.$img = that.videoWrapper.$video.css('pointer-events', 'none');
+        } else {
+          that.$img = $('<img />');
+        }
 
         if (this.options.bypassCss) {
             that.$img.css({ 'display': 'none' });
@@ -617,11 +667,11 @@
             that.$img.css(styles.img);
         }
 
-        that.$img.bind('load', function (e) {
+        that.$img.bind(isVideo ? 'canplay' : 'load', function (e) {
             var $this = $(this);
 
-            var imgWidth = this.width || $(e.target).width()
-              , imgHeight = this.height || $(e.target).height();
+            var imgWidth = this.naturalWidth || this.videoWidth || this.width || $(e.target).width()
+              , imgHeight = this.naturalHeight || this.videoHeight || this.height || $(e.target).height();
 
             // Save the ratio
             $this.data('ratio', imgWidth / imgHeight);
@@ -633,6 +683,11 @@
 
             // Show the image, then delete the old one
             var bringInNextImage = function () {
+              
+              if (oldVideoWrapper) {
+                oldVideoWrapper.stop();
+              }
+              
               oldImage.remove();
 
               // Resume the slideshow
@@ -645,6 +700,10 @@
               $(['after', 'show']).each(function () {
                 that.$container.trigger($.Event('backstretch.' + this, evtOptions), [that, newIndex]);
               });
+              
+              if (isVideo) {
+                that.videoWrapper.play();
+              }
             };
 
             if ((that.firstShow && !that.options.fadeFirst) || !fadeDuration) {
@@ -663,10 +722,13 @@
         })
         .appendTo(that.$wrap);
 
-        var selectedImage = that.images[newIndex];
-        that.$img.attr('src', selectedImage.url);
+        if (!isVideo) {
+          that.$img.attr('src', selectedImage.url);
+        }
+        
         that.$img.attr('alt', selectedImage.alt || '');
         that.$img.data('options', selectedImage);
+        
         that._currentImage = selectedImage;
 
         return that;
@@ -685,12 +747,22 @@
     , pause: function () {
         // Pause the slideshow
         this.paused = true;
+        
+        if (this.videoWrapper) {
+          this.videoWrapper.pause();
+        }
+        
         return this;
       }
 
     , resume: function () {
         // Resume the slideshow
         this.paused = false;
+        
+        if (this.videoWrapper) {
+          this.videoWrapper.play();
+        }
+        
         this.cycle();
         return this;
       }
@@ -702,13 +774,52 @@
           clearTimeout(this._cycleTimeout);
 
           var duration = (this._currentImage && this._currentImage.duration) || this.options.duration;
-
-          this._cycleTimeout = setTimeout($.proxy(function () {
+          var isVideo = isVideoSource(this._currentImage);
+          
+          var callNext = function () {
+            this.$img.off('.cycle');
+            
             // Check for paused slideshow
             if (!this.paused) {
               this.next();
             }
-          }, this), duration);
+          };
+
+          // Special video handling
+          if (isVideo) {
+
+            // Leave video at last frame
+            if (!this._currentImage.loop) {
+              var lastFrameTimeout = 0;
+
+              this.$img
+                .on('playing.cycle', function () {
+                  var player = $(this).data('player');
+
+                  clearTimeout(lastFrameTimeout);
+                  lastFrameTimeout = setTimeout(function () {
+                    player.pause();
+                    player.$video.trigger('ended');
+                  }, (player.getDuration() - player.getCurrentTime()) * 1000);
+                })
+                .on('ended.cycle', function () {
+                  clearTimeout(lastFrameTimeout);
+                });
+            }
+
+            // On error go to next
+            this.$img.on('error.cycle initerror.cycle', $.proxy(callNext, this));
+          }
+
+          if (isVideo && !this._currentImage.duration) {
+            // It's a video - playing until end
+            this.$img.on('ended.cycle', $.proxy(callNext, this));
+            
+          } else {
+            // Cycling according to specified duration
+            this._cycleTimeout = setTimeout($.proxy(callNext, this), duration);
+          }
+          
         }
         return this;
       }
@@ -717,6 +828,11 @@
         // Stop the resize events
         $(window).off('resize.backstretch orientationchange.backstretch');
 
+        // Stop any videos
+        if (this.videoWrapper) {
+          this.videoWrapper.stop();
+        }
+        
         // Clear the timeout
         clearTimeout(this._cycleTimeout);
 
@@ -727,6 +843,355 @@
         this.$container.removeData('backstretch');
       }
   };
+    
+ /**
+  *	Video Abstraction Layer
+  *
+  * Static methods:
+  * > VideoWrapper.loadYoutubeAPI() -> Call in order to load the Youtube API. 
+  *                                   An 'youtube_api_load' event will be triggered on $(window) when the API is loaded.
+  *
+  * Generic:
+  * > player.type -> type of the video
+  * > player.video / player.$video -> contains the element holding the video
+  * > player.play() -> plays the video
+  * > player.pause() -> pauses the video
+  * > player.setCurrentTime(position) -> seeks to a position by seconds
+  * 
+  * Youtube:
+  * > player.ytId will contain the youtube ID if the source is a youtube url
+  * > player.ytReady is a flag telling whether the youtube source is ready for playback
+  * */
+
+  var VideoWrapper = function () { this.init.apply(this, arguments); };
+
+  /**
+   * @param {Object} options
+   * @param {String|Array<String>|Array<{{src: String, type: String?}}>} options.url
+   * @param {Boolean} options.loop=false
+   * @param {Boolean?} options.mute=true
+   * @param {String?} options.poster
+   * loop, mute, poster
+   */
+  VideoWrapper.prototype.init = function (options) {
+
+    var that = this;
+    
+    var $video;
+
+    var setVideoElement = function () {
+      that.$video = $video;
+      that.video = $video[0];
+    };
+    
+    // Determine video type
+    
+    var videoType = 'video';
+    
+    if (!(options.url instanceof Array) &&
+      YOUTUBE_REGEXP.test(options.url)) {
+      videoType = 'youtube';
+    }
+    
+    that.type = videoType;
+
+    if (videoType === 'youtube') {
+
+      // Try to load the API in the meantime
+      VideoWrapper.loadYoutubeAPI();
+
+      that.ytId = options.url.match(YOUTUBE_REGEXP)[2];
+      var src = 'https://www.youtube.com/embed/' + that.ytId +
+        '?rel=0&autoplay=0&showinfo=0&controls=0&modestbranding=1' +
+        '&cc_load_policy=0&disablekb=1&iv_load_policy=3&loop=0' +
+        '&enablejsapi=1&origin=' + encodeURIComponent(window.location.origin);
+
+      that.__ytStartMuted = !!options.mute || options.mute === undefined;
+
+      $video = $('<iframe />')
+        .attr({ 'src_to_load': src })
+        .css({ 'border': 0, 'margin': 0, 'padding': 0 })
+        .data('player', that);
+        
+      if (options.loop) {
+        $video.on('ended.loop', function () {
+          if (!that.__manuallyStopped) {
+           that.play();
+          }
+        });
+      }
+
+      that.ytReady = false;
+
+      setVideoElement();
+
+      if (window['YT']) {
+        that._initYoutube();
+        $video.trigger('initsuccess');
+      } else {
+        $(window).one('youtube_api_load', function () {
+          that._initYoutube();
+          $video.trigger('initsuccess');
+        });
+      }
+      
+    }
+    else {
+      // Traditional <video> tag with multiple sources
+      
+      $video = $('<video>')
+        .prop('autoplay', false)
+        .prop('controls', false)
+        .prop('loop', !!options.loop)
+        .prop('muted', !!options.mute || options.mute === undefined)
+        
+        // Let the first frames be available before playback, as we do transitions
+        .prop('preload', 'auto')
+        .prop('poster', options.poster || '');
+        
+      var sources = (options.url instanceof Array) ? options.url : [options.url];
+
+      for (var i = 0; i < sources.length; i++) {
+        var sourceItem = sources[i];
+        if (typeof(sourceItem) === 'string') {
+          sourceItem = { src: sourceItem };
+        }
+        $('<src>')
+          .attr('src', sourceItem.src)
+          // Make sure to not specify type if unknown - 
+          //   so the browser will try to autodetect.
+          .attr('type', sourceItem.type || null)
+          .appendTo($video);
+      }
+      
+      if (!$video[0].canPlayType || !sources.length) {
+        $video.trigger('initerror');
+      } else {
+        $video.trigger('initsuccess');
+      }
+
+      setVideoElement();
+    }
+
+  };
+
+  VideoWrapper.prototype._initYoutube = function () {
+    var that = this;
+    
+    var YT = window['YT'];
+
+    that.$video
+      .attr('src', that.$video.attr('src_to_load'))
+      .removeAttr('src_to_load');
+
+    // It won't init if it's not in the DOM, so we emulate that
+    var hasParent = !!that.$video[0].parentNode;
+    if (!hasParent) {
+      var $tmpParent = $('<div>').css('display', 'none !important').appendTo(document.body);
+      that.$video.appendTo($tmpParent);
+    }
+
+    var player = new YT.Player(that.video, {
+      events: {
+        'onReady': function () {
+
+          if (that.__ytStartMuted) {
+            player.mute();
+          }
+
+          if (!hasParent) {
+            // Restore parent to old state - without interrupting any changes
+            if (that.$video[0].parentNode === $tmpParent[0]) {
+              that.$video.detach();
+            }
+            $tmpParent.remove();
+          }
+
+          that.ytReady = true;
+          that._updateYoutubeSize();
+          that.$video.trigger('canplay');
+        },
+        'onStateChange': function (event) {
+          switch (event.data) {
+            case YT.PlayerState.PLAYING:
+              that.$video.trigger('playing');
+              break;
+            case YT.PlayerState.ENDED:
+              that.$video.trigger('ended');
+              break;
+            case YT.PlayerState.PAUSED:
+              that.$video.trigger('pause');
+              break;
+            case YT.PlayerState.BUFFERING:
+              that.$video.trigger('waiting');
+              break;
+            case YT.PlayerState.CUED:
+              that.$video.trigger('canplay');
+              break;
+          }
+        },
+        'onPlaybackQualityChange': function () {
+          that._updateYoutubeSize();
+          that.$video.trigger('resize');
+        },
+        'onError': function (err) {
+          that.hasError = true;
+          that.$video.trigger({ 'type': 'error', 'error': err });
+        }
+      }
+    });
+
+    that.ytPlayer = player;
+
+    return that;
+  };    
+    
+  VideoWrapper.prototype._updateYoutubeSize = function () {
+    var that = this;
+
+    switch (that.ytPlayer.getPlaybackQuality() || 'medium') {
+      case 'small':
+        that.video.videoWidth = 426;
+        that.video.videoHeight = 240;
+        break;
+      case 'medium':
+        that.video.videoWidth = 640;
+        that.video.videoHeight = 360;
+        break;
+      default:
+      case 'large':
+        that.video.videoWidth = 854;
+        that.video.videoHeight = 480;
+        break;
+      case 'hd720':
+        that.video.videoWidth = 1280;
+        that.video.videoHeight = 720;
+        break;
+      case 'hd1080':
+        that.video.videoWidth = 1920;
+        that.video.videoHeight = 1080;
+        break;
+      case 'highres':
+        that.video.videoWidth = 2560;
+        that.video.videoHeight = 1440;
+        break;
+    }
+
+    return that;
+  };
+
+  VideoWrapper.prototype.play = function () {
+    var that = this;
+
+    that.__manuallyStopped = false;
+    
+    if (that.type === 'youtube') {
+      if (that.ytReady) {
+        that.$video.trigger('play');
+        that.ytPlayer.playVideo();
+      }
+    } else {
+      that.video.play();
+    }
+
+    return that;
+  };
+
+  VideoWrapper.prototype.pause = function () {
+    var that = this;
+
+    that.__manuallyStopped = false;
+    
+    if (that.type === 'youtube') {
+      if (that.ytReady) {
+        that.ytPlayer.pauseVideo();
+      }
+    } else {
+      that.video.pause();
+    }
+
+    return that;
+  };
+
+  VideoWrapper.prototype.stop = function () {
+    var that = this;
+
+    that.__manuallyStopped = true;
+    
+    if (that.type === 'youtube') {
+      if (that.ytReady) {
+        that.ytPlayer.pauseVideo();
+        that.ytPlayer.seekTo(0);
+      }
+    } else {
+      that.video.pause();
+      that.video.currentTime = 0;
+    }
+
+    return that;
+  };
+
+  VideoWrapper.prototype.getCurrentTime = function (seconds) {
+    var that = this;
+
+    if (that.type === 'youtube') {
+      if (that.ytReady) {
+        return that.ytPlayer.getCurrentTime();
+      }
+    } else {
+      return that.video.currentTime;
+    }
+
+    return 0;
+  };
+
+  VideoWrapper.prototype.setCurrentTime = function (seconds) {
+    var that = this;
+
+    if (that.type === 'youtube') {
+      if (that.ytReady) {
+        that.ytPlayer.seekTo(seconds, true);
+      }
+    } else {
+      that.video.currentTime = seconds;
+    }
+
+    return that;
+  };
+
+  VideoWrapper.prototype.getDuration = function () {
+    var that = this;
+
+    if (that.type === 'youtube') {
+      if (that.ytReady) {
+        return that.ytPlayer.getDuration();
+      }
+    } else {
+      return that.video.duration;
+    }
+
+    return 0;
+  };
+
+  /**
+   * This will load the youtube API (if not loaded yet)
+   * Use $(window).one('youtube_api_load', ...) to listen for API loaded event
+   */
+  VideoWrapper.loadYoutubeAPI = function () {
+    if (window['YT']) {
+      return;
+    }
+    if (!$('script[src*=www\\.youtube\\.com\\/iframe_api]').length) {
+      $('<script type="text/javascript" src="https://www.youtube.com/iframe_api">').appendTo('body');
+    }
+    var ytAPILoadInt = setInterval(function () {
+      if (window['YT'] && window['YT'].loaded) {
+        $(window).trigger('youtube_api_load');
+        clearTimeout(ytAPILoadInt);
+      }
+    }, 50);
+  };
+
 
   /* SUPPORTS FIXED POSITION?
    *

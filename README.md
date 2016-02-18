@@ -257,6 +257,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.3
+
+* New: Youtube and `<video>` support!
+
 ### Version 2.1.2
 
 * Bugfix: Executing backstretch methods on already backstretched elements failed
