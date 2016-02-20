@@ -561,7 +561,6 @@
           this.$container.css({
               position: position === 'static' ? 'relative' : position
             , zIndex: zIndex === 'auto' ? 0 : zIndex
-            , background: 'none'
           });
 
           // Needs a higher z-index
@@ -846,6 +845,11 @@
               // Resume the slideshow
               if (!that.paused && that.images.length > 1) {
                 that.cycle();
+              }
+
+              // Now we can clear the background on the element, to spare memory
+              if (!that.options.bypassCss && !that.isBody) {
+                that.$container.css('background', 'none');
               }
 
               // Trigger the "after" and "show" events

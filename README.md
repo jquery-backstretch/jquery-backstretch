@@ -278,6 +278,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.6
+
+* Minor fix: `background` css on the target element was sometimes cleared prematurely. (Issue #18)
+
 ### Version 2.1.5
 
 * Minor fix: `resolutionChangeRatioTreshold` was a typo. Changed to `resolutionChangeRatioThreshold`, but keeping backwards compatibility.
