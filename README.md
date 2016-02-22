@@ -276,6 +276,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.7
+
+* Minor documentation improvements. Version release for updated docs in NPM etc.
+
 ### Version 2.1.6
 
 * Minor fix: `background` css on the target element was sometimes cleared prematurely. (Issue #18)
