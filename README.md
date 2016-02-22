@@ -224,6 +224,7 @@ $('.foo').backstretch("next");
 | `.backstretch("resume")` | Resume a paused slideshow. |
 | `.backstretch("destroy", preserveBackground)` | Destroy the Backstretch instance. Optionally, you can pass in a Boolean parameter, preserveBackground, to determine whether or not you'd like to keep the current image stretched as the background image. |
 | `.backstretch("resize")` | This method is called automatically when the container (window or block-level element) is resized, however you can always call this manually if needed. |
+| `.backstretch("current")` | This function returns the index of the current slide |
 
 ## Public Variables
 
@@ -275,6 +276,11 @@ $(window).on("backstretch.after", function (e, instance, index) {
 ```
 
 ## Changelog
+
+### Version 2.1.8
+
+* Improved method calling through `.backstretch('method', ...)` to pass all arguments, and return value.
+* Added `current()` function to return current slide index.
 
 ### Version 2.1.7
 

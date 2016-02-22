@@ -26,7 +26,9 @@
       window.scrollTo(0, 0);
     }
 
-    return this.each(function () {
+    var returnValues;
+    
+    this.each(function (eachIndex) {
       var $this = $(this)
         , obj = $this.data('backstretch');
 
@@ -36,11 +38,18 @@
         // Is this a method they're trying to execute?
         if (typeof args[0] === 'string' &&
             typeof obj[args[0]] === 'function') {
+              
           // Call the method
-          obj[args[0]](options);
-
-          // No need to do anything further
-          return;
+          var returnValue = obj[args[0]].apply(obj, Array.prototype.slice.call(args, 1));
+          if (returnValue === obj) { // If a method is chaining
+            returnValue = undefined;
+          }
+          if (returnValue !== undefined) {
+            returnValues = returnValues || [];
+            returnValues[eachIndex] = returnValue;
+          }
+          
+          return; // Nothing further to do
         }
 
         // Merge the old options with the new
@@ -65,6 +74,8 @@
       obj = new Backstretch(this, images, options || {});
       $this.data('backstretch', obj);
     });
+    
+    return returnValues ? returnValues.length === 1 ? returnValues[0] : returnValues : this;
   };
 
   // If no element is supplied, we'll attach to body
@@ -898,6 +909,10 @@
         that._currentImage = selectedImage;
 
         return that;
+      }
+
+    , current: function () {
+        return this.index;
       }
 
     , next: function () {
