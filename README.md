@@ -115,10 +115,10 @@ However if you want to limit specific images to only be chosen if the device has
 | `alignY` * | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `transition` * | Type of transition to use. If multiple are specified, then it will be chosed randomly | String or Array<String> | 'fade' |
 | `transitionDuration` * | This is the duration at which the image will transition in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
-| `transitionEasing` | The easing function that will be used for animations. | Any supported jQuery easing value | *jQuery default* |
-| `transitionFirst` | If `true`, the first image will transition in like all the others. | Boolean | true |
+| `transitionEasing` * | The easing function that will be used for animations. | Any supported jQuery easing value | *jQuery default* |
+| `animateFirst` | If `true`, the first image will transition in like all the others. | Boolean | true |
 | `fade` * | Sets `transition` to `'fade'` and `transitionDuration` to whatever value was specified. | Integer or String | |
-| `fadeFirst` | Synonym for `transitionFirst` | Boolean | true |
+| `fadeFirst` | Synonym for `animateFirst` | Boolean | true |
 | `duration` * | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 | `paused` | For slideshows: Disables the change between slides | Boolean | false |
 | `start` | The index of the image in the array you want to start your slideshow with. | Integer | 0 |
@@ -145,12 +145,10 @@ Currently the plugin will automatically recognize a *youtube* url. If you pass u
 | `alt` | The alternative text for this image (If you want to play along with screen readers) | String | '' |
 | `alignX` | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `alignY` | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
-| `transition` * | Type of transition to use. If multiple are specified, then it will be chosed randomly | String or Array<String> | 'fade' |
-| `transitionDuration` * | This is the duration at which the image will transition in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
+| `transition` | Type of transition to use. If multiple are specified, then it will be chosed randomly | String or Array<String> | 'fade' |
+| `transitionDuration` | This is the duration at which the image will transition in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `transitionEasing` | The easing function that will be used for animations. | Any supported jQuery easing value | *jQuery default* |
-| `transitionFirst` | If `true`, the first image will transition in like all the others. | Boolean | true |
-| `fade` * | Sets `transition` to `'fade'` and `transitionDuration` to whatever value was specified. | Integer or String | |
-| `fadeFirst` | Synonym for `transitionFirst` | Boolean | true |
+| `fade` | Sets `transition` to `'fade'` and `transitionDuration` to whatever value was specified. | Integer or String | |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 | `isVideo` | Tell the plugin the this is a video (if cannot be recognized automatically) | Boolean | false |
 | `loop` | Should the video be looped? If yes, then the duration will be used to determine when to stop. | Boolean | false |
