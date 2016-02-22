@@ -911,6 +911,10 @@
         return that;
       }
 
+    , current: function () {
+        return this.index;
+      }
+
     , next: function () {
         // Next slide
         return this.show(this.index < this.images.length - 1 ? this.index + 1 : 0);
