@@ -660,7 +660,7 @@
             .animate(newCssAnim, {
               duration: options.duration,
               complete: function () {
-                options['new'].css('right', '');
+                options['new'].css(animProp, '');
                 options.complete.apply(this, arguments);
               },
               easing: options.easing || undefined
