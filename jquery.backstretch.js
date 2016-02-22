@@ -660,7 +660,7 @@
             .animate(newCssAnim, {
               duration: options.duration,
               complete: function () {
-                options['new'].css('right', '');
+                options['new'].css(animProp, '');
                 options.complete.apply(this, arguments);
               },
               easing: options.easing || undefined
@@ -775,7 +775,7 @@
       }
 
       // Show the slide at a certain position
-    , show: function (newIndex) {
+    , show: function (newIndex, overrideOptions) {
 
         // Validate index
         if (Math.abs(newIndex) > this.images.length - 1) {
@@ -824,7 +824,12 @@
 
         that.$item.bind(isVideo ? 'canplay' : 'load', function (e) {
             var $this = $(this)
-              , $wrapper = $this.parent();
+              , $wrapper = $this.parent()
+              , options = $wrapper.data('options');
+              
+            if (overrideOptions) {
+              options = $.extend({}, options, overrideOptions);
+            }
 
             var imgWidth = this.naturalWidth || this.videoWidth || this.width
               , imgHeight = this.naturalHeight || this.videoHeight || this.height;
@@ -833,7 +838,6 @@
             $wrapper.data('ratio', imgWidth / imgHeight);
 
             var getOption = function (opt) {
-              var options = $wrapper.data('options');
               return options[opt] !== undefined ?
                 options[opt] :
                 that.options[opt];
@@ -916,13 +920,15 @@
       }
 
     , next: function () {
-        // Next slide
-        return this.show(this.index < this.images.length - 1 ? this.index + 1 : 0);
+        var args = Array.prototype.slice.call(arguments, 0);
+        args.unshift(this.index < this.images.length - 1 ? this.index + 1 : 0);
+        return this.show.apply(this, args);
       }
 
     , prev: function () {
-        // Previous slide
-        return this.show(this.index === 0 ? this.images.length - 1 : this.index - 1);
+        var args = Array.prototype.slice.call(arguments, 0);
+        args.unshift(this.index === 0 ? this.images.length - 1 : this.index - 1);
+        return this.show.apply(this, args);
       }
 
     , pause: function () {

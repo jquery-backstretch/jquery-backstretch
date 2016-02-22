@@ -277,6 +277,11 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.9
+
+* Allow overriding transition options for a single `show(...)` call
+* Bugfix: Next transition can go wrong because of css leftover of previous transition
+
 ### Version 2.1.8
 
 * Improved method calling through `.backstretch('method', ...)` to pass all arguments, and return value.
