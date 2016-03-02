@@ -193,7 +193,7 @@
               image = imageSizes[j] = { url: image };
           }
 
-          if (image.pixelRatio && parseFloat(image.pixelRatio) !== devicePixelRatio) {
+          if (image.pixelRatio && image.pixelRatio !== 'auto' && parseFloat(image.pixelRatio) !== devicePixelRatio) {
               // We disallowed choosing this image for current device pixel ratio,
               // So skip this one.
               continue;

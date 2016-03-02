@@ -277,6 +277,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.10
+
+* Bugfix: `pixelRatio == 'auto'` was ignored due to a missing rule.
+
 ### Version 2.1.9
 
 * Allow overriding transition options for a single `show(...)` call
