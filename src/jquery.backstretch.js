@@ -612,16 +612,42 @@
     if (transition instanceof Array) {
       transition = transition[Math.round(Math.random() * (transition.length - 1))];
     }
+    
+    var $new = options['new'];
+    var $old = options['old'] ? options['old'] : $([]);
 
     switch (transition.toString().toLowerCase()) {
 
       default:
       case 'fade':
-        options['new'].fadeIn({
+        $new.fadeIn({
           duration: options.duration,
           complete: options.complete,
           easing: options.easing || undefined
         });
+        break;
+        
+      case 'fadeinout':
+      case 'fade_in_out':
+            
+        var fadeInNew = function () {
+            $new.fadeIn({
+              duration: options.duration / 2,
+              complete: options.complete,
+              easing: options.easing || undefined
+            });
+        };
+        
+        if ($old.length) {
+            $old.fadeOut({
+              duration: options.duration / 2,
+              complete: fadeInNew,
+              easing: options.easing || undefined
+            });
+        } else {
+            fadeInNew();
+        }
+        
         break;
 
       case 'pushleft':
@@ -655,26 +681,26 @@
         newCssStart[animProp] = '-100%';
         newCssAnim[animProp] = 0;
 
-        options['new']
+        $new
             .css(newCssStart)
             .animate(newCssAnim, {
               duration: options.duration,
               complete: function () {
-                options['new'].css(animProp, '');
+                $new.css(animProp, '');
                 options.complete.apply(this, arguments);
               },
               easing: options.easing || undefined
             });
 
-        if (transitionParts[1] === 'push' && options['old']) {
+        if (transitionParts[1] === 'push' && $old.length) {
             var oldCssAnim = {};
             oldCssAnim[animProp] = '100%';
 
-            options['old']
+            $old
                 .animate(oldCssAnim, {
                   duration: options.duration,
                   complete: function () {
-                    options['old'].css('display', 'none');
+                    $old.css('display', 'none');
                   },
                   easing: options.easing || undefined
                 });
