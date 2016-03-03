@@ -174,6 +174,7 @@ If you have specified an array of resolutions for a single image, then these are
 ## Transitions
 
 * `'fade'`
+* `'fade_in_out'` / `'fadeInOut'`
 * `'push_left'` / `'pushLeft'`
 * `'push_right'` / `'pushRight'`
 * `'push_up'` / `'pushUp'`
@@ -276,6 +277,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 ```
 
 ## Changelog
+
+### Version 2.1.12
+
+* New: Added `'fade_in_out'` transition
 
 ### Version 2.1.11
 
