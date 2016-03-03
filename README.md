@@ -277,6 +277,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.11
+
+* Bugfix: Resolution detection routine failed to properly match current url - and cause an additional replace of the image. This affected video urls in a way that caused them to being played from the start.
+
 ### Version 2.1.10
 
 * Bugfix: `pixelRatio == 'auto'` was ignored due to a missing rule.

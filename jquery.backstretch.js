@@ -719,7 +719,7 @@
 
             // In case there is no cycle and the new source is different than the current
             if (this.images.length === 1 &&
-                this._currentImage !== this.images[0]) {
+                this._currentImage.url !== this.images[0].url) {
 
               // Wait a little an update the image being showed
               var that = this;
