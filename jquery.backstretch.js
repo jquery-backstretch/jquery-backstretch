@@ -1,7 +1,7 @@
-/*! Backstretch - v2.1.0 - 2014-11-14
-* http://srobbin.com/jquery-plugins/backstretch/
-* Copyright (c) 2014 Scott Robbin; Licensed MIT */
-
+/*! Backstretch - v2.1.0 - 2016-03-22
+ * http://srobbin.com/jquery-plugins/backstretch/
+ * Copyright (c) 2016 Scott Robbin; Licensed MIT 
+*/
 ;(function ($, window, undefined) {
   'use strict';
 
@@ -265,7 +265,7 @@
         clearInterval(self.interval);
 
         // New image
-        self.$img = $('<img />')
+        self.$img = $('<img alt=""/>')
                       .css(styles.img)
                       .bind('load', function (e) {
                         var imgWidth = this.width || $(e.target).width()

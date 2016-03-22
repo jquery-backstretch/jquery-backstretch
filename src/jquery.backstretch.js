@@ -269,7 +269,7 @@
         clearInterval(self.interval);
 
         // New image
-        self.$img = $('<img />')
+        self.$img = $('<img alt=""/>')
                       .css(styles.img)
                       .bind('load', function (e) {
                         var imgWidth = this.width || $(e.target).width()
