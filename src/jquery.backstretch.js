@@ -1169,7 +1169,7 @@
         if (typeof(sourceItem) === 'string') {
           sourceItem = { src: sourceItem };
         }
-        $('<src>')
+        $('<source>')
           .attr('src', sourceItem.src)
           // Make sure to not specify type if unknown - 
           //   so the browser will try to autodetect.
