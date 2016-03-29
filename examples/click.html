@@ -3,52 +3,64 @@
 <head>
 	<meta charset="utf-8" />
 	<style>
-	    body { font-family: Helvetica, Arial, sans-serif; }
+	    body { font-family: Helvetica, Arial, sans-serif; line-height: 1.3em; -webkit-font-smoothing: antialiased; }
 	    .container {
 	        width: 90%;
 	        margin: 20px auto;
 	        background-color: #FFF;
 	        padding: 20px;
 	    }
-	    pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; }
+	    
+      pre, code {
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        font-size: 12px;
+        color: #333;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+      }
+      pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; overflow: scroll; }
+      code { padding: 2px 4px; background-color: #F7F7F9; border: 1px solid #E1E1E8; color: #D14; }
 	</style>
 </head>
 <body>
     <div class="container">
         <h1>Click Demo</h1>
-        <p>This demonstrates a commonly-asked question: how do I replace Backstretch's image once it's been called? Answer: easy, just call it again!</p>
-        <p>Furthermore, it gives an example of simple onclick functionality.</p>
+        <p>This demonstrates a commonly-asked question: how do I replace Backstretch's image once it's been called? The simple answer is, you can just call Backstretch again, and the image will be replaced.</p>
+        <p><em>Note: Any options that you previously passed in will be preserved.</em></p>
         <p>
             <input type="button" id="pot-holder" value="Show Pot Holder Background" />
             <input type="button" id="coffee" value="Show Coffee Background" />
         </p>
-        <pre><code>
-&lt;script src=&quot;../lib/jquery.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;../jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+        <pre>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
     $.backstretch(&quot;pot-holder.jpg&quot;, {speed: 500});
     
-    $(&quot;#pot-holder&quot;).click(function() {
-       $.backstretch(&quot;pot-holder.jpg&quot;);
+    $(&quot;#pot-holder&quot;).click(function (e) {
+      e.preventDefault();
+      $.backstretch(&quot;pot-holder.jpg&quot;);
     });
     
-    $(&quot;#coffee&quot;).click(function() {
-       $.backstretch(&quot;coffee.jpg&quot;);
+    $(&quot;#coffee&quot;).click(function (e) {
+      e.preventDefault();
+      $.backstretch(&quot;coffee.jpg&quot;);
     });
-&lt;/script&gt;
-        </code></pre>
+&lt;/script&gt;</pre>      
     </div>
-	<script src="../lib/jquery.min.js"></script>
-	<script src="../jquery.backstretch.min.js"></script>
+	<script src="../libs/jquery/jquery.js"></script>
+  <script src="../src/jquery.backstretch.js"></script>
 	<script>
-	    $.backstretch("pot-holder.jpg", {speed: 500});
+	    $.backstretch("pot-holder.jpg", {fade: 500});
 	    
-	    $("#pot-holder").click(function() {
-	       $.backstretch("pot-holder.jpg");
+	    $("#pot-holder").click(function (e) {
+        e.preventDefault();
+	      $.backstretch("pot-holder.jpg");
 	    });
 	    
-	    $("#coffee").click(function() {
-	       $.backstretch("coffee.jpg");
+	    $("#coffee").click(function (e) {
+        e.preventDefault();
+	      $.backstretch("coffee.jpg");
 	    });
     </script>
 </body>
