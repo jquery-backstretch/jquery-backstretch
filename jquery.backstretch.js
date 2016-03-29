@@ -181,7 +181,7 @@
         try {
           var bgCSS = {left: 0, top: 0}
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
-            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
+            , rootHeight = this.isBody ? this.$root.height() : this.$root.innerHeight()
             , bgWidth, bgHeight, bgOffset;
 
             // adjust background dimension according to viewport orientation
@@ -260,7 +260,8 @@
                         $(this).data('ratio', imgWidth / imgHeight);
 
                         // Show the image, then delete the old one
-                        // "speed" option has been deprecated, but we want backwards compatibilty
+                        // "speed" option has been deprecated, but we want backwards compatibility
+                        oldImage.fadeOut(self.options.speed || self.options.fade);
                         $(this).fadeIn(self.options.speed || self.options.fade, function () {
                           oldImage.remove();
 

@@ -3,32 +3,90 @@
 <head>
 	<meta charset="utf-8" />
 	<style>
-	    body { font-family: Helvetica, Arial, sans-serif; }
-	    .container {
-	        width: 90%;
-	        margin: 20px auto;
-	        background-color: #FFF;
-	        padding: 20px;
-	    }
-	    pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; }
+		body { font-family: Helvetica, Arial, sans-serif; line-height: 1.3em; -webkit-font-smoothing: antialiased; }
+		.container {
+			width: 90%;
+			margin: 20px auto;
+			background-color: #FFF;
+			padding: 20px;
+		}
+
+		pre, code {
+			font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+			font-size: 12px;
+			color: #333;
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			border-radius: 3px;
+		}
+		pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; overflow: scroll; }
+		code { padding: 2px 4px; background-color: #F7F7F9; border: 1px solid #E1E1E8; color: #D14; }
+
+		.bs, .bs_fit {
+			float: left;
+			margin-right: 10px;
+		}
+		.bs div, .bs_fit div {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			background: #999;
+			background: rgba(0,0,0,0.4);
+		}
+
+		.bs div p, .bs_fit div p {
+			padding: 5px;
+			font-size: 70%;
+			text-align: center;
+			color: #FFF;
+		}
+		.vertical { height: 400px; width: 300px; }
+		.horizontal { height: 300px; width: 400px; }
+		.square { height: 400px; width: 400px; }
 	</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Basic Demo</h1>
-        <p>This is a basic demo of jQuery Backstretch. It is a simple example of loading one image onto the page.</p>
-        <pre><code>
-&lt;script src=&quot;../lib/jquery.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;../jquery.backstretch.js&quot;&gt;&lt;/script&gt;
+<div class="container">
+	<h1>Fit Demo</h1>
+	<p>This demonstrates a possibility to fit Backstretch's image into viewport and difference between fitted and not fitted view.</p>
+	<h2>Vertical viewport</h2>
+	<div class="bs_fit vertical">
+		<div><p>The background image on this element was set using Backstretch with fit option.</p></div>
+	</div>
+	<div class="bs vertical">
+		<div><p>The background image on this element was set using Backstretch without fit option.</p></div>
+	</div>
+	<div style="clear:both;"></div>
+	<h2>Horizontal viewport</h2>
+	<div class="bs_fit horizontal">
+		<div><p>The background image on this element was set using Backstretch with fit option.</p></div>
+	</div>
+	<div class="bs horizontal">
+		<div><p>The background image on this element was set using Backstretch without fit option.</p></div>
+	</div>
+	<div style="clear:both;"></div>
+	<h2>Square viewport</h2>
+	<div class="bs_fit square">
+		<div><p>The background image on this element was set using Backstretch with fit option.</p></div>
+	</div>
+	<div class="bs square">
+		<div><p>The background image on this element was set using Backstretch without fit option.</p></div>
+	</div>
+	<div style="clear:both;"><br/></div>
+        <pre>&lt;script src=&quot;../libs/jquery/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;../src/jquery.backstretch.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
-    $.backstretch(&quot;pot-holder.jpg&quot;, {fit: true});
-&lt;/script&gt;
-        </code></pre>
-    </div>
-	<script src="../lib/jquery.min.js"></script>
-	<script src="../jquery.backstretch.js"></script>
-	<script>
-	    $.backstretch("pot-holder.jpg", {fit: true});
-    </script>
+	$.backstretch(&quot;coffee.jpg&quot;);
+	$(&quot;.bs&quot;).backstretch([&quot;pot-holder.jpg&quot;, &quot;dome.jpg&quot;, &quot;vertical_velocity.jpg&quot;], {fade: &quot;slow&quot;});
+	$(&quot;.bs_fit&quot;).backstretch([&quot;pot-holder.jpg&quot;, &quot;dome.jpg&quot;, &quot;vertical_velocity.jpg&quot;], {fit: true, fade: &quot;slow&quot;});
+&lt;/script&gt;</pre>
+</div>
+<script src="../libs/jquery/jquery.js"></script>
+<script src="../src/jquery.backstretch.js"></script>
+<script>
+	$.backstretch("coffee.jpg");
+	$(".bs").backstretch(["pot-holder.jpg", "dome.jpg", "vertical_velocity.jpg"], {fade: "slow"});
+	$(".bs_fit").backstretch(["pot-holder.jpg", "dome.jpg", "vertical_velocity.jpg"], {fit: true, fade: "slow"});
+</script>
 </body>
 </html>
