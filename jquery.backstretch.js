@@ -10,7 +10,7 @@
   'use strict';
 
   /** @const */
-  var YOUTUBE_REGEXP = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/i;
+  var YOUTUBE_REGEXP = /^.*(youtu\.be\/|youtube\.com\/v\/|youtube\.com\/embed\/|youtube\.com\/watch\?v=|youtube\.com\/watch\?.*\&v=)([^#\&\?]*).*/i;
   
   /* PLUGIN DEFINITION
    * ========================= */
@@ -1169,7 +1169,7 @@
         if (typeof(sourceItem) === 'string') {
           sourceItem = { src: sourceItem };
         }
-        $('<src>')
+        $('<source>')
           .attr('src', sourceItem.src)
           // Make sure to not specify type if unknown - 
           //   so the browser will try to autodetect.

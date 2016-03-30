@@ -278,6 +278,11 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.13
+
+* Bugfix: Native video source tags were misspelled
+* Bugfix: Youtube matching regex was not constrained to `youtube.com`/`youtu.be` domain
+
 ### Version 2.1.12
 
 * New: Added `'fade_in_out'` transition
