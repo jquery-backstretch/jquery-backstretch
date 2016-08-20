@@ -201,7 +201,6 @@ $('.foo').backstretch([
   'path/to/image3.jpg'
 ]);
 
-```javascript
 // Slideshow with granular control
 $('.foo').backstretch([
   { url: 'path/to/image.jpg', duration: 3000 }
