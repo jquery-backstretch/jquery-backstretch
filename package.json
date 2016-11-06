@@ -9,10 +9,12 @@
     "email": "scott@robbin.co",
     "url": "http://srobbin.com"
   },
-  "contributors": [{
-    "name": "Daniel Cohen Gindi",
-    "email": "danielgindi@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Daniel Cohen Gindi",
+      "email": "danielgindi@gmail.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/danielgindi/jquery-backstretch.git"
@@ -26,14 +28,14 @@
     }
   ],
   "dependencies": {
-    "jquery": ">= 1.7"
+    "jquery": "^3.1.1"
   },
   "devDependencies": {
-    "grunt": "0.4.*",
-    "grunt-contrib-qunit": "1.1.*",
-    "grunt-contrib-jshint": "0.11.*",
+    "grunt": "1.0.*",
+    "grunt-contrib-qunit": "1.2.*",
+    "grunt-contrib-jshint": "1.0.*",
     "grunt-contrib-concat": "1.0.*",
-    "grunt-contrib-uglify": "1.0.*",
+    "grunt-contrib-uglify": "2.0.*",
     "grunt-contrib-watch": "1.0.*"
   },
   "keywords": []

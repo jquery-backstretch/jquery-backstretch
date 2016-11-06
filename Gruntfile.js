@@ -23,7 +23,7 @@ module.exports = function(grunt) {
           '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
           '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
           '* Fork of improvements - by Daniel Cohen Gindi (danielgindi@gmail.com)' +
-          ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
+          ' Licensed <%= pkg.licenses.map(function (x) { return x["type"] }).join(", ") %> */'
       },
       dist: {
         src: 'src/<%= pkg.name %>.js',
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
         curly: true,
         eqeqeq: true,
         immed: true,
-        latedef: true,
+        latedef: false,
         newcap: true,
         noarg: true,
         sub: true,
