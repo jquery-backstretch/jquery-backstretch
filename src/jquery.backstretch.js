@@ -183,9 +183,9 @@
       var devicePixelRatio = window.devicePixelRatio || 1;
       var deviceOrientation = getDeviceOrientation();
       var windowOrientation = getWindowOrientation();
-      var wrapperOrientation = (containerHeight > containerWidth)
-          ? 'portrait'
-          : (containerWidth > containerHeight ? 'landscape' : 'square');
+      var wrapperOrientation = (containerHeight > containerWidth) ?
+        'portrait' :
+        (containerWidth > containerHeight ? 'landscape' : 'square');
 
       var lastAllowedImage = 0;
       var testWidth;
@@ -205,19 +205,19 @@
               continue;
           }
 
-          if (image.deviceOrientation && image.deviceOrientation != deviceOrientation) {
+          if (image.deviceOrientation && image.deviceOrientation !== deviceOrientation) {
               // We disallowed choosing this image for current device orientation,
               // So skip this one.
               continue;
           }
 
-          if (image.windowOrientation && image.windowOrientation != deviceOrientation) {
+          if (image.windowOrientation && image.windowOrientation !== deviceOrientation) {
               // We disallowed choosing this image for current window orientation,
               // So skip this one.
               continue;
           }
 
-          if (image.orientation && image.orientation != wrapperOrientation) {
+          if (image.orientation && image.orientation !== wrapperOrientation) {
               // We disallowed choosing this image for current element's orientation,
               // So skip this one.
               continue;
