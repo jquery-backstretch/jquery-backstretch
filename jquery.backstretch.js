@@ -178,9 +178,15 @@
     /* Given an array of various sizes of the same image and a container width,
      * return the best image.
      */
-    var selectBest = function (containerWidth, imageSizes) {
+    var selectBest = function (containerWidth, containerHeight, imageSizes) {
 
       var devicePixelRatio = window.devicePixelRatio || 1;
+      var deviceOrientation = getDeviceOrientation();
+      var windowOrientation = getWindowOrientation();
+      var wrapperOrientation = (containerHeight > containerWidth) ?
+        'portrait' :
+        (containerWidth > containerHeight ? 'landscape' : 'square');
+
       var lastAllowedImage = 0;
       var testWidth;
 
@@ -195,6 +201,24 @@
 
           if (image.pixelRatio && image.pixelRatio !== 'auto' && parseFloat(image.pixelRatio) !== devicePixelRatio) {
               // We disallowed choosing this image for current device pixel ratio,
+              // So skip this one.
+              continue;
+          }
+
+          if (image.deviceOrientation && image.deviceOrientation !== deviceOrientation) {
+              // We disallowed choosing this image for current device orientation,
+              // So skip this one.
+              continue;
+          }
+
+          if (image.windowOrientation && image.windowOrientation !== deviceOrientation) {
+              // We disallowed choosing this image for current window orientation,
+              // So skip this one.
+              continue;
+          }
+
+          if (image.orientation && image.orientation !== wrapperOrientation) {
+              // We disallowed choosing this image for current element's orientation,
               // So skip this one.
               continue;
           }
@@ -259,7 +283,7 @@
       for (var i = 0; i < images.length; i++) {
         if ($.isArray(images[i])) {
           images[i] = widthInsertSort(images[i]);
-          var chosen = selectBest(containerWidth, images[i]);
+          var chosen = selectBest(containerWidth, containerHeight, images[i]);
           chosenImages.push(chosen);
         } else {
           // In case a new image was pushed in, process it:
@@ -762,8 +786,8 @@
             , bgWidth = rootWidth
             , bgHeight = bgWidth / this.$itemWrapper.data('ratio')
             , evt = $.Event('backstretch.resize', {
-              relatedTarget: this.$container[0]
-            })
+              relatedTarget: this.$container[0]
+            })
             , bgOffset
             , alignX = this._currentImage.alignX === undefined ? this.options.alignX : this._currentImage.alignX
             , alignY = this._currentImage.alignY === undefined ? this.options.alignY : this._currentImage.alignY;
@@ -1058,7 +1082,7 @@
   };
     
  /**
-  *	Video Abstraction Layer
+  * Video Abstraction Layer
   *
   * Static methods:
   * > VideoWrapper.loadYoutubeAPI() -> Call in order to load the Youtube API. 
@@ -1417,6 +1441,36 @@
     }, 50);
   };
 
+  var getDeviceOrientation = function () {
+
+    if ('matchMedia' in window) {
+      if (window.matchMedia("(orientation: portrait)").matches) {
+         return 'portrait';
+      } else if (window.matchMedia("(orientation: landscape)").matches) {
+         return 'landscape';
+      }
+    }
+
+    if (screen.height > screen.width) {
+      return 'portrait';
+    }
+
+    // Even square devices have orientation,
+    //   but a desktop browser may be too old for `matchMedia`.
+    // Defaulting to `landscape` for the VERY rare case of a square desktop screen is good enough.
+    return 'landscape';
+  };
+
+  var getWindowOrientation = function () {
+    if (window.innerHeight > window.innerWidth) {
+      return 'portrait';
+    }
+    if (window.innerWidth > window.innerHeight) {
+      return 'landscape';
+    }
+
+    return 'square';
+  };
 
   /* SUPPORTS FIXED POSITION?
    *

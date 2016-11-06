@@ -280,6 +280,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.14
+
+* New: Added `'deviceOrientation'`, `'windowOrientation'` and `'orientation'` options
+
 ### Version 2.1.13
 
 * Bugfix: Native video source tags were misspelled
