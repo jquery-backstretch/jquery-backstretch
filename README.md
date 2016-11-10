@@ -280,6 +280,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.15
+
+* Improvement: Not modifying `background` property, but `background-image`, to allow CSS to play with colors. (@philsbury)
+
 ### Version 2.1.14
 
 * New: Added `'deviceOrientation'`, `'windowOrientation'` and `'orientation'` options
