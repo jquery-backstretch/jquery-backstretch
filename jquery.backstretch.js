@@ -914,7 +914,7 @@
 
               // Now we can clear the background on the element, to spare memory
               if (!that.options.bypassCss && !that.isBody) {
-                that.$container.css('background', 'none');
+                that.$container.css('background-image', 'none');
               }
 
               // Trigger the "after" and "show" events
