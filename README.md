@@ -5,6 +5,15 @@ Backstretch is a simple jQuery plugin that allows you to add a dynamically-resiz
 
 There are a couple of examples included with this package, or feel free to check it out live [on the project page itself](http://srobbin.com/jquery-plugins/backstretch/).
 
+## Install
+
+This package can be installed with:
+	
+- [npm](https://www.npmjs.com/package/jquery.backstretch): `npm install --save jquery.backstretch`
+- [bower](http://bower.io/search/?q=jquery.backstretch): `bower install --save jquery.backstretch`
+
+Or download the [latest release](https://github.com/srobbin/jquery-backstretch/releases).
+
 ## Setup
 
 Include the jQuery library (version 1.7 or newer) and Backstretch plugin files in your webpage (preferably at the bottom of the page, before the closing BODY tag):
