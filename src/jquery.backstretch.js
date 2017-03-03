@@ -71,8 +71,8 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
-      centeredX: true   // Should we center the image on the X axis?
-    , centeredY: true   // Should we center the image on the Y axis?
+      alignX: 'center'  // Specific X align, replace centeredX
+    , alignY: 'center'  // Specific Y align, replace centeredY
     , duration: 5000    // Amount of time in between slides (if slideshow)
     , fade: 0           // Speed of fade transition between slides
   };
@@ -182,26 +182,76 @@
   Backstretch.prototype = {
       resize: function () {
         try {
-          var bgCSS = {left: 0, top: 0}
+          var bgCSS = {}
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
             , bgWidth = rootWidth
             , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
             , bgHeight = bgWidth / this.$img.data('ratio')
-            , bgOffset;
+            , bgOffset, ratio = (bgHeight >= rootHeight);
 
-            // Make adjustments based on image ratio
-            if (bgHeight >= rootHeight) {
-                bgOffset = (bgHeight - rootHeight) / 2;
-                if(this.options.centeredY) {
-                  bgCSS.top = '-' + bgOffset + 'px';
+            // Compatibility with centeredY option.
+            if (typeof( this.options.centeredY ) != "undefined") {
+                if (this.options.centeredY) {
+                    this.options.alignY = "center";
+                } else {
+                    this.options.alignY = "top";
                 }
+            }
+            
+            // Compatibility with centeredX option.
+            if (typeof( this.options.centeredX ) != "undefined") {
+                if (this.options.centeredY) {
+                    this.options.alignX = "center";
+                } else {
+                    this.options.alignX = "left";
+                }
+            }
+            
+            // Make adjustments based on image ratio.
+            if (ratio) {
+                bgOffset = (bgHeight - rootHeight) / 2;
             } else {
                 bgHeight = rootHeight;
                 bgWidth = bgHeight * this.$img.data('ratio');
                 bgOffset = (bgWidth - rootWidth) / 2;
-                if(this.options.centeredX) {
-                  bgCSS.left = '-' + bgOffset + 'px';
+            }
+            
+            // Align Y axis.
+            switch (this.options.alignY) {
+            case 'center':
+                if(ratio) {
+                    bgCSS.top = '-' + bgOffset + 'px';
+                } else {
+                    bgCSS.top = '0';
                 }
+                break;
+            case 'top':
+                bgCSS.top = '0';
+                break;
+            case 'bottom':
+                bgCSS.bottom = '0';
+                break;
+            default:
+                bgCSS.top = '0';
+            }
+            
+            // Align X axis.
+            switch (this.options.alignX) {
+            case 'center':
+                if(! ratio) {
+                    bgCSS.left = '-' + bgOffset + 'px';
+                } else {
+                    bgCSS.left = '0';
+                }
+                break;
+            case 'left':
+                bgCSS.left = '0';
+                break;
+            case 'right':
+                bgCSS.right = '0';
+                break;
+            default:
+                bgCSS.left = '0';
             }
 
             this.$wrap.css({width: rootWidth, height: rootHeight})
