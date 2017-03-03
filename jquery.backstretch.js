@@ -266,6 +266,7 @@
 
         // Hack for IE img onload event
         self.$img.attr('src', self.images[newIndex]);
+	self.$img.attr('alt', 'backstretch');
         return self;
       }
 
