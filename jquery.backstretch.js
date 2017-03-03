@@ -179,12 +179,18 @@
       resize: function () {
         try {
           var bgCSS = {left: 0, top: 0}
-            , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
+            , landscape = (Math.ceil(window.innerWidth / window.innerHeight) > Math.ceil(screen.width / screen.height))
+            , rootWidth = this.isBody ? (isMobile ? (landscape ? screen.height : screen.width) : this.$root.width()) : this.$root.innerWidth()
             , bgWidth = rootWidth
-            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
+            , rootHeight = this.isBody ? (isMobile ? (landscape ? screen.width : screen.height) : (window.innerHeight ? window.innerHeight : this.$root.height() )) : this.$root.innerHeight()
             , bgHeight = bgWidth / this.$img.data('ratio')
             , bgOffset;
-
+            
+            // Fixes triggering of resize before image ratio is known (iOS 6 at least)
+            if (isNaN(bgHeight)) {
+              return this;
+            }
+           
             // Make adjustments based on image ratio
             if (bgHeight >= rootHeight) {
                 bgOffset = (bgHeight - rootHeight) / 2;
@@ -372,6 +378,19 @@
       // IE6
       (ieversion && ieversion <= 6)
     );
+  }());
+
+  var isMobile = (function () {
+
+    try {
+      document.createEvent("TouchEvent");
+      return true;
+    }
+
+    catch(e){
+      return false;
+    }
+
   }());
 
 }(jQuery, window));
