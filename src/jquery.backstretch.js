@@ -75,6 +75,7 @@
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
     , fade: 0           // Speed of fade transition between slides
+    , timeout: 0        // Amount of time to wait before the first image is shown
   };
 
   /* STYLES
@@ -164,7 +165,11 @@
 
     // Set the first image
     this.index = 0;
-    this.show(this.index);
+
+    // Show first image after the timeout
+    setTimeout($.proxy(function () {
+      this.show(this.index);
+    }, this), this.options.timeout);
 
     // Listen for resize
     $(window).on('resize.backstretch', $.proxy(this.resize, this))

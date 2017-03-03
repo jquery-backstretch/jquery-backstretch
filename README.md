@@ -27,6 +27,11 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
     "path/to/image2.jpg",
     "path/to/image3.jpg"    
   ], {duration: 4000});
+
+  // To wait some time before showing the first image, you set a timeout
+  $.backstretch("path/to/image.jpg", {
+    timeout: 2000,
+  });
 </script>
 ```
 
@@ -38,6 +43,7 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 | `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
+| `timeout` | The amount of time to wait before the first image is shown, expressed as the number of milliseconds. | Integer | 0 |
 
 ## Slideshow API
 
