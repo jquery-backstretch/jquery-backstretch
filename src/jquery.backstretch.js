@@ -71,10 +71,11 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
-      centeredX: true   // Should we center the image on the X axis?
-    , centeredY: true   // Should we center the image on the Y axis?
-    , duration: 5000    // Amount of time in between slides (if slideshow)
-    , fade: 0           // Speed of fade transition between slides
+      centeredX: true                  // Should we center the image on the X axis?
+    , centeredY: true                  // Should we center the image on the Y axis?
+    , duration: 5000                   // Amount of time in between slides (if slideshow)
+    , fade: 0                          // Speed of fade transition between slides
+    , backgroundNoneDisabled: false    // Whether or not to disable background: none on the original element
   };
 
   /* STYLES
@@ -150,8 +151,12 @@
       this.$container.css({
           position: position === 'static' ? 'relative' : position
         , zIndex: zIndex === 'auto' ? 0 : zIndex
-        , background: 'none'
       });
+      if (!this.options.backgroundNoneDisabled) {
+          this.$container.css({
+              background: 'none'
+          });
+      }
       
       // Needs a higher z-index
       this.$wrap.css({zIndex: -999998});
