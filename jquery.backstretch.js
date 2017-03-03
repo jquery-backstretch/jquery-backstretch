@@ -234,6 +234,7 @@
 
         // New image
         self.$img = $('<img />')
+                      .attr('alt', '')
                       .css(styles.img)
                       .bind('load', function (e) {
                         var imgWidth = this.width || $(e.target).width()
