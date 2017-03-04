@@ -69,6 +69,7 @@
   $.fn.backstretch.defaults = {
       centeredX: true   // Should we center the image on the X axis?
     , centeredY: true   // Should we center the image on the Y axis?
+    , fit: false        // Should we fit the image on the viewport?
     , duration: 5000    // Amount of time in between slides (if slideshow)
     , fade: 0           // Speed of fade transition between slides
   };
@@ -180,28 +181,45 @@
         try {
           var bgCSS = {left: 0, top: 0}
             , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
-            , bgWidth = rootWidth
-            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
-            , bgHeight = bgWidth / this.$img.data('ratio')
-            , bgOffset;
+            , rootHeight = this.isBody ? this.$root.height() : this.$root.innerHeight()
+            , bgWidth, bgHeight, bgOffset;
 
-            // Make adjustments based on image ratio
-            if (bgHeight >= rootHeight) {
-                bgOffset = (bgHeight - rootHeight) / 2;
-                if(this.options.centeredY) {
-                  bgCSS.top = '-' + bgOffset + 'px';
-                }
-            } else {
+            // adjust background dimension according to viewport orientation
+            if (rootWidth >= rootHeight) {
+              // horizontal or square viewport
+              // first try to fit the background by width
+              bgWidth = rootWidth;
+              bgHeight = bgWidth / this.$img.data('ratio');
+              // after if the fitting is needed and the height is to large then shrink the image by height
+              // without fitting if the backround height is lesser than viewport height then stretch it by height
+              if ((this.options.fit && bgHeight > rootHeight) || (!this.options.fit && bgHeight < rootHeight)) {
                 bgHeight = rootHeight;
                 bgWidth = bgHeight * this.$img.data('ratio');
-                bgOffset = (bgWidth - rootWidth) / 2;
-                if(this.options.centeredX) {
-                  bgCSS.left = '-' + bgOffset + 'px';
-                }
+              }
+            } else {
+              // vertical viewport
+              // first try to fit the background by height
+              bgHeight = rootHeight;
+              bgWidth = bgHeight * this.$img.data('ratio');
+              // after if the fitting is needed and the width is to large then shrink the image by width
+              // without fitting if the backround width is lesser than viewport width then stretch it by width
+              if ((this.options.fit && bgWidth > rootWidth) || (!this.options.fit && bgWidth < rootWidth)) {
+                bgWidth = rootWidth;
+                bgHeight = bgWidth / this.$img.data('ratio');
+              }
+            }
+
+            // adjust background position according to settings
+            bgCSS = {left: 0, top: 0};
+            if(this.options.centeredX) {
+                bgCSS.left = ((rootWidth - bgWidth) / 2) + "px";
+            }
+            if(this.options.centeredY) {
+                bgCSS.top = ((rootHeight - bgHeight) / 2) + "px";
             }
 
             this.$wrap.css({width: rootWidth, height: rootHeight})
-                      .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
+                      .find('img:not(.deleteable)').css($.extend({width: bgWidth, height: bgHeight}, bgCSS));
         } catch(err) {
             // IE7 seems to trigger resize before the image is loaded.
             // This try/catch block is a hack to let it fail gracefully.
@@ -212,7 +230,6 @@
 
       // Show the slide at a certain position
     , show: function (newIndex) {
-
         // Validate index
         if (Math.abs(newIndex) > this.images.length - 1) {
           return;
@@ -243,7 +260,8 @@
                         $(this).data('ratio', imgWidth / imgHeight);
 
                         // Show the image, then delete the old one
-                        // "speed" option has been deprecated, but we want backwards compatibilty
+                        // "speed" option has been deprecated, but we want backwards compatibility
+                        oldImage.fadeOut(self.options.speed || self.options.fade);
                         $(this).fadeIn(self.options.speed || self.options.fade, function () {
                           oldImage.remove();
 
