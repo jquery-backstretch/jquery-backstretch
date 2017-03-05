@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<style>
+	    body { font-family: Helvetica, Arial, sans-serif; line-height: 1.3em; -webkit-font-smoothing: antialiased; }
+	    .container {
+	        width: 90%;
+	        margin: 20px auto;
+	        background-color: #FFF;
+	        padding: 20px;
+	    }
+
+      pre, code {
+        font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+        font-size: 12px;
+        color: #333;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+      }
+	    pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; overflow: scroll; }
+      code { padding: 2px 4px; background-color: #F7F7F9; border: 1px solid #E1E1E8; color: #D14; }
+
+	</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Multiple Resolutions Demo</h1>
+        <p>
+            In order to change the image based on the resolution, we can specify a set of images for each item in the slideshow.<br />
+            Each item specifies a <code>width</code> and a <code>url</code>, where the <code>width</code> is the <b>minimum</b> width of the screen for this specific image.<br />
+            If we have an image of with 1920px, and we want it to be used between screen widths of 1280 and 1920, we'll specify a <code>width</code> of 1280.
+        </p>
+        <pre>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $.backstretch([
+        [
+            { &quot;width&quot;: 1280, &quot;url&quot;: &quot;sample1_1920.jpg&quot; },
+            { &quot;width&quot;: 960, &quot;url&quot;: &quot;sample1_1280.jpg&quot; },
+            { &quot;width&quot;: 480, &quot;url&quot;: &quot;sample1_960.jpg&quot; },
+            { &quot;width&quot;: 0, &quot;url&quot;: &quot;sample1_480.jpg&quot; }
+        ],
+        [
+            { &quot;width&quot;: 1280, &quot;url&quot;: &quot;sample2_1920.jpg&quot; },
+            { &quot;width&quot;: 960, &quot;url&quot;: &quot;sample2_1280.jpg&quot; },
+            { &quot;width&quot;: 480, &quot;url&quot;: &quot;sample2_960.jpg&quot; },
+            { &quot;width&quot;: 0, &quot;url&quot;: &quot;sample2_480.jpg&quot; }
+        ]
+    ]);
+&lt;/script&gt;</pre>
+    </div>
+	<script src="../libs/jquery/jquery.js"></script>
+	<script src="../src/jquery.backstretch.js"></script>
+	<script>
+	    $.backstretch([
+            [
+                { "width": 1920, "url": "sample1_1920.jpg" },
+                { "width": 1280, "url": "sample1_1280.jpg" },
+                { "width": 960, "url": "sample1_960.jpg" },
+                { "width": 480, "url": "sample1_480.jpg" }
+            ],
+            [
+                { "width": 1920, "url": "sample2_1920.jpg" },
+                { "width": 1280, "url": "sample2_1280.jpg" },
+                { "width": 960, "url": "sample2_960.jpg" },
+                { "width": 480, "url": "sample2_480.jpg" }
+            ]
+        ]);
+  </script>
+</body>
+</html>

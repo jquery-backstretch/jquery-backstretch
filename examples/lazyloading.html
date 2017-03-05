@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            body { font-family: Helvetica, Arial, sans-serif; line-height: 1.3em; -webkit-font-smoothing: antialiased; }
+            .container {
+                width: 90%;
+                margin: 20px auto;
+                background-color: #FFF;
+                padding: 20px;
+            }
+            pre, code {
+                font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+                font-size: 12px;
+                color: #333;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+            }
+            pre { border: 1px solid #CCC; background-color: #EEE; color: #333; padding: 10px; overflow: scroll; }
+            code { padding: 2px 4px; background-color: #F7F7F9; border: 1px solid #E1E1E8; color: #D14; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Slideshow Demo (with lazy-loading)</h1>
+            <p>This demonstrates how to use a Backstretch slideshow with <b>lazy-loading</b>.</p>
+            <pre>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $.backstretch([
+      &quot;pot-holder.jpg&quot;,
+      &quot;coffee.jpg&quot;,
+      &quot;dome.jpg&quot;
+      ], {
+        fade: 750,
+        duration: 4000,
+        <b>preload: 1</b>, //Use the lazy-loading functionality
+        <em>start: 2</em> //Optional - now starts with "dome.jpg"
+    });
+&lt;/script&gt;</pre>
+            <p><b>Hint:</b> Check the "Network"-Panel in your browser.</p>
+        </div>
+        <script src="../libs/jquery/jquery.js"></script>
+        <script src="../src/jquery.backstretch.js"></script>
+        <script>
+            $.backstretch([
+                "pot-holder.jpg",
+                "coffee.jpg",
+                "dome.jpg"
+            ], {
+                fade: 750,
+                duration: 4000,
+                preload: 0,
+                start: 2
+            });
+        </script>
+    </body>
+</html>

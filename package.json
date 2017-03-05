@@ -2,28 +2,41 @@
   "name": "jquery.backstretch",
   "title": "Backstretch",
   "description": "A simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element.",
-  "version": "2.0.4",
-  "homepage": "http://srobbin.com/jquery-plugins/backstretch/",
+  "version": "2.1.15",
+  "main": "jquery.backstretch.js",
   "author": {
     "name": "Scott Robbin",
     "email": "scott@robbin.co",
     "url": "http://srobbin.com"
   },
+  "contributors": [
+    {
+      "name": "Daniel Cohen Gindi",
+      "email": "danielgindi@gmail.com"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/srobbin/jquery-backstretch.git"
+    "url": "git://github.com/danielgindi/jquery-backstretch.git"
   },
   "bugs": {
-    "url": "https://github.com/srobbin/jquery-backstretch/issues"
+    "url": "https://github.com/danielgindi/jquery-backstretch/issues"
   },
   "licenses": [
     {
-      "type": "MIT",
-      "url": "http://srobbin.com/jquery-plugins/backstretch//blob/master/LICENSE-MIT"
+      "type": "MIT"
     }
   ],
   "dependencies": {
-    "jquery": ">= 1.7"
+    "jquery": "^3.1.1"
+  },
+  "devDependencies": {
+    "grunt": "1.0.*",
+    "grunt-contrib-qunit": "1.2.*",
+    "grunt-contrib-jshint": "1.0.*",
+    "grunt-contrib-concat": "1.0.*",
+    "grunt-contrib-uglify": "2.0.*",
+    "grunt-contrib-watch": "1.0.*"
   },
   "keywords": []
 }
