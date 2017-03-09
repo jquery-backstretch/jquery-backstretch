@@ -1,4 +1,4 @@
-Note: This repo <s>is not being actively developed, and</s> is currently looking for maintainers: https://github.com/jquery-backstretch/jquery-backstretch/issues/464
+Note: This repo is currently looking for maintainers: https://github.com/jquery-backstretch/jquery-backstretch/issues/464
 
 # Backstretch
 
