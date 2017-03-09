@@ -17,10 +17,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/danielgindi/jquery-backstretch.git"
+    "url": "git://github.com/jquery-backstretch/jquery-backstretch.git"
   },
   "bugs": {
-    "url": "https://github.com/danielgindi/jquery-backstretch/issues"
+    "url": "https://github.com/jquery-backstretch/jquery-backstretch/issues"
   },
   "licenses": [
     {
