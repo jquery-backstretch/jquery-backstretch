@@ -16,7 +16,7 @@ There are a couple of examples included with this package, or feel free to check
 2. Install via Bower with the following command.
 
 ```
-bower install jquery-backstretch-2
+bower install jquery-backstretch
 ```
 
 ## Setup
