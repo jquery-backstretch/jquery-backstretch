@@ -6,6 +6,8 @@
  * Licensed under the MIT license.
  */
 
+/* jshint laxcomma:true */
+
 ;(function ($, window, undefined) {
   'use strict';
 
