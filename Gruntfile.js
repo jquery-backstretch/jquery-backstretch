@@ -12,8 +12,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     concat: {
       dist: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: '<%= pkg.name %>.js'
+        src: 'src/jquery.backstretch.js',
+        dest: 'jquery.backstretch.js'
       }
     },
     uglify: {
@@ -26,15 +26,15 @@ module.exports = function(grunt) {
           ' Licensed <%= pkg.licenses.map(function (x) { return x["type"] }).join(", ") %> */'
       },
       dist: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: '<%= pkg.name %>.min.js'
+        src: 'src/jquery.backstretch.js',
+        dest: 'jquery.backstretch.min.js'
       }
     },
     qunit: {
       files: ['test/**/*.html']
     },
     watch: {
-      files: 'src/<%= pkg.name %>.js',
+      files: 'src/jquery.backstretch.js',
       tasks: 'jshint qunit'
     },
     jshint: {
