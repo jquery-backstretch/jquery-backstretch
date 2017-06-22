@@ -282,6 +282,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.16
+
+* New: Added `scale` feature.
+
 ### Version 2.1.15
 
 * Improvement: Not modifying `background` property, but `background-image`, to allow CSS to play with colors. (@philsbury)
