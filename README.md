@@ -112,6 +112,7 @@ However if you want to limit specific images to only be chosen if the device has
 |------|-------------|------|---------|
 | `alignX` * | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `alignY` * | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `scale` * | Controls the scaling mode. Can be 'cover'/'fit'/'fit-smaller'/'fill' | String | 'cover' |
 | `transition` * | Type of transition to use. If multiple are specified, then it will be chosed randomly | String or Array<String> | 'fade' |
 | `transitionDuration` * | This is the duration at which the image will transition in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `transitionEasing` * | The easing function that will be used for animations. | Any supported jQuery easing value | *jQuery default* |
@@ -144,6 +145,7 @@ Currently the plugin will automatically recognize a *youtube* url. If you pass u
 | `alt` | The alternative text for this image (If you want to play along with screen readers) | String | '' |
 | `alignX` | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `alignY` | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `scale` | Controls the scaling mode. Can be 'cover'/'fit'/'fit-smaller'/'fill' | String | 'cover' |
 | `transition` | Type of transition to use. If multiple are specified, then it will be chosed randomly | String or Array<String> | 'fade' |
 | `transitionDuration` | This is the duration at which the image will transition in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `transitionEasing` | The easing function that will be used for animations. | Any supported jQuery easing value | *jQuery default* |
@@ -170,6 +172,7 @@ If you have specified an array of resolutions for a single image, then these are
 | `orientation` | Restrict image selection to the element's orientation based on the element's current inner width/height) | `'landscape'` / `'portrait'` / `'square'` | undefined |
 | `alignX` | This parameter controls the horizontal alignment of the image. Can be 'center'/'left'/'right' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
 | `alignY` | This parameter controls the vertical alignment of the image. Can be 'center'/'top'/'bottom' or any number between 0.0 and 1.0. | Integer or String | 0.5 |
+| `scale` | Controls the scaling mode. Can be 'cover'/'fit'/'fit-smaller'/'fill' | String | 'cover' |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 
