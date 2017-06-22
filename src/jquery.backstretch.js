@@ -474,6 +474,10 @@
       options.transition = 'fade';
     }
 
+    if (options.scale) {
+      options.scale = validScale(options.scale);
+    }
+    
     return processAlignOptions(options);
   };
 
@@ -518,6 +522,20 @@
     return options;
   };
 
+  var SUPPORTED_SCALE_OPTIONS = {
+      'cover': 'cover',
+      'fit': 'fit',
+      'fit-smaller': 'fit-smaller',
+      'fill': 'fill'
+  };
+  
+  function validScale(scale) {
+    if (!SUPPORTED_SCALE_OPTIONS.hasOwnProperty(scale)) {
+      return 'cover';
+    }
+    return scale;
+  }
+  
   /* CLASS DEFINITION
    * ========================= */
   var Backstretch = function (container, images, options) {
@@ -781,41 +799,71 @@
           }
 
           var bgCSS = {left: 0, top: 0, right: 'auto', bottom: 'auto'}
-            , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
-            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
-            , bgWidth = rootWidth
-            , bgHeight = bgWidth / this.$itemWrapper.data('ratio')
-            , evt = $.Event('backstretch.resize', {
-              relatedTarget: this.$container[0]
-            })
-            , bgOffset
+          
+            , boxWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
+            , boxHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
+            
+            , naturalWidth = this.$itemWrapper.data('width')
+            , naturalHeight = this.$itemWrapper.data('height')
+            
+            , ratio = (naturalWidth / naturalHeight) || 1
+                    
             , alignX = this._currentImage.alignX === undefined ? this.options.alignX : this._currentImage.alignX
-            , alignY = this._currentImage.alignY === undefined ? this.options.alignY : this._currentImage.alignY;
-
-            // Make adjustments based on image ratio
-            if (bgHeight >= rootHeight) {
-                bgCSS.top = -(bgHeight - rootHeight) * alignY;
-            } else {
-                bgHeight = rootHeight;
-                bgWidth = bgHeight * this.$itemWrapper.data('ratio');
-                bgOffset = (bgWidth - rootWidth) / 2;
-                bgCSS.left = -(bgWidth - rootWidth) * alignX;
+            , alignY = this._currentImage.alignY === undefined ? this.options.alignY : this._currentImage.alignY
+            , scale = validScale(this._currentImage.scale || this.options.scale);
+          
+          var width, height;
+                
+          if (scale === 'fit' || scale === 'fit-smaller') {
+            width = naturalWidth;
+            height = naturalHeight;
+            
+            if (width > boxWidth || 
+                height > boxHeight || 
+                scale === 'fit-smaller') {
+              var boxRatio = boxWidth / boxHeight;
+              if (boxRatio > ratio) {
+                width = Math.floor(boxHeight * ratio);
+                height = boxHeight;
+              } else if (boxRatio < ratio) {
+                width = boxWidth;
+                height = Math.floor(boxWidth / ratio);
+              } else {
+                width = boxWidth;
+                height = boxHeight;
+              }
             }
+          } else if (scale === 'fill') {
+            width = boxWidth;
+            height = boxHeight;
+          } else { // 'cover'
+            width = Math.max(boxHeight * ratio, boxWidth);
+            height = Math.max(width / ratio, boxHeight);
+          }
+          
+          // Make adjustments based on image ratio
+          bgCSS.top = -(height - boxHeight) * alignY;
+          bgCSS.left = -(width - boxWidth) * alignX;
+          bgCSS.width = width;
+          bgCSS.height = height;
+          
+          if (!this.options.bypassCss) {
 
-            if (!this.options.bypassCss) {
+            this.$wrap
+                .css({width: boxWidth, height: boxHeight})
+                .find('>.backstretch-item').not('.deleteable')
+                .each(function () {
+                  var $wrapper = $(this);
+                  $wrapper.find('img,video,iframe')
+                          .css(bgCSS);
+                });
+          }
 
-                this.$wrap
-                    .css({width: rootWidth, height: rootHeight})
-                    .find('>.backstretch-item').not('.deleteable')
-                    .each(function () {
-                        var $wrapper = $(this);
-                        $wrapper.find('img,video,iframe')
-                                .css({width: bgWidth, height: bgHeight})
-                                .css(bgCSS);
+          var evt = $.Event('backstretch.resize', {
+                      relatedTarget: this.$container[0]
                     });
-            }
-
-            this.$container.trigger(evt, this);
+          this.$container.trigger(evt, this);
+          
         } catch(err) {
             // IE7 seems to trigger resize before the image is loaded.
             // This try/catch block is a hack to let it fail gracefully.
@@ -884,8 +932,10 @@
             var imgWidth = this.naturalWidth || this.videoWidth || this.width
               , imgHeight = this.naturalHeight || this.videoHeight || this.height;
 
-            // Save the ratio
-            $wrapper.data('ratio', imgWidth / imgHeight);
+            // Save the natural dimensions
+            $wrapper
+                .data('width', imgWidth)
+                .data('height', imgHeight);
 
             var getOption = function (opt) {
               return options[opt] !== undefined ?
