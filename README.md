@@ -282,6 +282,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.17
+
+* Bugfix: Calling `.backstretch(...)` on an already backstretched element did not properly destroy the older backstretch instance. Resulted in ghost backstretches... 
+
 ### Version 2.1.16
 
 * New: Added `scale` feature.
