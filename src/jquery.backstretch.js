@@ -56,7 +56,7 @@
         options = $.extend(obj.options, options);
 
         // Remove the old instance
-        if ( obj.hasOwnProperty('destroy') ) {
+        if ( typeof obj === 'object' && 'destroy' in obj ) {
           obj.destroy(true);
         }
       }
