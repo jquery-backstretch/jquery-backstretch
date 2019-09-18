@@ -282,6 +282,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+### Version 2.1.18
+
+* Bugfix: When another library imports youtube api first, YT detection misbehaves in backstretch.
+
 ### Version 2.1.17
 
 * Bugfix: Calling `.backstretch(...)` on an already backstretched element did not properly destroy the older backstretch instance. Resulted in ghost backstretches... 
