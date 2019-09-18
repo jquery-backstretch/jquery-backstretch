@@ -1228,7 +1228,7 @@
 
       setVideoElement();
 
-      if (window['YT']) {
+      if (window['YT'] && window['YT'].loaded) {
         that._initYoutube();
         $video.trigger('initsuccess');
       }
@@ -1501,16 +1501,19 @@
    * Use $(window).one('youtube_api_load', ...) to listen for API loaded event
    */
   VideoWrapper.loadYoutubeAPI = function () {
-    if (window['YT']) {
+    if (window['YT'] && window['__yt_load_event_interval__']) {
       return;
     }
-    if (!$('script[src*=www\\.youtube\\.com\\/iframe_api]').length) {
+    
+    if (!window['YT'] && !$('script[src*=www\\.youtube\\.com\\/iframe_api]').length) {
       $('<script type="text/javascript" src="https://www.youtube.com/iframe_api">').appendTo('body');
     }
-    var ytAPILoadInt = setInterval(function () {
+    
+    window['__yt_load_event_interval__'] = setInterval(function () {
       if (window['YT'] && window['YT'].loaded) {
         $(window).trigger('youtube_api_load');
-        clearTimeout(ytAPILoadInt);
+        clearTimeout(window['__yt_load_event_interval__']);
+        delete window['__yt_load_event_interval__'];
       }
     }, 50);
   };
