@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            line-height: 1.3em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            background-color: #FFF;
+            padding: 20px;
+        }
+
+        pre,
+        code {
+            font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+            font-size: 12px;
+            color: #333;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+
+        pre {
+            border: 1px solid #CCC;
+            background-color: #EEE;
+            color: #333;
+            padding: 10px;
+            overflow: scroll;
+        }
+
+        code {
+            padding: 2px 4px;
+            background-color: #F7F7F9;
+            border: 1px solid #E1E1E8;
+            color: #D14;
+        }
+
+        .carousel-example {
+            height: 300px;
+            color: #FFF;
+        }
+
+        .carousel-example div {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: #000;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .carousel-example div p {
+            padding: 10px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            z-index: 15;
+            width: 60%;
+            padding-left: 0;
+            margin-left: -30%;
+            text-align: center;
+            list-style: none;
+        }
+
+        .carousel-indicators li {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 1px;
+            text-indent: -999px;
+            cursor: pointer;
+            background-color: #000 \9;
+            background-color: rgba(0, 0, 0, 0);
+            border: 1px solid #fff;
+            border-radius: 10px;
+        }
+
+        .carousel-indicators .active {
+            width: 12px;
+            height: 12px;
+            margin: 0;
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Carousel Indicators Demo</h1>
+        <p>In this example, we use Bootstrap's carousel indicators (require jQuery 1.9.1 or higher)</p>
+
+        <div class="carousel-example">
+            <ol class="carousel-indicators">
+                <li id="indicator-0" class="indicator"></li>
+                <li id="indicator-1" class="indicator"></li>
+                <li id="indicator-2" class="indicator"></li>
+            </ol>
+        </div>
+
+				<pre>&lt;script src=&quot;//code.jquery.com/jquery-1.9.1.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+$(&quot;#indicator-0&quot;).addClass(&quot;active&quot;);
+$(&quot;.carousel-example&quot;).backstretch([&quot;pot-holder.jpg&quot;, &quot;coffee.jpg&quot;, &quot;dome.jpg&quot;]);
+
+// Listen to the backstretch event to highlight the current indicator
+$(window).on(&quot;backstretch.before&quot;, function (e, instance, index) {
+	jQuery(&quot;.carousel-indicators li&quot;).removeClass(&quot;active&quot;);
+	$(&quot;#indicator-&quot;+index.toString()).addClass(&quot;active&quot;)
+});
+
+// This is optional if you want the backstretch pause when user hover over the indicators
+$(&quot;.carousel-indicators&quot;).mouseover(function(){
+	$(&quot;.carousel-example&quot;).backstretch(&quot;pause&quot;);
+	$(&quot;.indicator&quot;).each(function(index){
+		$(this).click(function(){
+			$(&quot;.carousel-indicators li&quot;).removeClass(&quot;active&quot;);
+			$(&quot;.carousel-example&quot;).backstretch(&quot;show&quot;, index);
+			$(this).addClass(&quot;active&quot;);
+		});
+	});
+});
+
+$(&quot;.carousel-indicators&quot;).mouseleave(function(){
+	$(&quot;.carousel-example&quot;).backstretch(&quot;resume&quot;);
+	// Listen to the backstretch event to highlight the current indicator
+	$(window).on(&quot;backstretch.before&quot;, function (e, instance, index) {
+		$(&quot;.carousel-indicators li&quot;).removeClass(&quot;active&quot;);
+		$(&quot;#indicator-&quot;+index.toString()).addClass(&quot;active&quot;)
+	});
+});
+&lt;/script&gt;</pre>
+
+    </div>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="../src/jquery.backstretch.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $('#indicator-0').addClass('active');
+        $('.carousel-example').backstretch(["pot-holder.jpg", "coffee.jpg", "dome.jpg"]);
+
+        // Listen to the backstretch event to highlight the current indicator
+        $(window).on("backstretch.before", function(e, instance, index) {
+            jQuery('.carousel-indicators li').removeClass('active');
+            $('#indicator-' + index.toString()).addClass('active')
+        });
+
+        // This is optional if you want the backstretch pause when user hover over the indicators
+        $('.carousel-indicators').mouseover(function() {
+            $('.carousel-example').backstretch("pause");
+            $('.indicator').each(function(index) {
+                $(this).click(function() {
+                    $('.carousel-indicators li').removeClass('active');
+                    $('.carousel-example').backstretch("show", index);
+                    $(this).addClass('active');
+                });
+            });
+        });
+
+        $('.carousel-indicators').mouseleave(function() {
+            $('.carousel-example').backstretch("resume");
+            // Listen to the backstretch event to highlight the current indicator
+            $(window).on("backstretch.before", function(e, instance, index) {
+                $('.carousel-indicators li').removeClass('active');
+                $('#indicator-' + index.toString()).addClass('active')
+            });
+        });
+    </script>
+</body>
+
+</html>
