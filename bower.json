@@ -1,27 +1,27 @@
-{
-  "name": "jquery-backstretch",
-  "description": "A simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element.",
-  "version": "2.1.15",
-  "homepage": "http://www.jquery-backstretch.com/",
-  "author": {
-    "name": "Scott Robbin",
-    "email": "scott@robbin.co",
-    "url": "http://srobbin.com"
-  },
-  "main": ["jquery.backstretch.js"],
-  "dependencies": {
-    "jquery": ">=1.9.x"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jquery-backstretch/jquery-backstretch.git"
-  },
-  "ignore": [
-    "Gruntfile.js",
-    "examples",
-    "libs",
-    "test",
-    ".gitignore",
-    "src"
-  ]
-}
++AHs-
+  +ACI-name+ACI-: +ACI-jquery-backstretch+ACI-,
+  +ACI-description+ACI-: +ACI-A simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable background image to any page or element.+ACI-,
+  +ACI-version+ACI-: +ACI-2.1.15+ACI-,
+  +ACI-homepage+ACI-: +ACI-http://www.jquery-backstretch.com/+ACI-,
+  +ACI-author+ACI-: +AHs-
+    +ACI-name+ACI-: +ACI-Scott Robbin+ACI-,
+    +ACI-email+ACI-: +ACI-scott+AEA-robbin.co+ACI-,
+    +ACI-url+ACI-: +ACI-http://srobbin.com+ACI-
+  +AH0-,
+  +ACI-main+ACI-: +AFsAIg-jquery.backstretch.js+ACIAXQ-,
+  +ACI-dependencies+ACI-: +AHs-
+    +ACI-jquery+ACI-: +ACIAPgA9-1.9.x+ACI-
+  +AH0-,
+  +ACI-repository+ACI-: +AHs-
+    +ACI-type+ACI-: +ACI-git+ACI-,
+    +ACI-url+ACI-: +ACI-git://github.com/jquery-backstretch/jquery-backstretch.git+ACI-
+  +AH0-,
+  +ACI-ignore+ACI-: +AFs-
+    +ACI-Gruntfile.js+ACI-,
+    +ACI-examples+ACI-,
+    +ACI-libs+ACI-,
+    +ACI-test+ACI-,
+    +ACI-.gitignore+ACI-,
+    +ACI-src+ACI-
+  +AF0-
++AH0-
