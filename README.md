@@ -33,7 +33,7 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
   // You may also attach Backstretch to a block-level element
   $(".foo").backstretch("path/to/image.jpg");
 
-  // If your element defines a background image with CSS, you can omit the argement altogether
+  // If your element defines a background image with CSS, you can omit the argument altogether
   $(".foo").backstretch();
 
   // Or, to start a slideshow, just pass in an array of images
